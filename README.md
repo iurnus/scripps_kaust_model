@@ -27,20 +27,20 @@ physics and programming techniques involved.
 
 There are several folders in this GIT repository:
 
-* Allmake.sh                ## script to make ESMF, WRF, MITgcm, and the coupled solver
-* coupler/                  ## all coupler source code and examples
-* esmf\_test\_application/  ## ESMF test cases
-* installOption\_WRF/       ## WRF scripts with different install options
-* installOption\_OTH/       ## install options for WPS ESMF MITgcm or other software
-* README                    ## readme file
+* Allmake.sh - Script to make ESMF, WRF, MITgcm, and the coupled solver
+* coupler/ - All coupler source code and examples
+* esmf\_test\_application/ - ESMF test cases
+* installOption\_WRF/ - WRF scripts with different install options
+* installOption\_OTH/ - install options for WPS ESMF MITgcm or other software
+* README.md - readme file
 
 The other folders that should be added to finish the installation:
 (They are not supported in the current GIT repository)
 
-* esmf/                     ## ESMF code
-* MITgcm\_c66h/             ## MITgcm source code
-* WPS/                      ## WRF preprocessor
-* WRFV3911\_AO/             ## WRF source code
+* esmf/ - ESMF code
+* MITgcm\_c66h/ - MITgcm source code
+* WPS/ - WRF preprocessor
+* WRFV3911\_AO/ - WRF source code
 
 To compile the coupled solver, please run:
 
