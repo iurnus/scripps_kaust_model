@@ -7,9 +7,9 @@ components by using the ESMF coupler.
 
 The designed modeling system currently includes the following models:
 
-Atmosphere Solver: WRF (version 3.9.1.1)
-Ocean Solver: MITgcm (version c66h)
-Driver (coupler): ESMF (version 7.0.0)
+* Atmosphere Solver: [WRF](http://www2.mmm.ucar.edu/wrf/users/download/get_source.html) (version 3.9.1.1)
+* Ocean Solver: [MITgcm](http://mitgcm.org/public/source_code.html) (version c66h)
+* Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download/) (version 7.0.0)
 
 The features of the system includes:
 
@@ -27,7 +27,8 @@ physics and programming techniques involved.
 
 There are several folders in this GIT repository:
 
-* Allmake.sh - *Script to make ESMF, WRF, MITgcm, and the coupled solver*
+* Allmake.ring.sh - *Script to compile the code on local desktop ring using PGI compiler*
+* Allmake.shaheen.sh - *Script to compile the code on Shaheen-II supercomputer using Intel compiler*
 * coupler/ - *All coupler source code and examples*
 * esmf\_test\_application/ - *ESMF test cases*
 * installOption\_WRF/ - *WRF scripts with different install options*
@@ -42,10 +43,10 @@ The other folders that should be added to finish the installation:
 * WPS/ - *WRF preprocessor*
 * WRFV3911\_AO/ - *WRF source code*
 
-To compile the coupled solver, please run:
+To compile the coupled solver (use PGI compiler), please run:
 
 ```
-sh Allmake.sh
+sh Allmake.ring.sh
 ```
 
 A more detailed introduction of the code and tutorial cases can be found in the
