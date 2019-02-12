@@ -35,8 +35,8 @@ There are several folders in this GIT repository:
 * installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
 * README.md - *readme file*
 
-The other folders that should be added to finish the installation:
-(They are not supported in the current GIT repository)
+The source code of MITgcm, WRF and ESMF (not supported in the current GIT repository) 
+should be added to finish the installation:
 
 * esmf/ - *ESMF code*
 * MITgcm\_c66h/ - *MITgcm source code*
