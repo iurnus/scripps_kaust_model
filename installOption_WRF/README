@@ -1,0 +1,7 @@
+Implementations of the WRF
+
+On Ring:
+  wrfTestImplementations: Coupled WRF--ESMF test code. Only a test of the data interface.
+  wrfAOMITBulkImplementations: For atmosphere--ocean coupling. Send radiations (lwdown/swdown). Use mitgcm bulk formula to calculate net hflux.
+  wrfAOImplementations: For atmosphere--ocean coupling. Send net hflux, LH/SH, and wind to mitgcm.
+  wrfAO3911Implementations: For atmosphere--ocean coupling. Send net hflux, LH/SH, and wind to mitgcm. Use WRF 3911

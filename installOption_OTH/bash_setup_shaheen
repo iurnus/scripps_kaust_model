@@ -1,0 +1,42 @@
+
+## WARNING!!!!
+## Should turn off all bashrc options when install WW3
+## Then, use intel compiler to compile WW3
+
+module unload PrgEnv-cray
+module unload PrgEnv-intel
+module unload PrgEnv-gnu
+module unload PrgEnv-pgi
+
+module load PrgEnv-intel
+# module load PrgEnv-cray
+# module load PrgEnv-gnu
+# module load PrgEnv-pgi
+
+module load craype-haswell
+module load craype-hugepages4M
+
+module unload cray-hdf5-parallel
+module load cray-netcdf
+module load cray-parallel-netcdf
+module load grib2
+
+export NETCDF=$NETCDF_DIR
+export PNETCDF=$PARALLEL_NETCDF_DIR
+export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+
+export TZ='/usr/share/zoneinfo/US/Pacific'
+# 
+export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/regionalcoam/esmf/lib/libg/Unicos.intel.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+# export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/regionalcoam_cray/esmf/lib/libg/Unicos.cce.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+
+## # For WW3 and WW3_NC options
+# export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/bin:${PATH}
+# export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/exe:${PATH}
+# export WWATCH3_NETCDF=NC4
+# export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.4.1.1.6/bin/nc-config'
+# export PNETCDF_CONFIG='/opt/cray/pe/parallel-netcdf/1.8.1.3/bin/pnetcdf-config'
+export PATH=/home/x_sunr/kaust_project/testWW5.16/bin:${PATH}
+export PATH=/home/x_sunr/kaust_project/testWW5.16/exe:${PATH}
+export WWATCH3_NETCDF=NC4
+export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.4.1.1.6/bin/nc-config'

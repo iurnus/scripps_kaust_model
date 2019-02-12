@@ -1,0 +1,8 @@
+To install ESMF on TSCC:
+
+  cp configure.esmf.tscc ${esmf_DIR}
+
+then:
+  gmake info
+  gmake
+  gmake all_tests

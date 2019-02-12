@@ -1,0 +1,77 @@
+ESMF_CoupledFlow                    README
+----------------                    ------
+
+This README file provides instructions for how to build and run the
+ESMF_CoupledFlow demo application. Detailed discussion of the internal
+workings of the code, including its application of the ESMF API, are
+provided in the ESMF_CoupledFlow document. The ESMF_CoupledFlow document
+is available online at the ESMF web site http://www.earthsystemmodeling.org/
+under Users -> Code Examples -> External Demos -> ESMF_CoupledFlow.
+
+
+Building the ESMF_CoupledFlow demo application
+----------------------------------------------
+
+The application source code is accompanied by a portable Makefile that
+builds the executable as its default target. This Makefile is expected
+to work correctly unmodified on any system where ESMF is installed, and
+environment variable ESMFMKFILE is set according to the instructions given
+in section "Building and Installing the ESMF" of the ESMF User's Guide.
+
+   CAUTION: The ESMF_CoupledFlow demo application must be built against an
+            ESMF library installation that provides PIO and NetCDF support.
+            See section "Building and Installing the ESMF" of the
+            ESMF User's Guide for details on how to enable these third party 
+            dependencies during the ESMF library build process.
+
+
+Running the ESMF_CoupledFlow demo application
+---------------------------------------------
+
+The input namelist files coupled_app_input, coupled_flow_input,
+coupled_inject_input are read by the demo application from 'data' directory
+relative to the current working directory on a unix operating system.
+Successful execution of the demo application depends on the existence of the
+correct namelist files. If the current working directory is $CWD, then these
+namelist files must be stored in $CWD/data for the demo application to succeed.
+
+The provided generic Makefile does _not_ contain a run target. Executing
+binaries, especially in parallel, is an inherently system-dependent procedure.
+The ESMF_CoupledFlow executable must be run according to these specific
+procedures. In general the correct procedure depends on whether the executable
+was built against an mpiuni- or MPI-based ESMF library installation, and in the
+latter case on which MPI implementation was chosen. For most systems, the MPI
+version of the ESMF_CoupledFlow demo application can be executed by a command
+equivalent to:
+
+mpirun -np X ./ESMF_CoupledFlow
+
+where X specifies the total number of PETs.
+
+    CAUTION: The ESMF_CoupledFlow demo application requires X to be a multiple
+             of 4.
+             
+After successful execution of the ESMF_CoupledFlow demo application a message
+will be printed to stdout indicating SUCCESS. The application generates a
+series of output files:
+
+PET0.ESMF_LogFile - ESMF log file containing all error messages logged.
+
+DE.nc             - NetCDF file containing decomposition element ids.
+FLAG.nc           - NetCDF file containing flag of boundary conditions.
+OMEGA.nc          - NetCDF file containing time series of vorticity.
+SIE.nc            - NetCDF file containing time series of internal energy.
+U_velocity.nc     - NetCDF file containing time series of U velocity component.
+V_velocity.nc     - NetCDF file containing time series of V velocity component.
+
+The user can use standard NetCDF tools to analyze the data output files. Some
+files store an entire time series of the output variable. The tool "ncview" is
+particularly useful to view time series in an animated form. Decreasing the 
+"printout" value in the "coupled_flow_input" of the demo will increase the
+frequency of data output, resulting in a smoother animation.
+
+All output data files are removed by the "dust" Makefile target.
+
+The "clean" Makefile target removes all object, module and the executable file.
+
+The "distclean" Makefile target combines the "dust" and "clean" targets.

@@ -1,0 +1,58 @@
+# these settings for compiling standalone on Compaq. Type "make -r"
+CPP = /lib/cpp -P
+FC  = ftn -real-size 32 -i4  -w -ftz -fno-alias -align all -FR -convert big_endian 
+ESMF_DIR=/home/x_sunr/coupleCOAW/esmf/
+ESMF_DIR = /home/x_sunr/kaust_project/regionalcoam/esmf/
+ESMF_INCLUDE  = ${ESMF_DIR}/mod/modg/Unicos.intel.64.mpi.default/
+MAIN_DIR=/home/x_sunr/coupleCOAW/
+CURRENT_DIR=/home/x_sunr/coupleCOAW/WRFV3911_AO/external/io_esmf/
+CURRENT_DIR = /home/x_sunr/kaust_project/regionalcoam/WRFV3911_AO/external/io_esmf/
+INCLUDE_MODULES = -I$(CURRENT_DIR)/../../main \
+                  -I$(CURRENT_DIR)/../../external/io_netcdf \
+                  -I$(CURRENT_DIR)/../../external/io_int \
+                  -I$(CURRENT_DIR)/../../frame \
+                  -I$(CURRENT_DIR)/../../share \
+                  -I$(CURRENT_DIR)/../../phys \
+                  -I$(CURRENT_DIR)/../../chem \
+                  -I$(CURRENT_DIR)/../../inc \
+
+
+.SUFFIXES: .F90 .o
+
+AR = ar
+#RANLIB	= ranlib
+RANLIB	= echo
+
+OBJS = module_symbols_util.o \
+       module_esmf_extensions.o \
+       module_utility.o \
+       io_esmf.o \
+       ext_esmf_open_for_read.o \
+       ext_esmf_open_for_write.o \
+       ext_esmf_read_field.o \
+       ext_esmf_write_field.o
+
+TARGET = libwrfio_esmf.a
+
+$(TARGET) : $(OBJS)
+	$(AR) ru $(TARGET) $(OBJS)
+	$(RANLIB) $(TARGET)
+
+.F90.o :
+	$(CPP) -I../ioapi_share -P -traditional -DESMF_COUPLING $*.F90 > $*.f
+	$(FC) -I$(ESMF_INCLUDE) -I$(MAIN_DIR) -I$(CURRENT_DIR) $(INCLUDE_MODULES) -c -g -I../ioapi_share $*.f
+
+superclean: 
+	/bin/rm -f *.f *.o $(TARGET) *.mod
+
+# DEPENDENCIES : only dependencies after this line 
+
+module_symbols_util.o :
+module_esmf_extensions.o :
+module_utility.o : module_symbols_util.o module_esmf_extensions.o
+io_esmf.o : module_esmf_extensions.o
+ext_esmf_open_for_read.o : io_esmf.o
+ext_esmf_open_for_write.o : io_esmf.o
+ext_esmf_read_field.o : io_esmf.o
+ext_esmf_write_field.o : io_esmf.o
+

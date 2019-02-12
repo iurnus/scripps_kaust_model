@@ -1,0 +1,11 @@
+--- configure.wps	2017-10-02 21:46:23.551058108 -0700
++++ configure.wps	2017-10-02 21:45:39.812070339 -0700
+@@ -44,6 +44,8 @@
+                         -L$(WRF_DIR)/external/io_grib_share -lio_grib_share \
+                         -L$(WRF_DIR)/external/io_int -lwrfio_int \
+                         -L$(WRF_DIR)/external/io_netcdf -lwrfio_nf \
++                        -L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib \
++                        -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib \
+                         -L$(NETCDF)/lib -lnetcdff -lnetcdf
+ 
+ #### Architecture specific settings ####

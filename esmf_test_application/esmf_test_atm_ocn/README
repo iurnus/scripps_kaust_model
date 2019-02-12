@@ -1,0 +1,29 @@
+README for ATM-OCN-CON NUOPC prototype
+--------------------------------------
+
+Dependencies:
+  - ESMF v7.0.0 beta
+  
+Build:
+  - Set environment variable ESMFMKFILE to point to the esmf.mk of your ESMF
+    installation.
+  - gmake
+  
+Execution:
+  - Optionally set environment variable ESMF_RUNTIME_COMPLIANCECHECK to ON.
+  - mpirun -np X ./esmApp (where X is the total number of PETs)
+  
+Output:
+  - PET*.Log files containing compliance checker output if turned on.
+  - The prototype outputs time stepping information to stdout.
+  
+
+
+Code structure:
+  - Makefile    - Makefile that is based on the standard esmf.mk mechanism.
+  - atm.F90     - The ATM component, specializing generic NUOPC_Model.
+  - ocn.F90     - The OCN component, specializing generic NUOPC_Model.
+  - con.F90     - The Connector component, specializing generic NUOPC_Connector.
+  - esm.F90     - The Earth System Model (ESM) component, specializing generic
+                  NUOPC_Driver.
+  - esmApp.F90  - ESM driver application.
