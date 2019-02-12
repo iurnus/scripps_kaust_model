@@ -1,0 +1,39 @@
+code: 
+  coupled MITgcm--ESMF--WRF code with MPI
+  the MITgcm solver is divided into "init", "run", "finalize" parts
+  the WRF solver is also divided into "init", "run", "finalize" parts
+  ESMF drives different parts
+  the WRF bulf formula is used
+  RUN ON TSCC MACHINES, compiled using intel compiler
+
+simulation:
+  Red Sea region
+
+Notes:
+To install and run this case::
+
+./install.sh
+cd runCase.init/
+./Allrun
+cd runCase/
+./Allrun
+
+To clean this case::
+
+./clean.sh
+
+How to check if the code is installed?
+
+MITGCM executable is: build/mitgcmuv
+MITGCM library is: build/mmout/libmitgcm_org_ocn.a
+MITGCM run time library is: build/mmout/libmitgcmrtl.a
+MITGCM mod file is: build/mitgcm_org_ocn.mod
+The coupled MITGCM-ESMF solver is: coupledSolver/esmf_application
+
+####################
+WARNING!!!WARNING!!!
+####################
+The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.
+The ESMF should be installed in '../../esmf/' to run this case.
+The WRF v3.9.1.1 with should be installed in '../../WRFV3911_AO/' to run this case.
+In install.sh, the MPI_HOME variable is "/opt/openmpi/intel/ib/include/"

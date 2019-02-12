@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cp ../runCase/hycom* .
+cp ../runCase/Rs* .
+cp ../runCase/run-off* .
+cp ../runCase/bathymetry* . 
+cp ../runCase/data .
+cp ../runCase/data.[c-d]* .
+cp ../runCase/data.[f-z]* .
+cp ../runCase/eedata .
+
+cd genMIT
+matlab -nodisplay < copy_wrf_forcing.m 
+matlab -nodisplay < gen_lw_forcing.m 
+matlab -nodisplay < gen_sw_forcing.m 
+matlab -nodisplay < gen_precip_forcing.m 
+matlab -nodisplay < gen_evap_forcing.m 
+cd ..
+
+cp ./genMIT/wrf_* .
+cp ../build_mit/mitgcmuv .
+
+mpirun -np 4 mitgcmuv

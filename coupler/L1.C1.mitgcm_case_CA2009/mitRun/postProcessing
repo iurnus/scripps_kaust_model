@@ -1,0 +1,3 @@
+ln -s ../../script-post/test_california_ocean_loop.m .
+
+matlab -nodisplay < test_california_ocean_loop.m

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+rm -rf *.*
+rm -rf *data prepare_run esmf_application *list
+rm -rf log
+rm -rf mnc_test_*
+rm -rf *DATA
+rm -rf wrf*
+rm -rf sstin*
+rm -rf tr*
+rm -rf CAMtr_volume_mixing_ratio
+rm -rf ncep*
+rm -rf MASK
+rm -rf launch
+rm -rf mitgcmuv

@@ -1,0 +1,19 @@
+simple stand-alone ESMF MPI test
+
+Notes:
+To install and run this case::
+
+./install.sh
+
+To clean this case::
+
+./clean.sh
+
+Folders:
+  ./coupledSolver: Source code for the ESMF test case
+  ./run: The simulation will run in this folder.
+
+####################
+WARNING!!!WARNING!!!
+####################
+The ESMF should be installed in '../../esmf/' to run this case.

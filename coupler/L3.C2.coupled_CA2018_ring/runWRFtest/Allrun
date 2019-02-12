@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cp ../../../WRFV3911_AO/main/wrf.exe .
+cp ../runCase/*.TBL .
+cp ../runCase/CAM* .
+cp ../runCase/RRTM* .
+cp ../runCase/wrf*d01 .
+cp ../runCase/ozone* .
+
+./genSSTin.sh
+matlab -nodisplay < updateFlux.m
+
+mpirun -np 8 wrf.exe

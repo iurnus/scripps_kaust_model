@@ -1,0 +1,41 @@
+\documentclass[11pt]{report}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\title{\textbf{Check the input/output fields in the coupled solver}}
+\author{Rui Sun et al.}
+\date{\oldstylenums{07}/\oldstylenums{01}/\oldstylenums{2018}}
+%--------------------Make usable space all of page
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headsep}{-.25in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+%--------------------Indention
+\setlength{\parindent}{1cm}
+
+\begin{document}
+%--------------------Title Page
+\maketitle
+
+%% \section{Examine feeding the flux}
+%% \input{body/checkFlux.tex}
+ 
+\section{Examine the momentum}
+\input{body/checkWind.tex}
+\input{body/checkCurrent.tex}
+
+\section{Examine surface heat flux}
+\input{body/checkSST.tex}
+\input{body/checkT2.tex}
+\input{body/checkQ2.tex}
+\input{body/checkLH.tex}
+\input{body/checkSH.tex}
+\input{body/checkGLW.tex}
+\input{body/checkGSW.tex}
+
+\section{Examine fresh water flux}
+\input{body/checkPrecip.tex}
+\input{body/checkEvap.tex}
+
+\end{document}

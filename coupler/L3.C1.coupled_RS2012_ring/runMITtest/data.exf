@@ -1,0 +1,180 @@
+# $Header: /u/gcmpack/MITgcm/verification/lab_sea/input/data.exf,v 1.7 2004/07/11 06:21:44 dimitri Exp $
+#
+# *********************
+# External Forcing Data
+# *********************
+ &EXF_NML_01
+ useExfYearlyFields = .TRUE., 
+ useExfCheckRange   = .FALSE.,
+ exf_iprec          = 32,
+ exf_yftype         = 'RL',
+ &
+#
+ &EXF_NML_02
+#
+ atempstartdate1   = 20120601,
+ atempstartdate2   = 00000,
+ atempperiod       = 60.0,
+#
+ aqhstartdate1     = 20120601,
+ aqhstartdate2     = 00000,
+ aqhperiod         = 60.0,
+#
+ evapstartdate1  = 20120601,
+ evapstartdate2  = 00000,
+ evapperiod      = 60.0,
+#
+ precipstartdate1  = 20120601,
+ precipstartdate2  = 00000,
+ precipperiod      = 60.0,
+#
+ uwindstartdate1   = 20120601,
+ uwindstartdate2   = 00000,
+ uwindperiod       = 60.0,
+#
+ vwindstartdate1   = 20120601,
+ vwindstartdate2   = 00000,
+ vwindperiod       = 60.0,
+#
+ runoffstartdate1 = 20120101,
+ runoffstartdate2 = 000000, 
+ runoffperiod = -12,
+#   
+ swfluxstartdate1  = 20120601,
+ swfluxstartdate2  = 00000,
+ swfluxperiod      = 60.0,
+#
+ lwfluxstartdate1  = 20120601,
+ lwfluxstartdate2  = 00000,
+ lwfluxperiod      = 60.0,
+#
+ hl_startdate1  = 20120601,
+ hl_startdate2  = 00000,
+ hl_period      = 60.0,
+#
+ hs_startdate1  = 20120601,
+ hs_startdate2  = 00000,
+ hs_period      = 60.0,
+#
+#
+ precipfile = 'wrf_precip_1min',
+ evapfile   = 'wrf_evap_1min',
+ atempfile  = 'wrf_atemp_1min',
+ aqhfile    = 'wrf_aqh_1min',
+ swfluxfile = 'wrf_swflux_1min',
+ swdownfile = '',
+ lwdownfile = '',
+ lwfluxfile = 'wrf_lwflux_1min',
+ hl_file    = 'wrf_hl_1min',
+ hs_file    = 'wrf_hs_1min',
+ uwindfile  = 'wrf_uwind_1min',
+ vwindfile  = 'wrf_vwind_1min',
+ runofffile = 'run-off.bin_1x1',
+#
+ &
+ &EXF_NML_03
+ exf_inscal_precip = 1,
+ exf_inscal_runoff  = 3.1710e-08,
+ exf_offset_atemp = 0.0,
+ &
+#
+ &EXF_NML_04
+#
+ atemp_lon0        = 30.078125D0,
+ atemp_lon_inc     = 0.15625D0,
+ atemp_lat0        = 10.078125D0,
+ atemp_lat_inc     = 0.15625D0,
+ atemp_nlon        = 128,
+ atemp_nlat        = 128,
+#
+ aqh_lon0        = 30.078125D0,
+ aqh_lon_inc     = 0.15625D0,
+ aqh_lat0        = 10.078125D0,
+ aqh_lat_inc     = 0.15625D0,
+ aqh_nlon        = 128,
+ aqh_nlat        = 128,
+#
+ precip_lon0        = 30.078125D0,
+ precip_lon_inc     = 0.15625D0,
+ precip_lat0        = 10.078125D0,
+ precip_lat_inc     = 0.15625D0,
+ precip_nlon        = 128,
+ precip_nlat        = 128,
+#
+ evap_lon0        = 30.078125D0,
+ evap_lon_inc     = 0.15625D0,
+ evap_lat0        = 10.078125D0,
+ evap_lat_inc     = 0.15625D0,
+ evap_nlon        = 128,
+ evap_nlat        = 128,
+#
+ uwind_lon0        = 30.078125D0,
+ uwind_lon_inc     = 0.15625D0,
+ uwind_lat0        = 10.078125D0,
+ uwind_lat_inc     = 0.15625D0,
+ uwind_nlon        = 128,
+ uwind_nlat        = 128,
+#
+ vwind_lon0        = 30.078125D0,
+ vwind_lon_inc     = 0.15625D0,
+ vwind_lat0        = 10.078125D0,
+ vwind_lat_inc     = 0.15625D0,
+ vwind_nlon        = 128,
+ vwind_nlat        = 128,
+#
+ swflux_lon0        = 30.078125D0,
+ swflux_lon_inc     = 0.15625D0,
+ swflux_lat0        = 10.078125D0,
+ swflux_lat_inc     = 0.15625D0,
+ swflux_nlon        = 128,
+ swflux_nlat        = 128,
+#
+ lwflux_lon0        = 30.078125D0,
+ lwflux_lon_inc     = 0.15625D0,
+ lwflux_lat0        = 10.078125D0,
+ lwflux_lat_inc     = 0.15625D0,
+ lwflux_nlon        = 128,
+ lwflux_nlat        = 128,
+#
+ hl_lon0        = 30.078125D0,
+ hl_lon_inc     = 0.15625D0,
+ hl_lat0        = 10.078125D0,
+ hl_lat_inc     = 0.15625D0,
+ hl_nlon        = 128,
+ hl_nlat        = 128,
+#
+ hs_lon0        = 30.078125D0,
+ hs_lon_inc     = 0.15625D0,
+ hs_lat0        = 10.078125D0,
+ hs_lat_inc     = 0.15625D0,
+ hs_nlon        = 128,
+ hs_nlat        = 128,
+#
+ runoff_lon0        = 0.50D0,
+ runoff_lon_inc     = 1.0D0,
+ runoff_lat0        = -79.5D0,
+ runoff_lat_inc     = 160*1.0D0,
+ runoff_nlon        = 360,
+ runoff_nlat        = 160,
+#
+ &
+#
+ &EXF_NML_OBCS
+#
+ obcsNstartdate1     = 20120101,
+ obcsNstartdate2     = 00000,
+ obcsNperiod         = 86400.0,
+#
+ obcsSstartdate1     = 20120101,
+ obcsSstartdate2     = 00000,
+ obcsSperiod         = 86400.0,
+#
+ obcsWstartdate1     = 20120101,
+ obcsWstartdate2     = 00000,
+ obcsWperiod         = 86400.0,
+#
+ obcsEstartdate1     = 20120101,
+ obcsEstartdate2     = 00000,
+ obcsEperiod         = 86400.0,
+#
+ &

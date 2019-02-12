@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cp ../coupledCode/esmf_application .
+cp ../runCase.init/wrf*d01 . 
+ln -sf ../caseInput/* .
+
+mpirun -np 8 esmf_application &> log.esmf

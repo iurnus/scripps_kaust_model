@@ -1,0 +1,44 @@
+Introduction of the test cases
+
+The simulation cases are classified using different level of complexities.
+
+Level 1, stand-alone cases:
+\L1.C1.mitgcm_case_CA2009: 
+  --MITgcm stand-alone case
+  --California Region
+  --start day: 2009 01 01
+\L1.C2.coupled_esmf_test
+  --ESMF stand-alone case
+  --test the coupled ocean--atmosphere prototype solver
+
+Level 2, ESMF--X interface test cases:
+\L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu
+  --MITgcm part same as L1.C1 case
+  --Use ESMF--MITgcm interface 
+  --Using 1 CPU, MPI not activated
+\L2.C2.mitgcm_case_CA2009_mpiESMF_2cpu
+  --MITgcm part same as L1.C1 case
+  --Use WRF--MITgcm interface 
+  --Using 2 CPU, MPI activated
+
+Level 3, CPL atmosphere--ocean cases:
+\L3.C1.coupled_RS2012_ring
+  --Heat wave event starts from 2012 06 01
+  --MITgcm part use Red Sea
+  --WRF part use Red Sea
+  --Use ESMF--MITgcm interface 
+  --Use ESMF--WRF interface 
+  --MPI activated
+  --Use WRF bulk formula
+  --Ocean->Atmosphere: SST, ocean, surface, velocity
+  --Atmosphere->Ocean: heat flux, momentum flux, fresh water flux
+\L3.C2.coupled_CA2018
+  --Atmospheric river event starts from 2018 01 27
+  --MITgcm, WRF use East Pacific region
+  --For local desktop ring, use PGI compiler
+\L3.C3.coupled_CA2018
+  --Same as L3.C2, but for Shaheen-II supercomputer using Intel compiler
+
+post-processing scripts:
+\script-post
+

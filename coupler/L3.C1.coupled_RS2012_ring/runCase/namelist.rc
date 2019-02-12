@@ -1,0 +1,20 @@
+DebugLevel:     0
+
+StartYear:      2012
+StartMonth:     06
+StartDay:       01
+StartHour:      00
+StartMinute:    00
+StartSecond:    00
+
+StopYear:        2012
+StopMonth:       06
+StopDay:         01
+StopHour:        01
+StopMinute:      00
+StopSecond:      00
+
+EsmStepSeconds: 60
+ATMStepSeconds: 60
+OCNStepSeconds: 60
+WAVStepSeconds: 60

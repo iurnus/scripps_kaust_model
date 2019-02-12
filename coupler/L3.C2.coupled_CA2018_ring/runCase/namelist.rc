@@ -1,0 +1,20 @@
+DebugLevel:     0
+
+StartYear:      2018
+StartMonth:     01
+StartDay:       27
+StartHour:      00
+StartMinute:    00
+StartSecond:    00
+
+StopYear:        2018
+StopMonth:       02
+StopDay:         01
+StopHour:        00
+StopMinute:      00
+StopSecond:      00
+
+EsmStepSeconds: 1200
+ATMStepSeconds: 60
+OCNStepSeconds: 1200
+WAVStepSeconds: 1200

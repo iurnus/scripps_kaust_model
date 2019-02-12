@@ -1,0 +1,25 @@
+#!/bin/bash
+
+export CPL_FOLDER='/project/rus043_data/ar_2018_forecast/'
+ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-2[6-9]*.nc .
+ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-3[0-9]*.nc .
+ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-02-0[1-2]*.nc .
+cp ../caseInput/* .
+cp ../../../WRFV3911_AO/main/real.exe .
+cp ../../../WRFV3911_AO/main/wrf.exe .
+cp namelist.input.ca.2018.WRF_medium_set namelist.input
+
+echo "running real..."
+mpirun -np 8 real.exe &> log.real
+
+matlab -nodisplay < updateLowinp.m
+
+cp namelist.input.ca.2018.WRF_medium_ini namelist.input
+echo "setting initial condition..."
+mpirun -np 4 wrf.exe &> log.real
+
+matlab -nodisplay < updateHFlux.m
+
+# cp namelist.input.ca.2018.WRF_medium_run namelist.input
+# echo "run stand-alone WRF"
+# mpirun -np 4 wrf.exe &> log.real

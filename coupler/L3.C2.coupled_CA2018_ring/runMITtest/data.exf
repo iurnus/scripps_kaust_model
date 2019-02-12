@@ -1,0 +1,180 @@
+# $Header: /u/gcmpack/MITgcm/verification/lab_sea/input/data.exf,v 1.7 2004/07/11 06:21:44 dimitri Exp $
+#
+# *********************
+# External Forcing Data
+# *********************
+ &EXF_NML_01
+ useExfYearlyFields = .TRUE., 
+ useExfCheckRange   = .FALSE.,
+ exf_iprec          = 32,
+ exf_yftype         = 'RL',
+ &
+#
+ &EXF_NML_02
+#
+ atempstartdate1   = 20180127,
+ atempstartdate2   = 00000,
+ atempperiod       = 1200.0,
+#
+ aqhstartdate1     = 20180127,
+ aqhstartdate2     = 00000,
+ aqhperiod         = 1200.0,
+#
+ evapstartdate1  = 20180127,
+ evapstartdate2  = 00000,
+ evapperiod      = 1200.0,
+#
+ precipstartdate1  = 20180127,
+ precipstartdate2  = 00000,
+ precipperiod      = 1200.0,
+#
+ uwindstartdate1   = 20180127,
+ uwindstartdate2   = 00000,
+ uwindperiod       = 1200.0,
+#
+ vwindstartdate1   = 20180127,
+ vwindstartdate2   = 00000,
+ vwindperiod       = 1200.0,
+#
+ runoffstartdate1 = 20120101,
+ runoffstartdate2 = 000000, 
+ runoffperiod = -12,
+#   
+ swfluxstartdate1  = 20180127,
+ swfluxstartdate2  = 00000,
+ swfluxperiod      = 1200.0,
+#
+ lwfluxstartdate1  = 20180127,
+ lwfluxstartdate2  = 00000,
+ lwfluxperiod      = 1200.0,
+#
+ hl_startdate1  = 20180127,
+ hl_startdate2  = 00000,
+ hl_period      = 1200.0,
+#
+ hs_startdate1  = 20180127,
+ hs_startdate2  = 00000,
+ hs_period      = 1200.0,
+#
+#
+ precipfile = 'wrf_precip_20mins',
+ evapfile   = 'wrf_evap_20mins',
+ atempfile  = 'wrf_atemp_20mins',
+ aqhfile    = 'wrf_aqh_20mins',
+ swfluxfile = 'wrf_swflux_20mins',
+ swdownfile = '',
+ lwdownfile = '',
+ lwfluxfile = 'wrf_lwflux_20mins',
+ hl_file    = 'wrf_hl_20mins',
+ hs_file    = 'wrf_hs_20mins',
+ uwindfile  = 'wrf_uwind_20mins',
+ vwindfile  = 'wrf_vwind_20mins',
+ runofffile = 'run-off.bin_1x1',
+#
+ &
+ &EXF_NML_03
+ exf_inscal_precip = 1,
+ exf_inscal_runoff  = 3.1710e-08,
+ exf_offset_atemp = 0.0,
+ &
+#
+ &EXF_NML_04
+#
+ atemp_lon0        = 205.2600D0,
+ atemp_lon_inc     = 0.08000D0,
+ atemp_lat0        = 35.0400D0,
+ atemp_lat_inc     = 0.08000D0,
+ atemp_nlon        = 432,
+ atemp_nlat        = 256,
+#
+ aqh_lon0        = 205.2600D0,
+ aqh_lon_inc     = 0.08000D0,
+ aqh_lat0        = 35.0400D0,
+ aqh_lat_inc     = 0.08000D0,
+ aqh_nlon        = 432,
+ aqh_nlat        = 256,
+#
+ evap_lon0        = 205.2600D0,
+ evap_lon_inc     = 0.08000D0,
+ evap_lat0        = 35.0400D0,
+ evap_lat_inc     = 0.08000D0,
+ evap_nlon        = 432,
+ evap_nlat        = 256,
+#
+ precip_lon0        = 205.2600D0,
+ precip_lon_inc     = 0.08000D0,
+ precip_lat0        = 35.0400D0,
+ precip_lat_inc     = 0.08000D0,
+ precip_nlon        = 432,
+ precip_nlat        = 256,
+#
+ uwind_lon0        = 205.2600D0,
+ uwind_lon_inc     = 0.08000D0,
+ uwind_lat0        = 35.0400D0,
+ uwind_lat_inc     = 0.08000D0,
+ uwind_nlon        = 432,
+ uwind_nlat        = 256,
+#
+ vwind_lon0        = 205.2600D0,
+ vwind_lon_inc     = 0.08000D0,
+ vwind_lat0        = 35.0400D0,
+ vwind_lat_inc     = 0.08000D0,
+ vwind_nlon        = 432,
+ vwind_nlat        = 256,
+#
+ swflux_lon0        = 205.2600D0,
+ swflux_lon_inc     = 0.08000D0,
+ swflux_lat0        = 35.0400D0,
+ swflux_lat_inc     = 0.08000D0,
+ swflux_nlon        = 432,
+ swflux_nlat        = 256,
+#
+ lwflux_lon0        = 205.2600D0,
+ lwflux_lon_inc     = 0.08000D0,
+ lwflux_lat0        = 35.0400D0,
+ lwflux_lat_inc     = 0.08000D0,
+ lwflux_nlon        = 432,
+ lwflux_nlat        = 256,
+#
+ hl_lon0        = 205.2600D0,
+ hl_lon_inc     = 0.08000D0,
+ hl_lat0        = 35.0400D0,
+ hl_lat_inc     = 0.08000D0,
+ hl_nlon        = 432,
+ hl_nlat        = 256,
+#
+ hs_lon0        = 205.2600D0,
+ hs_lon_inc     = 0.08000D0,
+ hs_lat0        = 35.0400D0,
+ hs_lat_inc     = 0.08000D0,
+ hs_nlon        = 432,
+ hs_nlat        = 256,
+#
+ runoff_lon0        = 0.50D0,
+ runoff_lon_inc     = 1.0D0,
+ runoff_lat0        = -79.5D0,
+ runoff_lat_inc     = 160*1.0D0,
+ runoff_nlon        = 360,
+ runoff_nlat        = 160,
+#
+ &
+#
+ &EXF_NML_OBCS
+#
+ obcsNstartdate1     = 20180101,
+ obcsNstartdate2     = 00000,
+ obcsNperiod         = 86400.0,
+#
+ obcsSstartdate1     = 20180101,
+ obcsSstartdate2     = 00000,
+ obcsSperiod         = 86400.0,
+#
+ obcsWstartdate1     = 20180101,
+ obcsWstartdate2     = 00000,
+ obcsWperiod         = 86400.0,
+#
+ obcsEstartdate1     = 20180101,
+ obcsEstartdate2     = 00000,
+ obcsEperiod         = 86400.0,
+#
+ &

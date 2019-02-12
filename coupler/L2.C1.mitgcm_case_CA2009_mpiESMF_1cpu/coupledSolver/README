@@ -1,0 +1,16 @@
+ESMF_HelloWorld                     README
+---------------                     ------
+
+This directory contains code that is based on the ESMF Fortran API.
+
+The application prints "Hello ESMF World" to stdout. The code is accompanied
+by a generic Makefile that builds the executable. This Makefile should work 
+unmodified on any system where ESMF is installed and environment variable
+ESMFMKFILE is set according to the instructions given in the ESMF User's Guide.
+
+NOTE:
+The executable should be run according to the system-specific procedures that
+apply to the execution of binaries. The correct procedure may depend on whether
+the executable was built against an mpiuni- or mpi-based ESMF library
+installation.
+

@@ -1,0 +1,34 @@
+#
+# ***************
+# Open boundaries
+# ***************
+ &OBCS_PARM01
+ OB_Ieast= 128*-1,
+#
+ useOrlanskiNorth=.FALSE.,
+ useOBCSsponge=.TRUE.,
+ useOBCSbalance=.TRUE.,
+ useOBCSprescribe=.TRUE.,
+#
+ OBEuFile='Rs_UobcsE_ccs_01Jan2012_nPx1.bin',
+ OBEvFile='Rs_VobcsE_ccs_01Jan2012_nPx1.bin',
+ OBEtFile='Rs_TobcsE_ccs_01Jan2012_nPx1.bin',
+ OBEsFile='Rs_SobcsE_ccs_01Jan2012_nPx1.bin',
+#
+ &
+# *****************************************
+# Orlanski Boundary Condition Parameters.
+# *****************************************
+ &OBCS_PARM02
+# cvelTimeScale = 2000.,
+ &
+# *****************************************
+# Sponge Layer Parameters.
+# *****************************************
+ &OBCS_PARM03
+ Urelaxobcsinner=864000.E0,
+ Urelaxobcsbound=43200.E0,
+ Vrelaxobcsinner=864000.E0,
+ Vrelaxobcsbound=43200.E0,
+ spongeThickness=3,
+ &

@@ -1,0 +1,25 @@
+stand-alone MITgcm simulation of California region
+
+from Jan 01 2009 to Feb 01 2009
+
+thank Ganesh for generating this case
+
+Notes:
+To install and run this case::
+
+./install.sh
+
+To clean this case::
+
+./clean.sh
+
+Folders:
+  ./input_ca_mitgcm: Input files for the MITgcm case.
+  ./mitCode: The MITgcm code folder.
+  ./mitRun: The simulation will run in this folder.
+  ./utils: The install scripts for MITgcm. When using another computer, the addresses in the scripts should be updated.
+
+####################
+WARNING!!!WARNING!!!
+####################
+The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.

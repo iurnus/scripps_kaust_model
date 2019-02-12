@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "cleaning the current folder"
+./Allclean
+
+echo "copying MITGCM setup files"
+ln -s ../../L1.C1.mitgcm_case_CA2009/input_ca_mitgcm/* .
+
+echo "copying the NUOPC--WRF code..."
+cp ../coupledSolver/esmf_application .
+
+echo "running the NUOPC--WRF code..."
+# mpirun -np 2 esmf_application &> log
+mpirun -np 1 esmf_application &> log
+# ./esmf_application

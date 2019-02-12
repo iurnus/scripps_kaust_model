@@ -1,0 +1,31 @@
+code: 
+  coupled MITgcm--ESMF code with MPI, use 1 CPUs
+  the MITgcm solver is divided into "init", "run", "finalize" parts
+  ESMF drives different parts
+
+simulation:
+  California region
+  should have same results as stand-alone MITgcm code
+
+Notes:
+To install and run this case::
+
+./install.sh
+cd mitRun
+./Allrun
+
+To clean this case::
+
+./clean.sh
+
+Folders:
+  ./mitCode: The MITgcm code folder.
+  ./mitRun: The simulation will run in this folder.
+  ./utils: The install scripts for MITgcm. When using another computer, the addresses in the scripts should be updated.
+
+####################
+WARNING!!!WARNING!!!
+####################
+The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.
+The ESMF should be installed in '../../esmf/' to run this case.
+In install.sh, the MPI_HOME variable is "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"

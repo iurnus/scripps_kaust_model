@@ -1,0 +1,27 @@
+WRF SETUP FILES:
+CAMtr_volume_mixing_ratio
+GENPARM.TBL
+LANDUSE.TBL
+MPTABLE.TBL
+RRTM_*
+SOILPARM.TBL
+VEGPARM.TBL
+namelist.input      # namelist
+wrfinput_d01        # initial condition
+wrfbdy_d01          # lateral boundary condition
+wrflowinp_d01       # bottom boundary condition
+(The initial/boundary conditions are generated using WPS)
+
+MITGCM SETUP FILES:
+bathymetry_rs.bin   # bathymetry
+data*               # setup
+eedata              # setup
+hycom_*             # initial condition
+Rs_*                # lateral boundary condition
+ncep_pseudo_data*   # top boundary condition (pseudo data)
+run-off.bin_1x1     # run-off conditions
+
+CPL SOLVER FILES:
+Allclean
+Allrun
+namelist.rc         # namelist
