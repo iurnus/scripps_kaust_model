@@ -52,4 +52,4 @@ sh Allmake.ring.sh
 A more detailed introduction of the code and tutorial cases can be found in the
 code documentation available at:
 
-[documentation](https://scripps-coupled-atmosphere-ocean-model.readthedocs.io)
+  [documentation](https://scripps-coupled-atmosphere-ocean-model.readthedocs.io)
