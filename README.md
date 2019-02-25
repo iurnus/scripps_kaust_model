@@ -1,9 +1,9 @@
-The scripps coupled regional atmosphere-ocean model
+The Scripps-KAUST regional integrated prediction system
 
 This is a documentation for the regional coupled atmosphere-ocean model.
 This model is designed to be a state-of-the-art coupled atmosphere-ocean
 modeling system based on MITgcm and WRF. It also supports the new
-components by using the ESMF coupler.
+components by using the ESMF coupler. This system is still under development.
 
 The designed modeling system currently includes the following models:
 
