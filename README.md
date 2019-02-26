@@ -1,4 +1,4 @@
-The scripps coupled regional atmosphere-ocean model
+The Scripps-KAUST regional integrated prediction system
 
 This is a documentation for the regional coupled atmosphere-ocean model.
 This model is designed to be a state-of-the-art coupled atmosphere-ocean
@@ -35,8 +35,8 @@ There are several folders in this GIT repository:
 * installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
 * README.md - *readme file*
 
-The other folders that should be added to finish the installation:
-(They are not supported in the current GIT repository)
+The source code of MITgcm, WRF and ESMF (not supported in the current GIT repository) 
+should be added to finish the installation:
 
 * esmf/ - *ESMF code*
 * MITgcm\_c66h/ - *MITgcm source code*
@@ -50,4 +50,4 @@ sh Allmake.ring.sh
 ```
 
 A more detailed introduction of the code and tutorial cases can be found in the
-code documentation.
+code [documentation](https://scripps-coupled-atmosphere-ocean-model.readthedocs.io).
