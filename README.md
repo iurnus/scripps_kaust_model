@@ -27,15 +27,17 @@ physics and programming techniques involved.
 
 There are several folders in this GIT repository:
 
-* Allmake.ring.sh - *Script to compile the code on local desktop ring using PGI compiler*
-* Allmake.shaheen.sh - *Script to compile the code on Shaheen-II supercomputer using Intel compiler*
-* coupler/ - *All coupler source code and examples*
+* Allmake.ring.sh - *script to compile the code on local desktop ring using PGI compiler*
+* Allmake.shaheen.sh - *script to compile the code on Shaheen-II supercomputer using Intel compiler*
+* Allclean.sh - *script to uninstall the code*
+* coupler/ - *all coupler source code and examples*
 * esmf\_test\_application/ - *ESMF test cases*
 * installOption\_WRF/ - *WRF scripts with different install options*
 * installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
+* license\_statements/ - *license statements of the model components*
 * README.md - *readme file*
 
-The source code of MITgcm, WRF and ESMF (not supported in the current GIT repository) 
+The source code of MITgcm, WRF and ESMF (not supported in the GIT repository) 
 should be added to finish the installation:
 
 * esmf/ - *ESMF code*
