@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export WRF_DIR='/home/x_sunr/coupleCOAW/WRFV3911_AO/'
+
+cp ${WRF_DIR}/main/wrf.exe .
+cp ../runCase/*.TBL .
+cp ../runCase/CAM* .
+cp ../runCase/RRTM* .
+cp ../runCase/wrf*d01 .
+cp ../runCase/ozone* .
+
+./genSSTin.sh
+./updateFlux.py
+
+sbatch ./Allsubmit.sh

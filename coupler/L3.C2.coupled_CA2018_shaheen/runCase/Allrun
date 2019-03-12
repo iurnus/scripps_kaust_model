@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export WRF_DIR='/home/x_sunr/coupleCOAW/WRFV3911_AO/'
+
+cp ${WRF_DIR}/main/wrf.exe .
+cp ../coupledCode/esmf_application .
+cp ../runCase.init/wrf*d01 . 
+ln -sf ../caseInput/* .
+
+sbatch ./Allsubmit.sh
+

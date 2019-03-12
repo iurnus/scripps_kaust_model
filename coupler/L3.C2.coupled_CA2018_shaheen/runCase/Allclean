@@ -1,0 +1,25 @@
+#!/bin/bash
+
+rm -rf *.data
+rm -rf *.meta
+rm -rf wrfout*
+rm -rf tmp*.nc
+rm -rf rsl*
+rm -rf PET*
+rm -rf STD*
+rm -rf *.nc
+rm -rf esmf_application
+rm -rf namelist.output
+rm -rf log.*
+rm -rf *.exe
+rm -rf wrf*_d01
+rm -rf RR*
+rm -rf ozone*
+rm -rf *TBL
+rm -rf hycom*
+rm -rf Rs_*
+rm -rf data.*
+rm -rf eedata *_data run-off* CAM* bathy*
+rm -rf update*.py
+rm -rf job*
+rm -rf namelist.input

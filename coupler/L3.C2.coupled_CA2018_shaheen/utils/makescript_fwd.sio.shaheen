@@ -1,12 +1,13 @@
 #!/bin/bash
 
 MPI_HOME="/opt/openmpi/intel/ib/include/"
+MITGCM_DIR=/home/x_sunr/coupleCOAW/MITgcm_c66h/
 
 rm -f *.o
 rm -f *.f
 make CLEAN
 rm Makefile
 
-../../../MITgcm_c66h/tools/genmake2 "-rootdir" "../../../MITgcm_c66h" "-mpi" "-mods" "../code" "-optfile" "./mitgcm_optfile"
+$MITGCM_DIR/tools/genmake2 "-rootdir" "$MITGCM_DIR" "-mpi" "-mods" "../code" "-optfile" "./mitgcm_optfile"
 make depend
 make -j8

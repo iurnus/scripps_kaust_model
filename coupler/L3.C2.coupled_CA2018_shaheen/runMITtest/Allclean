@@ -1,0 +1,18 @@
+#!/bin/bash
+
+rm -rf *.data
+rm -rf *.meta
+rm -rf STD*
+rm -rf hycom*
+rm -rf Rs*
+rm -rf run-off*
+rm -rf bathymetry*
+rm -rf data
+rm -rf data.[c-d]*
+rm -rf data.[f-z]*
+rm -rf eedata
+rm -rf mitgcmuv
+rm -rf wrf_*
+rm -rf genMIT/wrf_*
+rm -rf job*
+

@@ -1,5 +1,5 @@
-WRF_DIR=/home/x_sunr/coupleCOAW/coupler/L3.C6.coupled_CA_2018_shaheen/../../WRFV3911_AO/
-ESMF_DIR=/home/x_sunr/coupleCOAW/coupler/L3.C6.coupled_CA_2018_shaheen/../../esmf/
+WRF_DIR=/home/x_sunr/coupleCOAW/WRFV3911_AO/
+ESMF_DIR=/home/x_sunr/coupleCOAW/esmf/
 
 WRF_INC = \
    -I${WRF_DIR}dyn_em \

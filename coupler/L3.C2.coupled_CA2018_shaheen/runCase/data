@@ -1,0 +1,84 @@
+
+ &PARM01
+ viscAz = 1.E-4,
+ viscAh = 1.E2,
+ viscA4 = 1.E9,
+ diffKhT = 1.E0,
+ diffK4T = 0.E10,
+ diffKzT = 1.E-5,
+ diffKhS = 1.E0,
+ diffK4S = 0.E10,
+ diffKzS = 1.E-5,
+ bottomDragQuadratic = 1.E-3,
+ beta = 1.E-11,
+ tAlpha = 2.E-4,
+ sBeta = 7.4E-4,
+ rhonil = 1035.,
+ rhoConstFresh = 1000.,
+ gravity = 9.81,
+ eosType = 'JMD95Z',
+ implicitDiffusion = .TRUE.,
+ implicitViscosity = .TRUE.,
+ implicitFreeSurface = .TRUE.,
+ convertFW2Salt =-1.,
+ useRealFreshWaterFlux = .FALSE.,
+ useCDscheme = .FALSE.,
+ globalFiles       = .FALSE.,
+ useSingleCpuIO    = .TRUE.,
+ vectorInvariantMomentum = .TRUE.,
+ staggerTimeStep = .TRUE.,
+ multiDimAdvection = .FALSE.,
+ tempAdvScheme = 30,
+ saltAdvScheme = 30,
+ useNHMTerms = .FALSE.,
+ hFacMin = 0.3,
+ hFacMindz = 50.,
+ readBinaryPrec = 32,
+ writeBinaryPrec = 32,
+ rotationPeriod = 86164.,
+ debugLevel = 0,
+ &
+# Elliptic solver parameters
+ &PARM02
+ cg2dMaxIters = 1000,
+ cg2dTargetResidual = 1.E-10,
+ &
+# Time stepping parameters
+ &PARM03
+ startTime         = 0.,
+ endTime           = 10800.,
+ deltaTmom         = 120.,
+ deltaTtracer      = 120.,
+ deltaTClock       = 120.,
+ abEps             = 0.1,
+ chkptFreq         = 0.,
+ pChkptFreq        = 120., 
+ dumpFreq          = 0.,
+ taveFreq          = 86400.,
+ tauThetaClimRelax = 0.,
+ tauSaltClimRelax  = 0.,
+ monitorFreq       = 1.,
+ forcing_In_AB     =.false.,
+ &
+# Gridding parameters
+ &PARM04
+ usingSphericalPolarGrid = .TRUE.,
+ xgOrigin=205.22,
+ ygOrigin=35.,
+ delX=432*0.08,
+ delY=256*0.08,
+ delZ= 9.977241, 10.139654, 10.467122, 10.964977, 11.641324, 12.507171, 13.576613,
+       14.867060, 16.399516, 18.198929, 20.294589, 22.720609, 25.516483, 28.727721,
+       32.406597, 36.612997, 41.415394, 46.891962, 53.131850, 60.236635, 68.321968, 
+       77.519466, 87.978847, 99.870373, 113.387618, 128.750618, 146.209458, 166.048336, 
+       188.590197, 214.201982, 243.300608, 276.359750, 313.917555, 356.585400, 405.057842, 
+       460.123931, 522.680049, 593.744500, 674.474093, 766.182967, &
+  &
+# Input datasets
+ &PARM05
+ bathyFile = 'bathymetry_ar2018.bin',
+ uVelInitFile    = 'hycom_U_ccs_newtopo_27Jan2018.bin',
+ vVelInitFile    = 'hycom_V_ccs_newtopo_27Jan2018.bin',
+ hydrogThetaFile = 'hycom_T_ccs_newtopo_27Jan2018.bin',
+ hydrogSaltFile  = 'hycom_S_ccs_newtopo_27Jan2018.bin',
+&

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cp ../runCase/hycom* .
+cp ../runCase/Rs* .
+cp ../runCase/run-off* .
+cp ../runCase/bathymetry* . 
+cp ../runCase/data .
+cp ../runCase/data.[c-d]* .
+cp ../runCase/data.[f-z]* .
+cp ../runCase/eedata .
+
+sbatch ./Allsubmit.sh
