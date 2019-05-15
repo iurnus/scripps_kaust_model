@@ -31,24 +31,25 @@ echo "esmf location: $esmfLocation"
 read -e -p "WRF location? :" -i "$PWD/WRFV3911_AO/" wrfLocation
 echo "wrf location: $wrfLocation"
 
-# # How to install MITgcm
-# tar -xvf $tarLocation/MITgcm_c66h.tar.gz -C .
-# 
-# # How to make ESMF
-# tar -xvf $tarLocation/esmf_7_0_0_src.tar -C .
-# # IMPORTANT!!!
-# # Make sure the ESMF options are correct in configure.esmf
-# # Make sure the NETCDF options are correct in configure.esmf
-# cp installOption_OTH/esmfInstallOptions/configure.esmf.ring esmf/configure.esmf
-# cp installOption_OTH/esmfInstallOptions/build_rules.mk.ring esmf/build_config/Linux.pgi.default/build_rules.mk
-# cp installOption_OTH/esmfInstallOptions/version.pgCC.ring esmf/scripts/version.pgCC
-# cd esmf
-# . configure.esmf
-# echo "installing esmf, it may take about 30 minutes"
-# gmake info &> log.info
-# gmake &> log.gmake
-# # gmake all_tests &> log.all_tests
-# cd ..
+# How to install MITgcm
+tar -xvf $tarLocation/MITgcm_c66h.tar.gz -C .
+
+# How to make ESMF
+tar -xvf $tarLocation/esmf_7_0_0_src.tar -C .
+# IMPORTANT!!!
+# Make sure the ESMF options are correct in configure.esmf
+# Make sure the NETCDF options are correct in configure.esmf
+cp installOption_OTH/esmfInstallOptions/configure.esmf.ring esmf/configure.esmf
+cp installOption_OTH/esmfInstallOptions/build_rules.mk.ring esmf/build_config/Linux.pgi.default/build_rules.mk
+cp installOption_OTH/esmfInstallOptions/version.pgCC.ring esmf/scripts/version.pgCC
+cd esmf
+. configure.esmf
+echo "installing esmf, it may take about 30 minutes"
+gmake info &> log.info
+gmake &> log.gmake
+# To test if ESMF is correctly compiled
+# gmake all_tests &> log.all_tests
+cd ..
 
 # How to make WRF3
 tar -xvf $tarLocation/WRFV3.9.1.1.TAR.gz -C .
