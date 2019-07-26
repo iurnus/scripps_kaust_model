@@ -1,9 +1,10 @@
 #!/bin/bash
 
-export CPL_FOLDER='/project/rus043_data/ar_2018_forecast/'
-ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-2[6-9]*.nc .
-ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-3[0-9]*.nc .
-ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-02-0[1-2]*.nc .
+# export CPL_FOLDER='/project/rus043_data/ar_2018_forecast/'
+# ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-2[6-9]*.nc .
+# ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-3[0-9]*.nc .
+# ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-02-0[1-2]*.nc .
+cp ../save_nc/*.nc .
 cp ../caseInput/* .
 cp ../../../WRFV3911_AO/main/real.exe .
 cp ../../../WRFV3911_AO/main/wrf.exe .
