@@ -3,11 +3,11 @@
 ## # ESMF USE NETCDF 3.6
 ## export NETCDF=/project_shared/Libraries/netcdf-3.6.3_shared_pgi_fortran_17.5-0/
 ## export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-3.6.3_shared_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-## export LD_LIBRARY_PATH=/home/rus043/kaust_project/esmf/esmf_700/lib/libg/Linux.pgi.64.openmpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+## export LD_LIBRARY_PATH=/home/rus043/scripps_test_github/esmf/lib/libg/Linux.pgi.64.openmpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 ## export LD_LIBRARY_PATH=/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 ## # ESMF USE NETCDF 4.4
-export esmf_path=/home/rus043/coupleCOAW/esmf/
+export esmf_path=/home/rus043/scripps_test_github/esmf/
 export NETCDF=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/
 # export NETCDF=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/
 export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}

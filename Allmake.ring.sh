@@ -6,8 +6,10 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   echo "bashrc file updated!"
 else
-  echo "Please update the bashrc file!"
-  echo "There are a few bashrc options in installOption_OTH/bashrc_setup_*"
+  echo "Please update the ~/.bashrc file!"
+  echo "Please update netcdf path in ~/.bashrc file for ESMF!"
+  echo "My ~/.bashrc file is available in installOption_OTH/bashrc_setup_ring"
+  echo "On ring@ucsd.edu, we used PGI compiler."
   exit
 fi
 
@@ -31,74 +33,90 @@ echo "esmf location: $esmfLocation"
 read -e -p "WRF location? :" -i "$PWD/WRFV3911_AO/" wrfLocation
 echo "wrf location: $wrfLocation"
 
-# How to install MITgcm
-tar -xvf $tarLocation/MITgcm_c66h.tar.gz -C .
+#  =1: compile
+# !=1: do not compile
+ifMITgcm=1
+ifESMF=1
+ifWRF=1
+ifWPS=1
 
-# How to make ESMF
-tar -xvf $tarLocation/esmf_7_0_0_src.tar -C .
-# IMPORTANT!!!
-# Make sure the ESMF options are correct in configure.esmf
-# Make sure the NETCDF options are correct in configure.esmf
-cp installOption_OTH/esmfInstallOptions/configure.esmf.ring esmf/configure.esmf
-cp installOption_OTH/esmfInstallOptions/build_rules.mk.ring esmf/build_config/Linux.pgi.default/build_rules.mk
-cp installOption_OTH/esmfInstallOptions/version.pgCC.ring esmf/scripts/version.pgCC
-cd esmf
-. configure.esmf
-echo "installing esmf, it may take about 30 minutes"
-gmake info &> log.info
-gmake &> log.gmake
-# To test if ESMF is correctly compiled
-# gmake all_tests &> log.all_tests
-cd ..
+if [ $ifMITgcm == "1" ]; then
+  # How to install MITgcm
+  tar -xvf $tarLocation/MITgcm_c66h.tar.gz -C .
+fi
 
-# How to make WRF3
-tar -xvf $tarLocation/WRFV3.9.1.1.TAR.gz -C .
-echo "compiling stand-alone WRF"
-cp -rf WRFV3 WRFV3911
-cd WRFV3911
-echo "choosing 54th option to compile WRF"
-printf '54\n1\n' | ./configure &> log.configure
-./compile em_real &> log.em_real0
-cd ../
+if [ $ifESMF == "1" ]; then
+  # How to make ESMF
+  tar -xvf $tarLocation/esmf_7_0_0_src.tar -C .
+  # IMPORTANT!!!
+  # Make sure the ESMF options are correct in configure.esmf
+  # Make sure the NETCDF options are correct in configure.esmf
+  cp installOption_OTH/esmfInstallOptions/configure.esmf.ring esmf/configure.esmf
+  cp installOption_OTH/esmfInstallOptions/build_rules.mk.ring esmf/build_config/Linux.pgi.default/build_rules.mk
+  cp installOption_OTH/esmfInstallOptions/version.pgCC.ring esmf/scripts/version.pgCC
+  cd esmf
+  . configure.esmf
+  echo "installing esmf, it may take about 30 minutes"
+  gmake info &> log.info
+  gmake &> log.gmake
+  # To test if ESMF is correctly compiled
+  # gmake all_tests &> log.all_tests
+  cd ..
+fi
 
-echo "compiling WRF for ocean-atmosphere coupling"
-rm -rf WRFV3911_AO
-cp -r WRFV3 WRFV3911_AO
-ln -sf installOption_WRF/installWRF3911_ao_ring.sh .
-# IMPORTANT!!!
-# Make sure the ESMF_DIR in configure.wrf is correct
-# Make sure the ESMF_DIR, MAIN_DIR, CURRENT_DIR in makefile.io_esmf are correct
-sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO3911Implementations_ring/configure.wrf
-sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
-sed -i "7s@.*@MAIN_DIR=$PWD/@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
-sed -i "8s@.*@CURRENT_DIR=$PWD/WRFV3911_AO/external/io_esmf/@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
-./installWRF3911_ao_ring.sh
 
-echo "compiling WPS for Red Sea case"
-tar -xvf $tarLocation/WPSV3.9.1.TAR.gz -C .
-cp -rf WPS WPS_RedSea
-cd WPS_RedSea
-echo "choosing 7 option to compile WPS"
-printf '5\n' | ./configure &> log.configure
-sed -i "35s@.*@WRF_DIR         =   $wrfLocation@" ./configure.wps
-cp ../installOption_OTH/patch.WPS_configure .
-cp ../installOption_OTH/wps_ecmwf_rs/*.sh .
-patch < patch.WPS_configure
-./compile &> log.compile
-cd ..
+if [ $ifWRF == "1" ]; then
+  # How to make WRF3
+  tar -xvf $tarLocation/WRFV3.9.1.1.TAR.gz -C .
+  echo "compiling stand-alone WRF"
+  cp -rf WRFV3 WRFV3911
+  cd WRFV3911
+  echo "choosing 54th option to compile WRF"
+  printf '54\n1\n' | ./configure &> log.configure
+  ./compile em_real &> log.em_real0
+  cd ../
+  
+  echo "compiling WRF for ocean-atmosphere coupling"
+  rm -rf WRFV3911_AO
+  cp -r WRFV3 WRFV3911_AO
+  ln -sf installOption_WRF/installWRF3911_ao_ring.sh .
+  # IMPORTANT!!!
+  # Make sure the ESMF_DIR in configure.wrf is correct
+  # Make sure the ESMF_DIR, MAIN_DIR, CURRENT_DIR in makefile.io_esmf are correct
+  sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO3911Implementations_ring/configure.wrf
+  sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
+  sed -i "7s@.*@MAIN_DIR=$PWD/@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
+  sed -i "8s@.*@CURRENT_DIR=$PWD/WRFV3911_AO/external/io_esmf/@" installOption_WRF/wrfAO3911Implementations_ring/makefile.io_esmf
+  ./installWRF3911_ao_ring.sh
+fi
 
-echo "compiling WPS for California Case"
-tar -xvf $tarLocation/WPSV3.9.1.TAR.gz -C .
-cp -rf WPS WPS_California
-cd WPS_California
-echo "choosing 7 option to compile WPS"
-printf '5\n' | ./configure &> log.configure
-sed -i "35s@.*@WRF_DIR         =   $wrfLocation@" ./configure.wps
-cp ../installOption_OTH/patch.WPS_configure .
-cp ../installOption_OTH/wps_gfs_ca/*.sh .
-patch < patch.WPS_configure
-./compile &> log.compile
-cd ..
+if [ $ifWPS == "1" ]; then
+  echo "compiling WPS for Red Sea case"
+  tar -xvf $tarLocation/WPSV3.9.1.TAR.gz -C .
+  cp -rf WPS WPS_RedSea
+  cd WPS_RedSea
+  echo "choosing 7 option to compile WPS"
+  printf '5\n' | ./configure &> log.configure
+  sed -i "35s@.*@WRF_DIR         =   $wrfLocation@" ./configure.wps
+  cp ../installOption_OTH/patch.WPS_configure .
+  cp ../installOption_OTH/wps_ecmwf_rs/*.sh .
+  patch < patch.WPS_configure
+  ./compile &> log.compile
+  cd ..
+  
+  echo "compiling WPS for California Case"
+  tar -xvf $tarLocation/WPSV3.9.1.TAR.gz -C .
+  cp -rf WPS WPS_California
+  cd WPS_California
+  echo "choosing 7 option to compile WPS"
+  printf '5\n' | ./configure &> log.configure
+  sed -i "35s@.*@WRF_DIR         =   $wrfLocation@" ./configure.wps
+  cp ../installOption_OTH/patch.WPS_configure .
+  cp ../installOption_OTH/wps_gfs_ca/*.sh .
+  patch < patch.WPS_configure
+  ./compile &> log.compile
+  cd ..
+fi
 
 echo Finished!
 echo "To test the installation, try running 'allrun.ring.sh in /coupler'"

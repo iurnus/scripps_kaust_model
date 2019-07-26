@@ -27,8 +27,8 @@ export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
 export TZ='/usr/share/zoneinfo/US/Pacific'
 # 
-export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/regionalcoam/esmf/lib/libg/Unicos.intel.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-# export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/regionalcoam_cray/esmf/lib/libg/Unicos.cce.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+# export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/regionalcoam/esmf/lib/libg/Unicos.intel.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/home/x_sunr/kaust_project/scripps_kaust_model/esmf/lib/libg/Unicos.intel.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 ## # For WW3 and WW3_NC options
 # export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/bin:${PATH}
