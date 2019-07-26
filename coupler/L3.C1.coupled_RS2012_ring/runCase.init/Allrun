@@ -3,6 +3,7 @@
 # cp /home/rus043/kaust_project/codeNew/regionalCOAM/coupler/coupler_redsea_verification/save_nc/2012_medium/met_em.d01.2012-06-0[1-2]*.nc .
 # cp ../../../WPS_RedSea/met_em*nc .
 
+ln -sf ../save_nc/* .
 ln -sf ../caseInput/* .
 cp ../../../WRFV3911_AO/main/real.exe .
 cp ../../../WRFV3911_AO/main/wrf.exe .

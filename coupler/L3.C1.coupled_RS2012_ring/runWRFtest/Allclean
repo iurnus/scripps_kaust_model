@@ -14,5 +14,6 @@ rm -rf *.TBL
 rm -rf RRTM*
 rm -rf wrf*d01
 rm -rf CAM*
-rm -rf cplFlux
+rm -rf cplFlux*
 rm -rf ozone*
+rm -rf log*
