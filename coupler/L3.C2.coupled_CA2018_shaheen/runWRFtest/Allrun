@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export WRF_DIR='/home/x_sunr/coupleCOAW/WRFV3911_AO/'
+export WRF_DIR='/home/x_sunr/scripps_kaust_model/WRFV3911_AO/'
 
 cp ${WRF_DIR}/main/wrf.exe .
 cp ../runCase/*.TBL .

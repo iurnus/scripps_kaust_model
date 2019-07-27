@@ -1,5 +1,5 @@
-WRF_DIR=/home/x_sunr/coupleCOAW/WRFV3911_AO/
-ESMF_DIR=/home/x_sunr/coupleCOAW/esmf/
+WRF_DIR=/home/x_sunr/scripps_kaust_model/WRFV3911_AO/
+ESMF_DIR=/home/x_sunr/scripps_kaust_model/esmf/
 
 WRF_INC = \
    -I${WRF_DIR}dyn_em \

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MPI_HOME="/opt/openmpi/intel/ib/include/"
-MITGCM_DIR=/home/x_sunr/coupleCOAW/MITgcm_c66h/
+MITGCM_DIR=/home/x_sunr/scripps_kaust_model/MITgcm_c66h/
 
 rm -f *.o
 rm -f *.f

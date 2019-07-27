@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export CPL_FOLDER='/project/k1325/2018_ar_forecast_wrf_nc/2018_fnl_432x256/'
-export WRF_DIR='/home/x_sunr/coupleCOAW/WRFV3911_AO/'
+export WRF_DIR='/home/x_sunr/scripps_kaust_model/WRFV3911_AO/'
 
 ln -s ${CPL_FOLDER}/met_em.d01.2018-01-2[6-9]*.nc .
 ln -s ${CPL_FOLDER}/met_em.d01.2018-01-3[0-9]*.nc .

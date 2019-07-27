@@ -1,14 +1,16 @@
 
 export MPI_HOME=/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include/
 
-read -e -p "WRF3911 (with OA coupling) location? :" -i "$HOME/coupleCOAW/WRFV3911_AO/" wrfLocation
-read -e -p "ESMF location? :" -i "$HOME/coupleCOAW/esmf/" esmfLocation
-read -e -p "MITgcm location? :" -i "$HOME/coupleCOAW/MITgcm_c66h/" mitgcmLocation
+read -e -p "WRF3911 (with OA coupling) location? :" -i "$HOME/scripps_kaust_model/WRFV3911_AO/" wrfLocation
+read -e -p "ESMF location? :" -i "$HOME/scripps_kaust_model/esmf/" esmfLocation
+read -e -p "MITgcm location? :" -i "$HOME/scripps_kaust_model/MITgcm_c66h/" mitgcmLocation
+read -e -p "COUPLER location? :" -i "$HOME/scripps_kaust_model/coupler/" couplerLocation
 sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
 sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
 sed -i "4s@.*@MITGCM_DIR=$mitgcmLocation@" utils/makescript_fwd.sio.shaheen
 sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
 sed -i "4s@.*@ESMF_DIR=$esmfLocation@" coupledCode/Allmake.sh
+sed -i "5s@.*@COUPLER_DIR=$couplerLocation@" coupledCode/Allmake.sh
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
