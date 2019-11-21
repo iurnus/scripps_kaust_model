@@ -1,4 +1,4 @@
-The Scripps-KAUST Regional Integrated Prediction System (SKRIPS)
+The Scripps-KAUST Regional Integrated Prediction System (SKRIPS) v1.0
 
 This is a documentation for the regional coupled atmosphere-ocean model.
 This model is designed to be a state-of-the-art coupled atmosphere-ocean
