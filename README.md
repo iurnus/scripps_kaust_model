@@ -7,9 +7,9 @@ components by using the ESMF coupler.
 
 The designed modeling system currently includes the following models:
 
-* Atmosphere Solver: [WRF](http://www2.mmm.ucar.edu/wrf/users/download/get_source.html) (version 3.9.1.1)
-* Ocean Solver: [MITgcm](http://mitgcm.org/public/source_code.html) (version c66h)
-* Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download/) (version 7.0.0)
+* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.2) (version 4.1.2)
+* Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint67m) (version c67m)
+* Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
 
 The features of the system includes:
 
@@ -41,9 +41,9 @@ The source code of MITgcm, WRF and ESMF (not supported in the GIT repository)
 should be added to finish the installation:
 
 * esmf/ - *ESMF code*
-* MITgcm\_c66h/ - *MITgcm source code*
+* MITgcm\_c67m/ - *MITgcm source code*
 * WPS/ - *WRF preprocessor*
-* WRFV3911\_AO/ - *WRF source code*
+* WRFV412\_AO/ - *WRF source code*
 
 To compile the coupled solver (use PGI compiler), please run:
 
