@@ -1,5 +1,3 @@
-MPI_HOME="/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include/"
-
 export ESMF_DIR=$(pwd)
 echo "ESMF DIR is: $ESMF_DIR"
 export ESMF_OS=Unicos
@@ -15,13 +13,14 @@ export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.4.1.1.6/INTE
 export ESMFMKFILE=${ESMF_DIR}lib/libg/Unicos.intel.64.mpi.default/esmf.mk
 
 export ESMF_OPENMP=OFF
-export ESMF_TESTMPMD=OFF
-export ESMF_TESTHARNESS_ARRAY=RUN_ESMF_TestHarnessArray_2
-export ESMF_TESTHARNESS_FIELD=RUN_ESMF_TestHarnessField_1
-export ESMF_TESTWITHTHREADS=OFF
 export ESMF_LAPACK=internal
-export ESMF_TESTEXHAUSTIVE=ON
 export ESMF_BOPT=g
 export ESMF_SITE=default
 export ESMF_ABI=64
 export ESMF_COMPILER=intel
+
+export ESMF_TESTMPMD=OFF
+export ESMF_TESTHARNESS_ARRAY=RUN_ESMF_TestHarnessArray_2
+export ESMF_TESTHARNESS_FIELD=RUN_ESMF_TestHarnessField_1
+export ESMF_TESTWITHTHREADS=OFF
+export ESMF_TESTEXHAUSTIVE=ON

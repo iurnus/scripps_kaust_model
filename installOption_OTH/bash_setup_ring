@@ -8,6 +8,7 @@
 
 ## # ESMF USE NETCDF 4.4
 export esmf_path=/home/rus043/scripps_test_github/esmf/
+export ESMFMKFILE=$esmf_path/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
 export NETCDF=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/
 # export NETCDF=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/
 export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
