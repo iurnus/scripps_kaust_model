@@ -35,8 +35,8 @@ echo "wrf location: $wrfLocation"
 
 #  =1: compile
 # !=1: do not compile
-ifMITgcm=1
-ifESMF=1
+ifMITgcm=0
+ifESMF=0
 ifWRF=1
 ifWPS=0
 
@@ -64,27 +64,29 @@ fi
 
 
 if [ $ifWRF == "1" ]; then
-  # How to make WRF3
-  unzip $tarLocation/WRF-master.zip
-  echo "compiling stand-alone WRF"
-  mv WRF-master WRFV412.org
-  cp -rf WRFV412.org WRFV412
-  cd WRFV412
-  echo "choosing 54th option to compile WRF"
-  printf '54\n1\n' | ./configure &> log.configure
-  ./compile em_real &> log.em_real0
-  cd ../
+  # # How to make WRF3
+  # unzip $tarLocation/WRF-master.zip
+  # echo "compiling stand-alone WRF"
+  # mv WRF-master WRFV412.org
+  # cp -rf WRFV412.org WRFV412
+  # cd WRFV412
+  # echo "choosing 54th option to compile WRF"
+  # printf '54\n1\n' | ./configure &> log.configure
+  # ./compile em_real &> log.em_real0
+  # cd ../
   
   echo "compiling WRF for ocean-atmosphere coupling"
-  rm -rf WRFV412_AO
-  cp -r WRFV412.org WRFV412_AO
+  WRF_CPL_DIR=WRFV412_AO_01
+  rm -rf $WRF_CPL_DIR
+  cp -r WRFV412.org $WRF_CPL_DIR
   ln -sf installOption_WRF/installWRF412_ao_ring.sh .
   # IMPORTANT!!!
   # Make sure the ESMF_DIR in configure.wrf is correct
   # Make sure the ESMF_DIR, MAIN_DIR, CURRENT_DIR in makefile.io_esmf are correct
   sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_ring/configure.wrf
   sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
-  sed -i "6s@.*@CURRENT_DIR=$PWD/WRFV412_AO/external/io_esmf/@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
+  sed -i "6s@.*@CURRENT_DIR=$PWD/$WRF_CPL_DIR/external/io_esmf/@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
+  sed -i "3s@.*@cd $WRF_CPL_DIR@" ./installWRF412_ao_ring.sh
   ./installWRF412_ao_ring.sh
 fi
 

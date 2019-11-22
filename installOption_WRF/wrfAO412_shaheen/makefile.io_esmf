@@ -4,7 +4,8 @@ FC  = ftn -real-size 32 -i4  -w -ftz -fno-alias -align all -FR -convert big_endi
 ESMF_DIR = /home/x_sunr/scripps_kaust_model_github/esmf/
 ESMF_INCLUDE  = ${ESMF_DIR}/mod/modg/Unicos.intel.64.mpi.default/
 CURRENT_DIR = /home/x_sunr/scripps_kaust_model_github/WRFV412_AO/external/io_esmf/
-INCLUDE_MODULES = -I$(CURRENT_DIR)/../../main \
+INCLUDE_MODULES = -I$(CURRENT_DIR)/../../ \
+			      -I$(CURRENT_DIR)/../../main \
                   -I$(CURRENT_DIR)/../../external/io_netcdf \
                   -I$(CURRENT_DIR)/../../external/io_int \
                   -I$(CURRENT_DIR)/../../frame \
@@ -36,7 +37,7 @@ $(TARGET) : $(OBJS)
 
 .F90.o :
 	$(CPP) -I../ioapi_share -P -traditional -DESMF_COUPLING $*.F90 > $*.f
-	$(FC) -I$(ESMF_INCLUDE) -I$(MAIN_DIR) -I$(CURRENT_DIR) $(INCLUDE_MODULES) -c -g -I../ioapi_share $*.f
+	$(FC) -I$(ESMF_INCLUDE) -I$(CURRENT_DIR) $(INCLUDE_MODULES) -c -g -I../ioapi_share $*.f
 
 superclean: 
 	@/bin/rm -f *.f *.o $(TARGET) *.mod

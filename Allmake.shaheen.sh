@@ -19,7 +19,7 @@ echo -n "Have you downloaded the tar files (y/n)? "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
   echo "tar files downloaded!"
-  read -e -p "The location of the tar files? (default: $PWD/tarfiles/):" -i "$PWD/tarfiles/" tarLocation
+  read -e -p "The location of the tar files? :" -i "$PWD/tarfiles/" tarLocation
   echo "tar files are located at: $tarLocation"
 else
   echo "please download the tar files via: git clone git@bitbucket.org:iurnus/regionalcoam_tarfiles.git"
@@ -73,15 +73,17 @@ if [ $ifWRF == "1" ]; then
   cd ../
   
   echo "compiling WRF for ocean-atmosphere coupling"
-  rm -rf WRFV412_AO
-  cp -r WRFV412.org WRFV412_AO
+  WRF_CPL_DIR=WRFV412_AO
+  rm -rf $WRF_CPL_DIR
+  cp -r WRFV412.org $WRF_CPL_DIR
   ln -sf installOption_WRF/installWRF412_ao_shaheen.sh .
   # IMPORTANT!!!
   # Make sure the ESMF_DIR in configure.wrf is correct
   # Make sure the ESMF_DIR, MAIN_DIR, CURRENT_DIR in makefile.io_esmf are correct
   sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_shaheen/configure.wrf
   sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_shaheen/makefile.io_esmf
-  sed -i "6s@.*@CURRENT_DIR=$PWD/WRFV412_AO/external/io_esmf/@" installOption_WRF/wrfAO412_shaheen/makefile.io_esmf
+  sed -i "6s@.*@CURRENT_DIR=$PWD/$WRF_CPL_DIR/external/io_esmf/@" installOption_WRF/wrfAO412_shaheen/makefile.io_esmf
+  sed -i "3s@.*@cd $WRF_CPL_DIR" ./installWRF412_ao_shaheen.sh
   ./installWRF412_ao_shaheen.sh
 fi
 

@@ -3,8 +3,9 @@ CPP = /lib/cpp -P
 FC  = mpif90 -r4 -i4  -w -Mfree -byteswapio 
 ESMF_DIR=/home/rus043/scripps_coupled_model_github/esmf/
 ESMF_INCLUDE  = ${ESMF_DIR}/mod/modg/Linux.pgi.64.openmpi.default/
-CURRENT_DIR=/home/rus043/scripps_coupled_model_github/WRFV412_AO/external/io_esmf/
-INCLUDE_MODULES = -I$(CURRENT_DIR)/../../main \
+CURRENT_DIR=/home/rus043/scripps_coupled_model_github/WRFV412_AO_01/external/io_esmf/
+INCLUDE_MODULES = -I$(CURRENT_DIR)/../../ \
+			      -I$(CURRENT_DIR)/../../main \
                   -I$(CURRENT_DIR)/../../external/io_netcdf \
                   -I$(CURRENT_DIR)/../../external/io_int \
                   -I$(CURRENT_DIR)/../../frame \
@@ -36,7 +37,7 @@ $(TARGET) : $(OBJS)
 
 .F90.o :
 	$(CPP) -I../ioapi_share -P -traditional -DESMF_COUPLING $*.F90 > $*.f
-	$(FC) -I$(ESMF_INCLUDE) -I$(MAIN_DIR) -I$(CURRENT_DIR) $(INCLUDE_MODULES) -c -g -I../ioapi_share $*.f
+	$(FC) -I$(ESMF_INCLUDE) -I$(CURRENT_DIR) $(INCLUDE_MODULES) -c -g -I../ioapi_share $*.f
 
 superclean: 
 	@/bin/rm -f *.f *.o $(TARGET) *.mod
