@@ -84,8 +84,7 @@ if [ $ifWRF == "1" ]; then
   # Make sure the ESMF_DIR, MAIN_DIR, CURRENT_DIR in makefile.io_esmf are correct
   sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_ring/configure.wrf
   sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
-  sed -i "7s@.*@MAIN_DIR=$PWD/@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
-  sed -i "8s@.*@CURRENT_DIR=$PWD/WRFV412_AO/external/io_esmf/@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
+  sed -i "6s@.*@CURRENT_DIR=$PWD/WRFV412_AO/external/io_esmf/@" installOption_WRF/wrfAO412_ring/makefile.io_esmf
   ./installWRF412_ao_ring.sh
 fi
 

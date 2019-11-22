@@ -3,7 +3,7 @@ WRF_PWD_DIR=${PWD}
 cd WRFV412_AO
 echo "WRF_PWD_DIR is: ${WRF_PWD_DIR}"
 WRF_UPDATE_DIR0=${WRF_PWD_DIR}/installOption_WRF/wrfAO412_shared/
-WRF_UPDATE_DIR1=${WRF_PWD_DIR}/installOption_WRF/wrfAO412_ring/
+WRF_UPDATE_DIR1=${WRF_PWD_DIR}/installOption_WRF/wrfAO412_shaheen/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
