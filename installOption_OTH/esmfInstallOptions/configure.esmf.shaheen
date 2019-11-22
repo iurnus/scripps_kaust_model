@@ -19,6 +19,7 @@ export ESMF_SITE=default
 export ESMF_ABI=64
 export ESMF_COMPILER=intel
 
+# TEST OPTIONS
 export ESMF_TESTMPMD=OFF
 export ESMF_TESTHARNESS_ARRAY=RUN_ESMF_TestHarnessArray_2
 export ESMF_TESTHARNESS_FIELD=RUN_ESMF_TestHarnessField_1
