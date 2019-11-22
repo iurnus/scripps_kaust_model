@@ -1,14 +1,17 @@
-code: 
-  coupled MITgcm--ESMF code with MPI, use 2 CPUs
-  the MITgcm solver is divided into "init", "run", "finalize" parts
-  ESMF drives different parts
-  based on the L2C1 case, with update patches
+ESMF-MITgcm interface implementation test & MPI test
+
+This folder contains an ESMF-MITgcm coupled test case. The case aims to test
+the implementation of ESMF-MITgcm interface. In this test, the ESMF driver will
+drive MITgcm. The MITgcm solver is divided into "init", "run", "finalize"
+parts. The ESMF-atmosphere interface is also implemented, but the functions do
+not drive "real" atmosphere model. 
+
+This test use 2 CPUs to test the MPI implementations.
 
 simulation:
   California region
-  should have same results as stand-alone MITgcm code
+  The results should be the same as stand-alone MITgcm code
 
-Notes:
 To install and run this case::
 
 ./install.sh
@@ -20,13 +23,23 @@ To clean this case::
 ./clean.sh
 
 Folders:
-  ./patches: The patches to be update from the 1 CPU case.
   ./mitRun: The simulation will run in this folder.
+  ./mitCode: A few updates of MITgcm source code.
+  ./utils: Install scripts for MITgcm.
 
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.
-The ESMF should be installed in '../../esmf/' to run this case.
-The L2C1 case should be in '../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/' to run this case.
-In install.sh, the MPI_HOME variable is "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
+The MITgcm path is defined as '/home/rus043/scripps_coupled_model_update/MITgcm_c67m' in install.sh
+The MPI_HOME path is defined as '/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include' in install.sh
+
+The ESMF should be installed to run this case. The variable ESMFMKFILE should
+be defined:
+
+  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
+
+where ESMF_DIR should be the location that ESMF is installed.
+
+This is not an indepedent test. MUST have L2C1 test case.
+The L2C1_DIR path is defined as '../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/' in install.sh
+
