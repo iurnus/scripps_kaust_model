@@ -5,7 +5,7 @@
 
 ln -sf ../save_nc/* .
 ln -sf ../caseInput/* .
-cp ../../../WRFV3911_AO/main/real.exe .
-cp ../../../WRFV3911_AO/main/wrf.exe .
+cp ../../../WRFV412_AO/main/real.exe .
+cp ../../../WRFV412_AO/main/wrf.exe .
 
 mpirun -np 4 real.exe

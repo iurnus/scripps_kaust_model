@@ -1,7 +1,7 @@
 
 export MPI_HOME="/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
 
-read -e -p "WRF3911 (with OA coupling) location? :" -i "$PWD/../../WRFV3911_AO/" wrfLocation
+read -e -p "WRF412 (with OA coupling) location? :" -i "$PWD/../../WRFV412_AO/" wrfLocation
 read -e -p "ESMF location? :" -i "$PWD/../../esmf/" esmfLocation
 sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
 sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
@@ -29,7 +29,7 @@ cp $MPI_HOME/mpif* .
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
-# build the test coupler
-cd coupledCode
-./Allmake.sh
-cd ..
+# # build the test coupler
+# cd coupledCode
+# ./Allmake.sh
+# cd ..

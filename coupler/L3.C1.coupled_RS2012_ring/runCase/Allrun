@@ -2,7 +2,7 @@
 
 ln -sf ../caseInput/* .
 
-cp ../../../WRFV3911_AO/main/wrf.exe .
+cp ../../../WRFV412_AO/main/wrf.exe .
 cp ../runCase.init/wrfbdy_d01 . 
 cp ../runCase.init/wrfinput_d01 .
 cp ../runCase.init/wrflowinp_d01 .

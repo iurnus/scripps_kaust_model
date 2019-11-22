@@ -1,7 +1,5 @@
 #!/bin/csh -f
 
-setenv MPI_HOME "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
-
 # build the MITGCM as a library
 mkdir build/
 cp utils/* build/ # copy the scripts to install MITGCM
@@ -9,6 +7,7 @@ cp -rf mitCode/ code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.ring # install MITGCM, generate *.f files
 
+setenv MPI_HOME "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
 cp ${MPI_HOME}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..

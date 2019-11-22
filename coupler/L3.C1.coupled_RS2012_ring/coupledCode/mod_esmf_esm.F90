@@ -41,14 +41,14 @@
 !
       contains
 !
-      subroutine ESM_SetServices(gcomp, rc)
+      subroutine ESM_SetServices(driver, rc)
       implicit none
 !
 !-----------------------------------------------------------------------
 !     Imported variable declarations 
 !-----------------------------------------------------------------------
 !
-      type(ESMF_GridComp) :: gcomp
+      type(ESMF_GridComp) :: driver
       integer, intent(out) :: rc
 !
       rc = ESMF_SUCCESS
@@ -58,7 +58,7 @@
 !-----------------------------------------------------------------------
 !
       print *, "calling ESM_SetServices function"
-      call NUOPC_CompDerive(gcomp, NUOPC_SetServices, rc=rc)
+      call NUOPC_CompDerive(driver, NUOPC_SetServices, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 !
@@ -67,14 +67,14 @@
 !-----------------------------------------------------------------------
 !
       print *, "calling NUOPC_CompSpecialize function"
-      call NUOPC_CompSpecialize(gcomp,                                  &
+      call NUOPC_CompSpecialize(driver,                                  &
                                 specLabel=NUOPC_Label_SetModelServices, &
                                 specRoutine=ESM_SetModelServices, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 !
       print *, "calling NUOPC_CompSpecialize function"
-      call NUOPC_CompSpecialize(gcomp,                                  &
+      call NUOPC_CompSpecialize(driver,                                  &
                                 specLabel=NUOPC_Label_SetRunSequence,   &
                                 specRoutine=ESM_SetRunSequence, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -83,14 +83,14 @@
       print *, "calling NUOPC_CompSpecialize function finished"
       end subroutine ESM_SetServices
 !
-      subroutine ESM_SetModelServices(gcomp, rc)
+      subroutine ESM_SetModelServices(driver, rc)
       implicit none
 !
 !-----------------------------------------------------------------------
 !     Imported variable declarations 
 !-----------------------------------------------------------------------
 !
-      type(ESMF_GridComp) :: gcomp
+      type(ESMF_GridComp) :: driver
       integer, intent(out) :: rc
 !     
 !-----------------------------------------------------------------------
@@ -113,7 +113,7 @@
 !-----------------------------------------------------------------------
 !
       print *, "setting ATM services"
-      call NUOPC_DriverAddComp(gcomp, "ATM", ATM_SetServices,           &
+      call NUOPC_DriverAddComp(driver, "ATM", ATM_SetServices,           &
                                comp=child, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
@@ -123,7 +123,7 @@
                              line=__LINE__, file=FILENAME)) return
 
       print *, "setting OCN services"
-      call NUOPC_DriverAddComp(gcomp, "OCN", OCN_SetServices,           &
+      call NUOPC_DriverAddComp(driver, "OCN", OCN_SetServices,           &
                                comp=child, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
@@ -136,7 +136,7 @@
 !     SetServices for connector components 
 !-----------------------------------------------------------------------
 !
-      call NUOPC_DriverAddComp(gcomp,                                   &
+      call NUOPC_DriverAddComp(driver,                                   &
                            srcCompLabel="ATM",                          &
                            dstCompLabel="OCN",                          &
                            compSetServicesRoutine=CPL_SetServices,      &
@@ -148,7 +148,7 @@
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
 
-      call NUOPC_DriverAddComp(gcomp,                                   &
+      call NUOPC_DriverAddComp(driver,                                   &
                            srcCompLabel="OCN",                          &
                            dstCompLabel="ATM",                          &
                            compSetServicesRoutine=CPL_SetServices,      &
@@ -161,7 +161,7 @@
                              line=__LINE__, file=FILENAME)) return
 !
 !-----------------------------------------------------------------------
-!     Set internal clock for application (gcomp). The time step must be 
+!     Set internal clock for application (driver). The time step must be 
 !     set to the slowest time interval of the connector components
 !-----------------------------------------------------------------------
 !
@@ -175,22 +175,23 @@
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 !
-      call ESMF_GridCompSet(gcomp, clock=esmClock, rc=rc)
+      call ESMF_GridCompSet(driver, clock=esmClock, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
       print *, "setting clock services finished!"
 !
       end subroutine ESM_SetModelServices 
 !
-      subroutine ESM_SetRunSequence(gcomp, rc)
+      subroutine ESM_SetRunSequence(driver, rc)
       implicit none
 !
 !-----------------------------------------------------------------------
 !     Imported variable declarations 
 !-----------------------------------------------------------------------
 !
-      type(ESMF_GridComp) :: gcomp
+      type(ESMF_GridComp) :: driver
       integer, intent(out) :: rc
+      type(NUOPC_FreeFormat)              :: runSeqFF
 !     
 !-----------------------------------------------------------------------
 !     Local variable declarations 
@@ -212,35 +213,26 @@
 
       PRINT *, "Running coupled solver..."
 
-      call ESMF_GridCompGet(gcomp, vm=vm, rc=rc)
+      call ESMF_GridCompGet(driver, vm=vm, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 
-      call ESMF_VMGet(vm, localPet=localPet, petCount=petCount, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-          line=__LINE__, file=FILENAME)) return
 
-      call NUOPC_DriverNewRunSequence(gcomp, slotCount=1, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-          line=__LINE__, file=FILENAME)) return
+      ! read free format run sequence from config
+      runSeqFF = NUOPC_FreeFormatCreate(stringList=(/ &
+        " @*            ",    &
+        "   OCN -> ATM  ",    &
+        "   ATM -> OCN  ",    &
+        "   OCN         ",    &
+        "   ATM         ",    &
+        " @             " /), &
+        rc=rc)
 
-      call NUOPC_DriverAddRunElement(gcomp, slot=1,                     &
-                                     srcCompLabel="ATM",                &
-                                     dstCompLabel="OCN",                &
-                                     rc=rc)
-
-      call NUOPC_DriverAddRunElement(gcomp, slot=1,                     &
-                                     srcCompLabel="OCN",                &
-                                     dstCompLabel="ATM",                &
-                                     rc=rc)
-
-      call NUOPC_DriverAddRunElement(gcomp, slot=1, compLabel="OCN",    &
-                                     rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-          line=__LINE__, file=FILENAME)) return
-
-      call NUOPC_DriverAddRunElement(gcomp, slot=1, compLabel="ATM",    &
-                                     rc=rc)
+      call NUOPC_FreeFormatLog(runSeqFF, rc=rc)
+      call NUOPC_DriverIngestRunSequence(driver, runSeqFF, &
+        autoAddConnectors=.true., rc=rc)
+      call NUOPC_DriverPrint(driver, orderflag=.true., rc=rc)
+      call NUOPC_FreeFormatDestroy(runSeqFF, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 

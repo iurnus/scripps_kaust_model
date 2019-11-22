@@ -9,9 +9,9 @@ ln -s ../build/mmout/*.a .
 ln -s ../build/setrlstk.o .
 ln -s ../build/sigreg.o .
 
-# ln -s ../../../WRFV3911_AO/main/wrf_test_ESMF.o .
-ln -s ../../../WRFV3911_AO/main/wrf_ESMFMod.o .
-ln -s ../../../WRFV3911_AO/main/module_wrf_top.o .
-ln -s ../../../WRFV3911_AO/main/libwrflib.a .
+# ln -s ../../../WRFV412_AO/main/wrf_test_ESMF.o .
+ln -s ../../../WRFV412_AO/main/wrf_ESMFMod.o .
+ln -s ../../../WRFV412_AO/main/module_wrf_top.o .
+ln -s ../../../WRFV412_AO/main/libwrflib.a .
 
 make

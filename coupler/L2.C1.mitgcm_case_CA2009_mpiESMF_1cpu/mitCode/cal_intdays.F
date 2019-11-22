@@ -1,6 +1,3 @@
-C $Header: /u/gcmpack/MITgcm/pkg/cal/cal_intdays.F,v 1.2 2003/10/09 04:19:19 edhill Exp $
-C $Name: checkpoint66h $
-
 #include "CAL_OPTIONS.h"
 
       INTEGER FUNCTION cal_IntDays(

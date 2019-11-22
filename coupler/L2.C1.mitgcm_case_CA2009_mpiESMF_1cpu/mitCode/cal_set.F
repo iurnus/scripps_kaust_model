@@ -1,6 +1,3 @@
-C $Header: /u/gcmpack/MITgcm/pkg/cal/cal_set.F,v 1.10 2014/06/05 19:38:45 jmc Exp $
-C $Name: checkpoint66h $
-
 #include "CAL_OPTIONS.h"
 
       SUBROUTINE CAL_SET(
@@ -97,7 +94,6 @@ C-    Set calendar parameters which are independent of the calendar choice:
       secondsPerMinute = 60
       secondsPerHour   = secondsPerMinute*minutesPerHour
       secondsPerDay    = secondsPerMinute*minutesPerDay
-
 
 C-    Select which calendar type to use:
       IF ( theCalendar .EQ. 'gregorian') THEN

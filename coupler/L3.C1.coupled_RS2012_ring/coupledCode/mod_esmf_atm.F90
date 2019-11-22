@@ -664,7 +664,7 @@
         ierr = 0
         
         PRINT *, "in name is: ", config_flags%auxinput5_inname
-        PRINT *, "out name is: ", config_flags%auxinput5_outname
+        PRINT *, "out name is: ", config_flags%auxhist5_outname
    
         #include "med_open_esmf_calls.inc"
    
