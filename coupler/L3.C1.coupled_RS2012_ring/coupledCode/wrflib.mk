@@ -1,5 +1,5 @@
-WRF_DIR=/home/rus043/scripps_coupled_model_1.1/coupler/L3.C1.coupled_RS2012_ring/../../WRFV412_AO/
-ESMF_DIR=/home/rus043/scripps_coupled_model_1.1/coupler/L3.C1.coupled_RS2012_ring/../../esmf/
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C1.coupled_RS2012_ring/../../WRFV412_AO_01/
+ESMF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C1.coupled_RS2012_ring/../../esmf/
 
 WRF_INC = \
    -I${WRF_DIR}dyn_em \

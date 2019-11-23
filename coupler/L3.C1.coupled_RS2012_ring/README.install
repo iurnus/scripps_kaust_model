@@ -1,10 +1,13 @@
-code: 
-  coupled MITgcm--ESMF--WRF code with MPI
-  the MITgcm solver is divided into "init", "run", "finalize" parts
-  the WRF solver is also divided into "init", "run", "finalize" parts
-  ESMF drives different parts
-  the WRF bulf formula is used
-  RUN ON RING, compiled using PGI compiler
+MITgcm-WRF coupled simulation test: Red Sea
+
+This folder contains an MITgcm-WRF coupled test case. The coupled simulation is
+driven by ESMF. The case aims to test the implementation of the coupled code.
+In this test, the ESMF driver drives both MITgcm and WRF. Both MITgcm and WRF
+are divided into "init", "run", "finalize" parts. This coupled code drives the
+realistic simulations in the Red Sea region.
+
+The WRF bulf formula is used in this case.
+This should be compiled using PGI compiler (run it on ring).
 
 simulation:
   Red Sea region
@@ -37,16 +40,22 @@ MUST run the coupled case first:
 
 ./allrun.sh
 
-runMITtest: test if the MITgcm flux is added correctly (need ./install_mit.sh)
-runWRFtest: test if the WRF flux is added correctly
-latexSummary: automatically summarize the results
+runMITtest: Test if the MITgcm flux is added correctly. (To install stand-alone MITgcm code, run ./install_mit.sh)
+runWRFtest: Test if the WRF flux is added correctly
+latexSummary: Generate the report automatically.
 
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.
-The ESMF should be installed in '../../esmf/' to run this case.
-The WRF v3.9.1.1 with should be installed in '../../WRFV3911_AO/' to run this case.
-In install.sh, the MPI_HOME variable is "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
+The MITgcm path is defined as '/home/rus043/scripps_coupled_model_update/MITgcm_c67m' in install.sh
+The MPI_HOME path is defined as '/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include' in install.sh
+
+The ESMF should be installed to run this case. The variable ESMFMKFILE should
+be defined:
+
+  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
+
+where ESMF_DIR should be the location that ESMF is installed.
+
 Make sure MATLAB is installed.
 Make sure NCL is installed.

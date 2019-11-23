@@ -1,4 +1,5 @@
  &time_control
+ iofields_filename                   = "namelist.WRF_IO",
  run_days                            = 0,
  run_hours                           = 6,
  run_minutes                         = 0,
@@ -35,7 +36,7 @@
  auxinput4_end_d                     = 60,
  io_form_auxinput4                   = 2,
  auxhist5_outname                    = 'wrfout_esmf',
- frames_per_auxhist5                 = 10000000,
+ frames_per_auxhist5                 = 100000,
  auxhist5_interval_s                 = 60,
  auxhist5_end_d                      = 60,
  io_form_auxhist5                    = 7,

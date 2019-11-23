@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cp ../../../WRFV3911_AO/main/wrf.exe .
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C1.coupled_RS2012_ring/../../WRFV412_AO_01/
+cp $WRF_DIR/main/wrf.exe .
 cp ../runCase/*.TBL .
 cp ../runCase/CAM* .
 cp ../runCase/RRTM* .

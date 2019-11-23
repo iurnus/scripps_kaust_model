@@ -1,8 +1,9 @@
 #!/bin/bash
 
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C1.coupled_RS2012_ring/../../WRFV412_AO_01/
 ln -sf ../caseInput/* .
 
-cp ../../../WRFV412_AO/main/wrf.exe .
+cp $WRF_DIR/main/wrf.exe .
 cp ../runCase.init/wrfbdy_d01 . 
 cp ../runCase.init/wrfinput_d01 .
 cp ../runCase.init/wrflowinp_d01 .

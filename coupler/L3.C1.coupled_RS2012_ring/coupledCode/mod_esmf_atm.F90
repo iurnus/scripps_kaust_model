@@ -333,14 +333,6 @@
 
       call wrf_run();
 
-      call ESMF_StateGet(exportState, itemName="SST_INPUT", field=esmffield, rc=rc)
-      write (ofile, "(A7,I6.6,A3)") "sstiATM", 3, ".nc"
-      call ESMF_FieldWrite(esmffield, trim(ofile), rc=rc)
-
-      call ESMF_FieldGet(esmffield, localDE=0, farrayPtr=ptr_esmffield, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
-          line=__LINE__, file=FILENAME)) return
-
       if (.not. allocated(sst_ini_wrf)) then
         allocate(sst_ini_wrf(ips:MIN(ide-1,ipe),jps:MIN(jde-1,jpe)))
       end if
@@ -349,7 +341,6 @@
         do nI = ips,MIN(ide-1,ipe)
           !! This is not available for WRFV3911?
           sst_ini_wrf(nI,nJ) = head_grid%sst(nI,nJ)
-          !! sst_ini_wrf(nI,nJ) = ptr_esmffield(nI,nJ)
         end do
       end do
 
@@ -494,12 +485,9 @@
         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
             line=__LINE__, file=FILENAME)) return
 
-        !! do nJ = jps, jpe
-        !!   do nI = ips, ipe
         do nJ = jps,MIN(jde-1,jpe)
           do nI = ips,MIN(ide-1,ipe)
             ptr_esmffield(nI,nJ) = sst_ini_wrf(nI,nJ)
-            !! ptr_esmffield(nI,nJ) = head_grid%sst(nI,nJ)
           end do
         end do
 

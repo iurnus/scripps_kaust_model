@@ -1,10 +1,16 @@
-
+#!/bin/sh
 export MPI_HOME="/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
+export MITGCM_DIR="/home/rus043/scripps_coupled_model_update/MITgcm_c67m"
 
-read -e -p "WRF412 (with OA coupling) location? :" -i "$PWD/../../WRFV412_AO/" wrfLocation
+read -e -p "WRF412 (with OA coupling) location? :" -i "$PWD/../../WRFV412_AO_01/" wrfLocation
 read -e -p "ESMF location? :" -i "$PWD/../../esmf/" esmfLocation
 sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
 sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
+
+sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
+sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
+sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
+sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFTest/Allrun
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
@@ -23,13 +29,20 @@ cp utils/* build/ # copy the scripts to install MITGCM
 cp mitCode/* code/ # copy the scripts to install MITGCM
 cp mitSettingRS/* code/ # copy the scripts to install MITGCM
 cd build
-./makescript_fwd.sio.ring # install MITGCM, generate *.f files
+./makescript_fwd.sio.ring ${MITGCM_DIR}# install MITGCM, generate *.f files
 
-cp $MPI_HOME/mpif* . 
+cp ${MPI_HOME}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
-# # build the test coupler
-# cd coupledCode
-# ./Allmake.sh
-# cd ..
+# build the test coupler
+cd coupledCode
+./Allmake.sh
+cd ..
+
+if ( -f ./coupledSolver/esmf_application ) then
+  echo Installation is successful!
+  echo The coupled model is installed as ./coupledSolver/esmf_application
+else 
+  echo ERROR! Installation is NOT successful!
+fi

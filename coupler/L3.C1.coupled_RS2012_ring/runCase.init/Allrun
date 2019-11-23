@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# cp /home/rus043/kaust_project/codeNew/regionalCOAM/coupler/coupler_redsea_verification/save_nc/2012_medium/met_em.d01.2012-06-0[1-2]*.nc .
-# cp ../../../WPS_RedSea/met_em*nc .
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C1.coupled_RS2012_ring/../../WRFV412_AO_01/
 
 ln -sf ../save_nc/* .
 ln -sf ../caseInput/* .
-cp ../../../WRFV412_AO/main/real.exe .
-cp ../../../WRFV412_AO/main/wrf.exe .
+cp $WRF_DIR/main/real.exe .
+cp $WRF_DIR/main/wrf.exe .
 
 mpirun -np 4 real.exe
