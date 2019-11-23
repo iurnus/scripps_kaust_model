@@ -1,5 +1,8 @@
-Now we are updating SKRIPS code from v1.0 to v1.1. The SKRIPS v1.0 is still available: [download v1.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.0)
+The SKRIPS is under continous development. 
 
+The current stable version v1.0 is available: [download v1.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.0)
+
+We are currently updating our code to v1.1.
 The Scripps-KAUST Regional Integrated Prediction System (SKRIPS) v1.1
 
 This is a documentation for the regional coupled atmosphere-ocean model.
