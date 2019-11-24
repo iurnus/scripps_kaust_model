@@ -1112,7 +1112,7 @@
 !     Get field
 !-----------------------------------------------------------------------
 !
-      call ESMF_StateGet(importState, "SST", field_sst_ini, rc=rc)
+      call ESMF_StateGet(importState, "SST_INPUT", field_sst_ini, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 !
@@ -1276,6 +1276,7 @@
       call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
       call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
       call ESMF_StateGet(importState, "T2", field_t2, rc=rc)
+      call ESMF_StateGet(importState, "SST_INPUT", field_sst_ini, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 !
@@ -1296,6 +1297,8 @@
         call ESMF_FieldGet(field_uoce, localDE=j, farrayPtr=ptr_uoce, rc=rc)
         call ESMF_FieldGet(field_voce, localDE=j, farrayPtr=ptr_voce, rc=rc)
         call ESMF_FieldGet(field_t2, localDE=j, farrayPtr=ptr_t2, rc=rc)
+        call ESMF_FieldGet(field_sst_ini, localDE=j,                    &
+                           farrayPtr=ptr_sst_ini, rc=rc)
         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
             line=__LINE__, file=FILENAME)) return
 !
@@ -1304,6 +1307,8 @@
         ptr_uoce = MISSING_R8
         ptr_voce = MISSING_R8
         where (ieee_is_nan(ptr_t2)) ptr_t2 = MISSING_R8
+        ! DO NOT initialize the initial sst?
+        ! where (ieee_is_nan(ptr_sst_ini)) ptr_sst_ini = MISSING_R8
 !
 !       ! Put data to export field 
         bi = 1
