@@ -10,7 +10,7 @@ sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
 sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
 sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
 sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFTest/Allrun
+sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
@@ -40,9 +40,9 @@ cd coupledCode
 ./Allmake.sh
 cd ..
 
-if ( -f ./coupledSolver/esmf_application ) then
-  echo Installation is successful!
-  echo The coupled model is installed as ./coupledSolver/esmf_application
+if [ -f ./coupledCode/esmf_application ]; then
+  echo "Installation is successful!"
+  echo The coupled model is installed as ./coupledCode/esmf_application
 else 
   echo ERROR! Installation is NOT successful!
 fi
