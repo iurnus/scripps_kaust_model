@@ -1,6 +1,6 @@
 #!/bin/sh
 export MPI_HOME="/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
-export MITGCM_DIR="/home/rus043/scripps_coupled_model_github/MITgcm_c67m"
+export MITGCM_DIR="/home/rus043/scripps_kaust_model_github/MITgcm_c67m"
 
 read -e -p "WRF412 (with OA coupling) location? :" -i "$PWD/../../WRFV412_AO_01/" wrfLocation
 read -e -p "ESMF location? :" -i "$PWD/../../esmf/" esmfLocation

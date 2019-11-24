@@ -1,6 +1,6 @@
 #!/bin/csh -f
 setenv MPI_HOME "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
-setenv MITGCM_DIR "/home/rus043/scripps_coupled_model_update/MITgcm_c67m"
+setenv MITGCM_DIR "/home/rus043/scripps_kaust_model_github/MITgcm_c67m"
 setenv L2C1_DIR "../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/"
 
 # build the MITGCM as a library

@@ -14,7 +14,7 @@
 # To permanently change options, change the settings for your platform
 # in the file arch/configure.defaults then rerun configure.
 #
-ESMF_DIR=/home/rus043/scripps_coupled_model_github/esmf/
+ESMF_DIR=/home/rus043/scripps_kaust_model_github/esmf/
 
 SHELL           =       /bin/sh
 DEVTOP          =       `pwd`

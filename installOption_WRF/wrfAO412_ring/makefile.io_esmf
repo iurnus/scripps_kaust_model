@@ -1,9 +1,9 @@
 # these settings for compiling standalone on Compaq. Type "make -r"
 CPP = /lib/cpp -P
 FC  = mpif90 -r4 -i4  -w -Mfree -byteswapio 
-ESMF_DIR=/home/rus043/scripps_coupled_model_github/esmf/
+ESMF_DIR=/home/rus043/scripps_kaust_model_github/esmf/
 ESMF_INCLUDE  = ${ESMF_DIR}/mod/modg/Linux.pgi.64.openmpi.default/
-CURRENT_DIR=/home/rus043/scripps_coupled_model_github/WRFV412_AO_01/external/io_esmf/
+CURRENT_DIR=/home/rus043/scripps_kaust_model_github/WRFV412_AO_01/external/io_esmf/
 INCLUDE_MODULES = -I$(CURRENT_DIR)/../../ \
 			      -I$(CURRENT_DIR)/../../main \
                   -I$(CURRENT_DIR)/../../external/io_netcdf \
