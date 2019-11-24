@@ -62,7 +62,7 @@ for iStep in [1,2,3,4]:
               np.arange(-200,201,100),np.arange(-10,30.01,5),np.arange(0,16.01,1),\
               np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
               np.arange(0,200.01,10),np.arange(0,200.01,10)]
-  nFigures = 10
+  nFigures = 11
   
   print "plot mitgcm..."
   ## for i in range(128):

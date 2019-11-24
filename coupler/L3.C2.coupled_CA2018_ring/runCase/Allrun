@@ -1,7 +1,8 @@
 #!/bin/bash
 
-cp ../coupledCode/esmf_application .
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C2.coupled_CA2018_ring/../../WRFV412_AO_01/
 cp ../runCase.init/wrf*d01 . 
+cp ../coupledCode/esmf_application .
 ln -sf ../caseInput/* .
 
 mpirun -np 8 esmf_application &> log.esmf

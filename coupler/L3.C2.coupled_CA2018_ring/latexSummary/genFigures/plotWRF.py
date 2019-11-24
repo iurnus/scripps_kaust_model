@@ -62,7 +62,7 @@ tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,
             np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
             np.arange(0,200.01,10), np.arange(0,200.01,10),\
             np.arange(0.00001,2.001,0.4),np.arange(0,40.1,10)]
-nFigures = 10
+nFigures = 11
   
 print "plot WRF..."
   

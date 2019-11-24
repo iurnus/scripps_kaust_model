@@ -1,4 +1,4 @@
-WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C2.coupled_CA2018_ring/../../WRFV3911_AO/
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C2.coupled_CA2018_ring/../../WRFV412_AO_01/
 ESMF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C2.coupled_CA2018_ring/../../esmf/
 
 WRF_INC = \

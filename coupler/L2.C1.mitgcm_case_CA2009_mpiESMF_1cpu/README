@@ -6,7 +6,7 @@ drive MITgcm. The MITgcm solver is divided into "init", "run", "finalize"
 parts. The ESMF-atmosphere interface is also implemented, but the functions do
 not drive "real" atmosphere model. 
 
-This test use 1 CPU.
+This test uses 1 CPU.
 
 simulation:
   California region

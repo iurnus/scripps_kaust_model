@@ -17,6 +17,20 @@
 # differing names and dirrent sized static data objects.
 #
 # 
+
+# Set compile options (need to be updated for other machines)
+set comp         = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpif77
+set cccommand    = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpicc
+set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse)
+set compopts_num = ( $compopts )
+set complibs     = (-L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib/ -lnetcdff -lnetcdf )
+set compinc      = (-I/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include/ )
+set ccopts       = "-c"
+
+set arcommand    = ar
+set aropts       = "-rsc"
+
+
 # Set module prefix 
 if ( $# == 1 ) then
 set mpref_s = ( $1 )
@@ -208,25 +222,6 @@ cp f1.Ftmp ${mpref_l}_mod.Ftmp
 cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIPRIV/MPIPRIV/' > f1.Ftmp
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
 
-# echo "Compiling code"
-# source ${BUILDROOT}/mytools/comp_profile.BASE
-# source ${BUILDROOT}/mytools/comp_profile.${COMP_PROF}
-# 
-# set compinc  = ( ${compinc} -I${BUILDROOT}/esmf_top )
-
-# set comp     = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpifort
-# set cccommand = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpicc
-set comp     = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpif77
-set cccommand = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpicc
-set compopts = (-byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse)
-set compopts_num = ( $compopts )
-set complibs = (-L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib/ -lnetcdff -lnetcdf )
-set compinc = (-I/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include/ )
-set ccopts = "-c"
-
-set arcommand = ar
-set aropts    = "-rsc"
-
 
 # Create output directory
 mkdir mmout
@@ -239,7 +234,7 @@ foreach f ( $mitgcmrtl )
 end
 ${cccommand} ${ccopts} tim.c
 set mitgcmrtlo = ( $mitgcmrtlo tim.o )
-\rm mmout/libmitgcmrtl.a
+rm -rf mmout/libmitgcmrtl.a
 ${arcommand} ${aropts} mmout/libmitgcmrtl.a $mitgcmrtlo
 #ranlib mmout/libmitgcmrtl.a
 
@@ -253,10 +248,26 @@ echo " " | $comp $compopts_num -c ${mpref_l}_mod.F ${complibs} ${compinc}
 mv ${mpref_l}_mod.F ${mpref_l}_mod.Ftmp
 ./template_comp.sh ${mpref_s}
 ${cccommand} ${ccopts} component_${mpref_s}_context.c
-\rm mmout/lib${mpref_l}.a
+rm -rf mmout/lib${mpref_l}.a
 ${arcommand} ${aropts} mmout/lib${mpref_l}.a ${mpref_l}_mod.o component_${mpref_s}_context.o
 #ranlib mmout/lib${mpref_l}.a
-set modname = `echo ${mpref_l} | ${mkmodname}`
-echo $modname
-cp ${modname}.mod mmout
-#\rm *mod
+cp ${mpref_l}.mod mmout
+
+# Check installation
+if ( -f ./mmout/${mpref_l}.mod ) then
+  echo Installation is successful for ./mmout/${mpref_l}.mod
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/${mpref_l}.mod
+endif
+
+if ( -f ./mmout/lib${mpref_l}.a ) then
+  echo Installation is successful for ./mmout/lib${mpref_l}.a
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/lib${mpref_l}.a
+endif
+
+if ( -f ./mmout/libmitgcmrtl.a ) then
+  echo Installation is successful for ./mmout/libmitgcmrtl.a
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/libmitgcmrtl.a
+endif

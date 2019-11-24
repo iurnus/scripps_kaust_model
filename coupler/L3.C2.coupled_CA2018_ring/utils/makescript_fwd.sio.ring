@@ -1,12 +1,18 @@
-#!/bin/bash
+#!/bin/csh -f
 
-MPI_HOME="/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
+echo $1
+
+if ( $# == 1 ) then
+set MITGCM_DIR = ( $1 )
+else
+set MITGCM_DIR = ( "../../../MITgcm_c67m" )
+endif
 
 rm -f *.o
 rm -f *.f
 make CLEAN
 rm Makefile
 
-../../../MITgcm_c66h/tools/genmake2 "-rootdir" "../../../MITgcm_c66h" "-mpi" "-mods" "../code" "-optfile" "./mitgcm_optfile"
+${MITGCM_DIR}/tools/genmake2 "-rootdir" "${MITGCM_DIR}" "-mpi" "-mods" "../code" "-optfile" "./mitgcm_optfile"
 make depend
 make -j8

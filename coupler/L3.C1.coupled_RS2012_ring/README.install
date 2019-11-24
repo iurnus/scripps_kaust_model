@@ -31,7 +31,7 @@ MITGCM executable is: build/mitgcmuv
 MITGCM library is: build/mmout/libmitgcm_org_ocn.a
 MITGCM run time library is: build/mmout/libmitgcmrtl.a
 MITGCM mod file is: build/mitgcm_org_ocn.mod
-The coupled MITGCM-ESMF solver is: coupledSolver/esmf_application
+The coupled MITGCM-ESMF solver is: coupledCode/esmf_application
 
 ###############
 DEBUGGING CASES

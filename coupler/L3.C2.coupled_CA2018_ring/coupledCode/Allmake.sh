@@ -1,20 +1,19 @@
 #!/bin/sh
 
-export ESMFMKFILE=../../../esmf/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
+WRF_DIR=/home/rus043/scripps_coupled_model_github/coupler/L3.C2.coupled_CA2018_ring/../../WRFV412_AO_01/
 
 make distclean
 
 ln -s ../../L3.C1.coupled_RS2012_ring/coupledCode/mod_*.F90 .
 ln -s ../../L3.C1.coupled_RS2012_ring/coupledCode/mitgcm_wrf*.F90 .
-ln -s ../../L3.C1.coupled_RS2012_ring/coupledCode/namelist* .
 
 ln -s ../build/*.mod .
 ln -s ../build/mmout/*.a .
 ln -s ../build/setrlstk.o .
 ln -s ../build/sigreg.o .
 
-ln -s ../../../WRFV3911_AO/main/wrf_ESMFMod.o .
-ln -s ../../../WRFV3911_AO/main/module_wrf_top.o .
-ln -s ../../../WRFV3911_AO/main/libwrflib.a .
+ln -s $WRF_DIR/main/wrf_ESMFMod.o .
+ln -s $WRF_DIR/main/module_wrf_top.o .
+ln -s $WRF_DIR/main/libwrflib.a .
 
 make
