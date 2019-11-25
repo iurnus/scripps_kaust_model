@@ -2,12 +2,10 @@ The SKRIPS is under continous development.
 
 The most recent stable version is v1.0. It is available here: [download v1.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.0)
 
-The Scripps-KAUST Regional Integrated Prediction System (SKRIPS)
 
-This is a documentation for the regional coupled atmosphere-ocean model.
-This model is designed to be a state-of-the-art coupled atmosphere-ocean
-modeling system based on MITgcm and WRF. It also supports the new
-components by using the ESMF coupler.
+This is the repository for the Scripps-KAUST Regional Integrated Prediction System (SKRIPS). 
+It is a regional coupled atmosphere-ocean model based on MITgcm and WRF. 
+Its coupler is the Earth System Modeling Framework (ESMF).
 
 The designed modeling system currently includes the following models:
 
