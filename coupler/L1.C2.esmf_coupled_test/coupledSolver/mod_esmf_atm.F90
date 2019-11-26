@@ -294,19 +294,19 @@ module mod_esmf_atm
       line=__LINE__, file=FILENAME)) return
 
   if (.not.allocated(deBlockList)) then
-    allocate(deBlockList(2,2,0:4))
+    allocate(deBlockList(2,2,1:5))
   end if
 
-  deBlockList(:,1,0) = (/ 1, 1/)
-  deBlockList(:,2,0) = (/ 2, ny/)
-  deBlockList(:,1,1) = (/ 3, 1/)
-  deBlockList(:,2,1) = (/ 4, ny/)
-  deBlockList(:,1,2) = (/ 5, 1/)
-  deBlockList(:,2,2) = (/ 6, ny/)
-  deBlockList(:,1,3) = (/ 7, 1/)
-  deBlockList(:,2,3) = (/ 8, ny/)
-  deBlockList(:,1,4) = (/ 9, 1/)
-  deBlockList(:,2,4) = (/nx, ny/)
+  deBlockList(:,1,1) = (/ 1, 1/)
+  deBlockList(:,2,1) = (/ 2, ny/)
+  deBlockList(:,1,2) = (/ 3, 1/)
+  deBlockList(:,2,2) = (/ 4, ny/)
+  deBlockList(:,1,3) = (/ 5, 1/)
+  deBlockList(:,2,3) = (/ 6, ny/)
+  deBlockList(:,1,4) = (/ 7, 1/)
+  deBlockList(:,2,4) = (/ 8, ny/)
+  deBlockList(:,1,5) = (/ 9, 1/)
+  deBlockList(:,2,5) = (/nx, ny/)
 !
 !-----------------------------------------------------------------------
 !     Create ESMF DistGrid based on model domain decomposition

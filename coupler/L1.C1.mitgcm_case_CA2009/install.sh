@@ -2,7 +2,7 @@
 
 # build the MITGCM as a library
 echo "building MITgcm..."
-echo "WARNING:: NEED MITGCM SOURCE FILE in ../../MITgcm_c66h/"
+echo "WARNING:: NEED MITGCM SOURCE FILE in ../../MITgcm_c67m/"
 
 mkdir build/
 cp utils/* build/ # copy the scripts to install MITGCM
