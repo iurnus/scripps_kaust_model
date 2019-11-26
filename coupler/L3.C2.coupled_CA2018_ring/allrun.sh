@@ -1,7 +1,6 @@
 #!/bin/csh -f
 
-# ./install.sh
-# ./install_mit.sh
+./install.sh
 
 cd runCase.init/
 ./Allrun

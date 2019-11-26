@@ -53,7 +53,7 @@ for iStep in [1,2,3,4]:
   clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001.01,200),\
                np.arange(-205,205.01,10),np.arange(-10,30.01,1),np.arange(0,16.01,0.1),\
                np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
-               np.arange(0,200.01,1),np.arange(0,200.01,1)]
+               np.arange(0,2.01,0.1),np.arange(0,2.01,0.1)]
   cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
               cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
               cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
@@ -61,7 +61,7 @@ for iStep in [1,2,3,4]:
   tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
               np.arange(-200,201,100),np.arange(-10,30.01,5),np.arange(0,16.01,1),\
               np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
-              np.arange(0,200.01,10),np.arange(0,200.01,10)]
+              np.arange(0,2.01,0.5),np.arange(0,2.01,0.5)]
   nFigures = 11
   
   print "plot mitgcm..."
@@ -90,6 +90,7 @@ for iStep in [1,2,3,4]:
     clevs = clevsList[i]
     cs = m.contourf(mitgcm_meshX,mitgcm_meshY,fieldName[i],\
                     clevs,extend='both',cmap=cmapList[i])
+    print 'mean is: ', np.mean(fieldName[i])
     if (fieldString[i] == 'wind'):
       nQ = 8
       cs_quiver = m.quiver(mitgcm_meshX[::nQ,::nQ],mitgcm_meshY[::nQ,::nQ],\

@@ -20,4 +20,4 @@ cd ..
 cp ./genMIT/wrf_* .
 cp ../build_mit/mitgcmuv .
 
-mpirun -np 8 mitgcmuv
+mpirun -np 16 mitgcmuv

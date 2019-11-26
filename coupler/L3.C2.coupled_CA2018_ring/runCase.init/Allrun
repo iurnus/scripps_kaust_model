@@ -14,11 +14,11 @@ cp namelist.input.ca.2018.WRF_medium_set namelist.input
 echo "running real..."
 mpirun -np 8 real.exe &> log.real
 
-# matlab -nodisplay < updateLowinp.m
-# 
-# cp namelist.input.ca.2018.WRF_medium_ini namelist.input
-# echo "setting initial condition..."
-# mpirun -np 4 wrf.exe &> log.real
-# 
-# matlab -nodisplay < updateHFlux.m
-# 
+matlab -nodisplay < updateLowinp.m
+
+cp namelist.input.ca.2018.WRF_medium_ini namelist.input
+echo "setting initial condition..."
+mpirun -np 4 wrf.exe &> log.real
+
+matlab -nodisplay < updateHFlux.m
+

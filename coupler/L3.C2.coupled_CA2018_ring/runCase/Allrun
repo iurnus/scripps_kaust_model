@@ -5,4 +5,4 @@ cp ../runCase.init/wrf*d01 .
 cp ../coupledCode/esmf_application .
 ln -sf ../caseInput/* .
 
-mpirun -np 8 esmf_application &> log.esmf
+mpirun -np 16 esmf_application &> log.esmf

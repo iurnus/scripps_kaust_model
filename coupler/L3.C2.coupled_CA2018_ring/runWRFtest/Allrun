@@ -11,4 +11,4 @@ cp ../runCase/ozone* .
 ./genSSTin.sh
 matlab -nodisplay < updateFlux.m
 
-mpirun -np 8 wrf.exe
+mpirun -np 16 wrf.exe
