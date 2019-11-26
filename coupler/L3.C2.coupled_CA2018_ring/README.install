@@ -47,7 +47,7 @@ latexSummary: Generate the report automatically.
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm path is defined as '/home/rus043/scripps_kaust_model_github/MITgcm_c67m' in install.sh
+The MITgcm path is defined as '${HOME}/scripps_kaust_model_github/MITgcm_c67m' in install.sh
 The MPI_HOME path is defined as '/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include' in install.sh
 
 The ESMF should be installed to run this case. The variable ESMFMKFILE should

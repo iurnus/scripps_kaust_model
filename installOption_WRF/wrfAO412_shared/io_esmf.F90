@@ -589,13 +589,13 @@ END MODULE module_ext_esmf
       ! PRINT *, 'TESTBUG:  myPE = ', myPE
 
       if (.not.allocated(deBlockList)) then
-        allocate(deBlockList(2,2,0:i*j-1))
+        allocate(deBlockList(2,2,1:i*j))
       end if
       do tile = 0, (i*j)-1
-        deBlockList(1,1,tile) = allXStart(tile)
-        deBlockList(1,2,tile) = allXStart(tile) + allXCount(tile) - 1
-        deBlockList(2,1,tile) = allYStart(tile)
-        deBlockList(2,2,tile) = allYStart(tile) + allYCount(tile) - 1
+        deBlockList(1,1,tile+1) = allXStart(tile)
+        deBlockList(1,2,tile+1) = allXStart(tile) + allXCount(tile) - 1
+        deBlockList(2,1,tile+1) = allYStart(tile)
+        deBlockList(2,2,tile+1) = allYStart(tile) + allYCount(tile) - 1
         ! PRINT *, 'tile is: ', tile
         ! PRINT *, 'allXStart is: ', deBlockList(1,1,tile)
         ! PRINT *, 'allXEnd is: '  , deBlockList(1,2,tile)
