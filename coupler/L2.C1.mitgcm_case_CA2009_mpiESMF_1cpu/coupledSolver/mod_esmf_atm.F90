@@ -340,11 +340,11 @@ module mod_esmf_atm
 
   !! TODO:: make the deblocklist more general
   if (.not.allocated(deBlockList)) then
-    allocate(deBlockList(2,2,0:0))
+    allocate(deBlockList(2,2,1:1))
   end if
 
-  deBlockList(:,1,0) = (/ 1, 1/)
-  deBlockList(:,2,0) = (/nx, ny/)
+  deBlockList(:,1,1) = (/ 1, 1/)
+  deBlockList(:,2,1) = (/nx, ny/)
 
   !! if (.not.allocated(deBlockList)) then
   !!   allocate(deBlockList(2,2,0:1))

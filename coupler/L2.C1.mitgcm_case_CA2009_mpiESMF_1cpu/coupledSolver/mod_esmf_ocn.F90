@@ -394,16 +394,16 @@ module mod_esmf_ocn
 !-----------------------------------------------------------------------
 !
   if (.not.allocated(deBlockList)) then
-    allocate(deBlockList(2,2,0:nPx*nPy-1))
+    allocate(deBlockList(2,2,1:nPx*nPy))
   end if
 !
   bj = 1
   bi = 1
-  do tile = 0, (nPx*nPy)-1
-    deBlockList(1,1,tile) = mpi_myXGlobalLo(tile+1)
-    deBlockList(1,2,tile) = mpi_myXGlobalLo(tile+1)+sNx-1
-    deBlockList(2,1,tile) = mpi_myYGlobalLo(tile+1) 
-    deBlockList(2,2,tile) = mpi_myYGlobalLo(tile+1)+sNy-1
+  do tile = 1, (nPx*nPy)
+    deBlockList(1,1,tile) = mpi_myXGlobalLo(tile)
+    deBlockList(1,2,tile) = mpi_myXGlobalLo(tile)+sNx-1
+    deBlockList(2,1,tile) = mpi_myYGlobalLo(tile) 
+    deBlockList(2,2,tile) = mpi_myYGlobalLo(tile)+sNy-1
   end do
 !
 !-----------------------------------------------------------------------
@@ -866,8 +866,8 @@ module mod_esmf_ocn
     where (ieee_is_nan(ptr)) ptr = MISSING_R8
     ! ptr = MISSING_R8
 !
-    do jj = 1-OLy, sNy+OLy
-      do ii = 1-OLx, sNx+OLx
+    do jj = 1, sNy
+      do ii = 1, sNx
         iG = myXGlobalLo-1+(bi-1)*sNx+ii
         jG = myYGlobalLo-1+(bj-1)*sNy+jj
         if ((iG > 0 .and. iG < imax) .and.                          &
