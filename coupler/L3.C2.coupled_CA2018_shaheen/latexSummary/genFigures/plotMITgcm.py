@@ -13,7 +13,9 @@ import MITgcmutils
 
 p = [];
 
-for iStep in [1,2,3]:
+print "plot WRF..."
+for iStep in [1,2,3,4]:
+  print " plot step: " + str(iStep)
   mitgcm_pickup_file = '../../runCase/pickup.'+str(iStep).zfill(10)
   mitgcm_pickup_results = MITgcmutils.rdmds(mitgcm_pickup_file)
   mitgcm_diag_file = '../../runCase/diag2dKPP.'+str(iStep).zfill(10)
@@ -32,7 +34,7 @@ for iStep in [1,2,3]:
   mitgcm_wind = mitgcm_diag_results[10,:,:]
   mitgcm_t2 = mitgcm_diag_results[11,:,:] - 273.15
   mitgcm_q2 = mitgcm_diag_results[12,:,:]
-  mitgcm_rain = mitgcm_diag_results[13,:,:]
+  mitgcm_precip = mitgcm_diag_results[13,:,:]
   mitgcm_evap = mitgcm_diag_results[14,:,:]
   mitgcm_sst = mitgcm_pickup_results[80,:,:]
   mitgcm_uoce = mitgcm_pickup_results[0,:,:]
@@ -43,17 +45,17 @@ for iStep in [1,2,3]:
   meridians = np.arange(210.,240.1,10.)
   
   fieldString = ['LH','SH','GSW','GLW','T2','SST','Q2',\
-                 'current','wind','rain','evap']
+                 'current','wind','precip','evap']
   # plot the lh/sh out of ocean; 
   # plot downward long/short wave radiation
   fieldName = [-mitgcm_lh,-mitgcm_sh,-mitgcm_swnet,\
                -mitgcm_lwnet,mitgcm_t2,mitgcm_sst,\
                mitgcm_q2,mitgcm_current,mitgcm_wind,\
-               mitgcm_rain,mitgcm_evap]
+               mitgcm_precip*1000*86400,mitgcm_evap*1000*86400]
   clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001.01,200),\
                np.arange(-205,205.01,10),np.arange(-10,30.01,1),np.arange(0,16.01,0.1),\
                np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
-               np.arange(0,5.1e-8,0.2e-8),np.arange(0,5.1e-8,0.2e-8)]
+               np.arange(0,2.01,0.1),np.arange(0,2.01,0.1)]
   cmapList = [plt.cm.seismic,plt.cm.seismic,plt.cm.jet,\
               plt.cm.seismic,plt.cm.jet,plt.cm.jet,\
               plt.cm.jet,cmocean.cm.speed,plt.cm.jet,\
@@ -61,8 +63,8 @@ for iStep in [1,2,3]:
   tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
               np.arange(-200,201,100),np.arange(-10,30.01,5),np.arange(0,16.01,1),\
               np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
-              np.arange(0,5.1e-8,1e-8),np.arange(0,5.1e-8,1e-8)]
-  nFigures = 10
+              np.arange(0,2.01,0.5),np.arange(0,2.01,0.5)]
+  nFigures = 11
   
   print "plot mitgcm..."
     
@@ -81,6 +83,7 @@ for iStep in [1,2,3]:
     clevs = clevsList[i]
     cs = m.contourf(mitgcm_meshX,mitgcm_meshY,fieldName[i],\
                     clevs,extend='both',cmap=cmapList[i])
+    print 'mean is: ', np.mean(fieldName[i])
     if (fieldString[i] == 'wind'):
       nQ = 8
       cs_quiver = m.quiver(mitgcm_meshX[::nQ,::nQ],mitgcm_meshY[::nQ,::nQ],\

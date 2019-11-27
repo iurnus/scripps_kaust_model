@@ -1,13 +1,16 @@
-code: 
-  coupled MITgcm--ESMF--WRF code with MPI
-  the MITgcm solver is divided into "init", "run", "finalize" parts
-  the WRF solver is also divided into "init", "run", "finalize" parts
-  ESMF drives different parts
-  the WRF bulf formula is used
-  RUN ON SHAHEEN-II, compiled using intel compiler
+MITgcm-WRF coupled simulation test: California Current
+
+This folder contains an MITgcm-WRF coupled test case. The coupled simulation is
+driven by ESMF. The case aims to test the implementation of the coupled code.
+In this test, the ESMF driver drives both MITgcm and WRF. Both MITgcm and WRF
+are divided into "init", "run", "finalize" parts. This coupled code drives the
+realistic simulations in the California Current region.
+
+The WRF bulf formula is used in this case.
+This should be compiled using Intel compiler (run it on shaheen).
 
 simulation:
-  Red Sea region
+  California Current region
 
 Notes:
 To install and run this case::
@@ -26,13 +29,21 @@ MITGCM executable is: build/mitgcmuv
 MITGCM library is: build/mmout/libmitgcm_org_ocn.a
 MITGCM run time library is: build/mmout/libmitgcmrtl.a
 MITGCM mod file is: build/mitgcm_org_ocn.mod
-The coupled MITGCM-ESMF solver is: coupledSolver/esmf_application
+The coupled MITGCM-ESMF solver is: coupledCode/esmf_application
 
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm source file should be in '../../MITgcm_c66h/' to run this case.
-The ESMF should be installed in '../../esmf/' to run this case.
-The WRF v3.9.1.1 with should be installed in '../../WRFV3911_AO/' to run this case.
-In install.sh, the MPI_HOME variable is "/opt/openmpi/intel/ib/include/"
-Python is required for pre-processing or post-processing.
+The MITgcm path is defined as '/home/x_sunr/scripps_kaust_model_github/MITgcm_c67m' in install.sh
+The MPI_HOME path is defined as '/opt/openmpi/intel/ib/include/' in install.sh
+
+The ESMF should be installed to run this case. The variable ESMFMKFILE should
+be defined:
+
+  export ESMFMKFILE=$ESMF_DIR/lib/libg/Unicos.intel.64.mpi.default/esmf.mk
+
+where ESMF_DIR should be the location that ESMF is installed.
+
+Make sure Python (Anaconda version) is installed.
+Make sure NCL is installed.
+Make sure L3C1 case is located at "../L3.C1.coupled_RS2012_ring/"

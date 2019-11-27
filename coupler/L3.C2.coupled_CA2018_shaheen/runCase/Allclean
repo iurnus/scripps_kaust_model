@@ -23,3 +23,4 @@ rm -rf eedata *_data run-off* CAM* bathy*
 rm -rf update*.py
 rm -rf job*
 rm -rf namelist.input
+rm -rf core

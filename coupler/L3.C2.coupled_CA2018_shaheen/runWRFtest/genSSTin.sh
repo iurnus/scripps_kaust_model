@@ -1,5 +1,7 @@
 #!/bin/bash
 
+module load nco/4.5.0
+
 rm cplFlux wrfout.nc
 ln -sf ../runCase/wrfout_d01_2018-01-27_00:00:00 wrfout.nc
 

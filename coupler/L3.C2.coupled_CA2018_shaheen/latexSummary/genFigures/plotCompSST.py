@@ -41,9 +41,7 @@ for i in range(256):
     else:
        mitgcm_ocean[i,j] = np.nan
 
-clevs_show = np.arange(0.,18.,1.);
-# clevs_diff = np.arange(-0.03,0.031,0.004);
-# clevs_diff = np.arange(-0.0525,0.0526,0.005);
+clevs_show = np.arange(0.,18.1,1.);
 clevs_diff = np.arange(-0.00042,0.000421,0.00004);
 
 # PLOT UNCPL SST, STEP 1
@@ -122,7 +120,7 @@ cs_diff1 = m.contourf(mitgcm_meshX,mitgcm_meshY,\
                       clevs_diff,extend='both',cmap=cmocean.cm.balance)
 
 cbar_ax = f.add_axes([0.10, 0.05, 0.25, 0.03])
-fig.colorbar(cs_contourf, cax=cbar_ax, ticks=[24,26,28,30,32], orientation='horizontal')
+fig.colorbar(cs_contourf, cax=cbar_ax, ticks=[0,4,8,12,16], orientation='horizontal')
 
 cbar_ax = f.add_axes([0.65, 0.05, 0.25, 0.03])
 fig.colorbar(cs_diff1, cax=cbar_ax, ticks=[-0.0004,0,0.0004], orientation='horizontal')

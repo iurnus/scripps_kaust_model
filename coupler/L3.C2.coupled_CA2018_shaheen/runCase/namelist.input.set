@@ -1,4 +1,5 @@
  &time_control
+ iofields_filename                   = "namelist.WRF_IO",
  run_days                            = 0,
  run_hours                           = 0,
  run_minutes                         = 1,

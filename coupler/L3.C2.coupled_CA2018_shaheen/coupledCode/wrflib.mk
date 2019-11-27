@@ -1,5 +1,5 @@
-WRF_DIR=/home/x_sunr/scripps_kaust_model/WRFV3911_AO/
-ESMF_DIR=/home/x_sunr/scripps_kaust_model/esmf/
+WRF_DIR=/home/x_sunr/scripps_kaust_model_github/WRFV412_AO_01/
+ESMF_DIR=/home/x_sunr/scripps_kaust_model_github/esmf/
 
 WRF_INC = \
    -I${WRF_DIR}dyn_em \
@@ -13,6 +13,7 @@ WRF_INC = \
    -I${WRF_DIR}phys \
    -I${WRF_DIR}chem \
    -I${WRF_DIR}inc \
+   -I${WRF_DIR}wrftladj \
 
 WRF_LIB = \
 	wrf_ESMFMod.o module_wrf_top.o libwrflib.a \

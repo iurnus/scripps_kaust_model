@@ -23,12 +23,14 @@ ini_voce_ = ini_voce[0,:,:]
 
 wrf_results = Dataset('wrfinput_d01','r+',format='NETCDF4');
 wrf_sst = wrf_results.variables['SST'][:];
+wrf_ssti = wrf_results.variables['SST_INPUT'][:];
 wrf_tsk = wrf_results.variables['TSK'][:];
 wrf_uoce = wrf_results.variables['UOCE'][:];
 wrf_voce = wrf_results.variables['VOCE'][:];
 wrf_landmask = wrf_results.variables['LANDMASK'][:];
 
 sst_write = np.zeros((nYY,nXX))
+ssti_write = np.zeros((nYY,nXX))
 tsk_write = np.zeros((nYY,nXX))
 uoce_write = np.zeros((nYY,nXX))
 voce_write = np.zeros((nYY,nXX))
@@ -36,11 +38,13 @@ for j in range(nXX):
   for i in range(nYY):
     if wrf_landmask[0,i,j] == 0:
       sst_write[i,j] = ini_sst_[i,j]
+      ssti_write[i,j] = ini_sst_[i,j]
       tsk_write[i,j] = ini_sst_[i,j]
       uoce_write[i,j] = ini_uoce_[i,j]
       voce_write[i,j] = ini_voce_[i,j]
 
 wrf_results.variables['SST'][0,:,:] = sst_write;
+wrf_results.variables['SST_INPUT'][0,:,:] = ssti_write;
 wrf_results.variables['TSK'][0,:,:] = tsk_write;
 wrf_results.variables['UOCE'][0,:,:] = uoce_write;
 wrf_results.variables['VOCE'][0,:,:] = voce_write;

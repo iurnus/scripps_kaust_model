@@ -1,8 +1,8 @@
 #!/bin/sh
 
-WRF_DIR=/home/x_sunr/scripps_kaust_model/WRFV3911_AO/
-ESMF_DIR=/home/x_sunr/scripps_kaust_model/esmf/
-COUPLER_DIR=/home/x_sunr/scripps_kaust_model/coupler/
+WRF_DIR=/home/x_sunr/scripps_kaust_model_github/WRFV412_AO_01/
+ESMF_DIR=/home/x_sunr/scripps_kaust_model_github/esmf/
+COUPLER_DIR=/home/x_sunr/scripps_kaust_model_github/coupler/
 
 export ESMFMKFILE=$ESMF_DIR/lib/libg/Unicos.intel.64.mpi.default/esmf.mk
 

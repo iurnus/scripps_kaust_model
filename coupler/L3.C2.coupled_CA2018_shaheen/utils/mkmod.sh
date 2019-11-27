@@ -17,6 +17,19 @@
 # differing names and dirrent sized static data objects.
 #
 # 
+
+# Set compile options (need to be updated for other machines)
+set comp      = ftn
+set cccommand = cc
+set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
+set compopts_num = ( $compopts )
+set complibs = (-L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib -lnetcdf -lnetcdff -lpnetcdf)
+set compinc = (-I/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/include -I/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/include -I/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include)
+set ccopts = "-c"
+
+set arcommand = ar
+set aropts    = "-rsc"
+
 # Set module prefix 
 if ( $# == 1 ) then
 set mpref_s = ( $1 )
@@ -212,31 +225,10 @@ cp f1.Ftmp ${mpref_l}_mod.Ftmp
 cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIPRIV/MPIPRIV/' > f1.Ftmp
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
 
-# echo "Compiling code"
-# source ${BUILDROOT}/mytools/comp_profile.BASE
-# source ${BUILDROOT}/mytools/comp_profile.${COMP_PROF}
-# 
-# set compinc  = ( ${compinc} -I${BUILDROOT}/esmf_top )
 
-# set comp     = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpifort
-# set cccommand = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpicc
-
-set comp      = ftn
-set cccommand = cc
-set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
-set compopts_num = ( $compopts )
-set complibs = (-L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib -lnetcdf -lnetcdff -lpnetcdf)
-set compinc = (-I/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/include -I/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/include -I/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include)
-set ccopts = "-c"
-
-set arcommand = ar
-set aropts    = "-rsc"
-
-echo "Compiling code 1"
 # Create output directory
 mkdir mmout
 
-echo "Compiling code 2"
 # Create runtime library archive
 set mitgcmrtlo = ( )
 foreach f ( $mitgcmrtl )
@@ -245,28 +237,40 @@ foreach f ( $mitgcmrtl )
 end
 ${cccommand} ${ccopts} tim.c
 set mitgcmrtlo = ( $mitgcmrtlo tim.o )
-\rm mmout/libmitgcmrtl.a
+rm -rf mmout/libmitgcmrtl.a
 ${arcommand} ${aropts} mmout/libmitgcmrtl.a $mitgcmrtlo
 #ranlib mmout/libmitgcmrtl.a
 
-echo "Compiling code 3"
 # Create component library archive
 mv ${mpref_l}_mod.Ftmp ${mpref_l}_mod.F
 source scommand
 mv foo.F ${mpref_l}_mod.F
 
-echo "Compiling code 4"
 sed -i "s/COMMON\/C_ocn_PTRACERS_SURFCOR_FIELDS\/ totSurfCorPTr, meanSurfCorPTr/COMMON\/C_ocn_PTRACERS_SURFCOR_FIELDS\/ totSurfCorPTr \n      COMMON\/C_ocn_PTRACERS_SURFCOR_FIELDS\/ meanSurfCorPTr/g" mitgcm_org_ocn_mod.F
-echo "Compiling code 5"
 echo " " | $comp $compopts_num -c ${mpref_l}_mod.F ${complibs} ${compinc}
-echo "Compiling code 6"
 mv ${mpref_l}_mod.F ${mpref_l}_mod.Ftmp
 ./template_comp.sh ${mpref_s}
 ${cccommand} ${ccopts} component_${mpref_s}_context.c
-\rm mmout/lib${mpref_l}.a
+rm -rf mmout/lib${mpref_l}.a
 ${arcommand} ${aropts} mmout/lib${mpref_l}.a ${mpref_l}_mod.o component_${mpref_s}_context.o
 #ranlib mmout/lib${mpref_l}.a
-set modname = `echo ${mpref_l} | ${mkmodname}`
-echo $modname
-cp ${modname}.mod mmout
-#\rm *mod
+cp ${mpref_l}.mod mmout
+
+# Check installation
+if ( -f ./mmout/${mpref_l}.mod ) then
+  echo Installation is successful for ./mmout/${mpref_l}.mod
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/${mpref_l}.mod
+endif
+
+if ( -f ./mmout/lib${mpref_l}.a ) then
+  echo Installation is successful for ./mmout/lib${mpref_l}.a
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/lib${mpref_l}.a
+endif
+
+if ( -f ./mmout/libmitgcmrtl.a ) then
+  echo Installation is successful for ./mmout/libmitgcmrtl.a
+else 
+  echo ERROR! Installation is NOT successful for ./mmout/libmitgcmrtl.a
+endif

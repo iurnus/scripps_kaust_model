@@ -20,7 +20,6 @@ wrf_lat = wrf_uncpl_nc.variables['XLAT'][:];
 wrf_lon = wrf_uncpl_nc.variables['XLONG'][:]+360;
 wrf_cpl_nc = Dataset(wrf_cpl_result,'r',format='NETCDF4');
 wrf_cpl_t2 = wrf_cpl_nc.variables['T2'][:]-273.15;
-print wrf_cpl_t2[0,:,:]
 
 fig = plt.figure(num=None, figsize=(8,6), dpi=80, facecolor='w', edgecolor='k')
 f, axarr = plt.subplots(2,3)
@@ -32,7 +31,7 @@ lonMin = 210.0
 lonMax = 240.0
 parallels = np.arange(36.,54.1,6.)
 meridians = np.arange(212.,236.1,8.)
-clevs_show = np.arange(-4.,20.1,2.);
+clevs_show = np.arange(-10.,30.1,5.);
 clevs_diff = np.arange(-0.21,0.22,0.02);
 
 # PLOT UNCPL T2, STEP 1
@@ -98,7 +97,7 @@ cs_diff1 = m.contourf(wrf_lon[0,:,:],wrf_lat[0,:,:],\
                       clevs_diff,extend='both',cmap=cmocean.cm.balance)
 
 cbar_ax = f.add_axes([0.10, 0.05, 0.25, 0.03])
-fig.colorbar(cs_contourf, cax=cbar_ax, ticks=[-4,0,4,8,12,16,20], orientation='horizontal')
+fig.colorbar(cs_contourf, cax=cbar_ax, ticks=[-10,0,10,20,30], orientation='horizontal')
 
 cbar_ax = f.add_axes([0.65, 0.05, 0.25, 0.03])
 fig.colorbar(cs_diff1, cax=cbar_ax, ticks=[-0.2,-0.1,0,0.1,0.2], orientation='horizontal')
