@@ -104,6 +104,7 @@
 
       type(ESMF_Calendar) :: esmCal
       type(ESMF_Clock) :: esmClock
+      integer, allocatable :: petList(:)
 !
       rc = ESMF_SUCCESS
       print *, "calling ESM_SetModelServices function"
@@ -113,24 +114,41 @@
 !-----------------------------------------------------------------------
 !
       print *, "setting ATM services"
+      allocate(petList(cpuATM))
+      do i=1,cpuATM
+        petList(i) = i-1
+      enddo
+      print *, petList
       call NUOPC_DriverAddComp(driver, "ATM", ATM_SetServices,           &
-                               comp=child, rc=rc)
+                               petList=petList,comp=child, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
       call ESMF_AttributeSet(child, name="Verbosity", value="high",     &
                              rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
+      deallocate(petList)
 
+      allocate(petList(cpuOCN))
+      if (coupleMode .eq. 1) then
+        do i=1,cpuOCN
+          petList(i) = i-1
+        enddo
+      elseif (coupleMode .eq. 2) then
+        do i=1,cpuOCN
+          petList(i) = i-1 + cpuATM
+        enddo
+      endif
       print *, "setting OCN services"
       call NUOPC_DriverAddComp(driver, "OCN", OCN_SetServices,           &
-                               comp=child, rc=rc)
+                               petList=petList,comp=child, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
-      call ESMF_AttributeSet(child, name="Verbosity", value="high",     &
+      call ESMF_AttributeSet(child, name="Verbosity", value="high",    &
                              rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                              line=__LINE__, file=FILENAME)) return
+      deallocate(petList)
 !
 !-----------------------------------------------------------------------
 !     SetServices for connector components 
@@ -205,13 +223,19 @@
       type(ESMF_Time) :: stopTime
       type(ESMF_TimeInterval) :: timeStep
       type(ESMF_Clock) :: internalClock
-!
       type(ESMF_Clock) :: localclock
+      real(ESMF_KIND_R8) :: timeStart, timeEnd
+      character(160)  :: msgString
+
       integer :: urc
 !
       rc = ESMF_SUCCESS
 
       PRINT *, "Running coupled solver..."
+
+      call ESMF_VMWtime(timeStart)
+      write (msgString,*) "START TIME: ", timeStart
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
 
       call ESMF_GridCompGet(driver, vm=vm, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -235,6 +259,10 @@
       call NUOPC_FreeFormatDestroy(runSeqFF, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
+      call ESMF_VMWtime(timeEnd)
+      write (msgString,*) "END TIME: ", timeEnd
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+      PRINT *, "End time: ", timeEnd
 
       end subroutine ESM_SetRunSequence
 !

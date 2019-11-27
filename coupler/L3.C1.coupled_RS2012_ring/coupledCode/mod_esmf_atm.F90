@@ -428,6 +428,9 @@
       INTEGER :: ims, ime, jms, jme, kms, kme
       INTEGER :: ips, ipe, jps, jpe, kps, kpe
       INTEGER :: nI, nJ
+      real(ESMF_KIND_R8) :: wTimeStart, wTimeEnd
+
+      call ESMF_VMWtime(wTimeStart)
   
       rc = ESMF_SUCCESS
 
@@ -455,15 +458,6 @@
       CALL ESMF_SetCurrent( gcomp=p_gcomp, importState=p_importState, &
                             exportState=p_exportState, clock=p_clock)
   
-      call ESMF_ClockPrint(clock, options="currTime", &
-        preString="------>Advancing MODEL from: ", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-        line=__LINE__, file=__FILE__)) return  ! bail out
-      
-      call ESMF_ClockPrint(clock, options="stopTime", &
-        preString="--------------------------------> to: ", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-        line=__LINE__, file=__FILE__)) return  ! bail out
       
       CALL ESMF_ClockGet( clock, currTime=currentTime, &
                           timeStep=runLength, rc=rc )
@@ -498,39 +492,10 @@
 
       call wrf_run();
   
-      CALL ESMF_StateGet( exportState, itemCount=itemCount, &
-                          stateintent=stateintent, name=statename, &
-                          rc=rc )
-  
-      ALLOCATE ( itemNames(itemCount), itemTypes(itemCount) )
-  
-      CALL ESMF_StateGet( exportState, itemNameList=itemNames, &
-                          itemtypeList=itemTypes, rc=rc )
-  
-      DO i=1, itemCount
-        PRINT *, 'nuopc wrf_run: exportState contains field <', &
-                  TRIM(itemNames(i)),'>'
-      ENDDO
    
       PRINT *, 'WRF run loop: ', iLoop_atm
       iLoop_atm = iLoop_atm + 1
 
-      call ESMF_ClockPrint(clock, options="currTime", &
-        preString="------>Advancing ATM from: ", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-        line=__LINE__, file=__FILE__)) return  ! bail out
-      
-      call ESMF_ClockGet(clock, currTime=currTime, timeStep=timeStep, &
-                         rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-        line=__LINE__, file=__FILE__)) return  ! bail out
-      
-      call ESMF_TimePrint(currTime + timeStep, &
-        preString="--------------------------------> to: ", rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-        line=__LINE__, file=__FILE__)) return  ! bail out
-  
-      DEALLOCATE ( itemNames, itemTypes )
 
       end subroutine
 

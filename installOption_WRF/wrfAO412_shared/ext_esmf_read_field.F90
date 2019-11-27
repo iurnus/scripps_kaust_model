@@ -72,8 +72,8 @@ SUBROUTINE ext_esmf_read_field ( DataHandle , DateStr , VarName , Field , FieldT
     CALL wrf_error_fatal("ext_esmf_read_field: DataHandle not opened for read" )
   ENDIF
 
-  write(mess,*)'ext_esmf_read_field ',DataHandle, TRIM(DateStr), TRIM(VarName)
-  call wrf_debug( 300, TRIM(mess) )
+  !! write(mess,*)'ext_esmf_read_field ',DataHandle, TRIM(DateStr), TRIM(VarName)
+  !! call wrf_debug( 300, TRIM(mess) )
 
 ! BY RUI, only do it when it is SST field
 if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE') THEN
@@ -119,8 +119,8 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
   IF ( .NOT. okay_to_read( DataHandle ) )  THEN
 
     ! Training:  build the ESMF import state
-    write(mess,*) ' ext_esmf_read_field: TRAINING READ:  DataHandle = ', DataHandle
-    call wrf_debug( 300, TRIM(mess) )
+    !! write(mess,*) ' ext_esmf_read_field: TRAINING READ:  DataHandle = ', DataHandle
+    !! call wrf_debug( 300, TRIM(mess) )
 
     ! First, build the ESMF_Grid for this DataHandle, if it does not 
     CALL ioesmf_create_grid( DataHandle, esmf_rank, MemoryOrder, Stagger,      &
@@ -135,9 +135,9 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
 
     !! ALLOCATE( tmp_esmf_r4_ptr(ips:ipe,jps:jpe) )
     !! ALLOCATE( tmp_esmf_r4_ptr_global(ids:ide,jds:jde) )
-    write(mess,*)'ext_esmf_read_field: calling ESMF_FieldCreate field=',trim(varname)
+    !! write(mess,*)'ext_esmf_read_field: calling ESMF_FieldCreate field=',trim(varname)
     !! PRINT *, "TESTBUG: ext_esmf_read_field, creating tmpfield", trim(VarName)
-    CALL wrf_debug ( 100, mess )
+    !! CALL wrf_debug ( 100, mess )
     call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R4, &
                            rank=2, rc=rc)
 

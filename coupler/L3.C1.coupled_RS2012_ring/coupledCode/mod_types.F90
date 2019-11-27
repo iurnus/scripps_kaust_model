@@ -78,6 +78,15 @@
       integer :: atm_step_seconds
       integer :: ocn_step_seconds
 
+      ! 1: sqeuential; 2: concurrent
+      integer :: coupleMode
+      integer :: cpuOCN
+      integer :: cpuATM
+
+      real(ESMF_KIND_R8) :: esm_wall_time = 0.d0
+      real(ESMF_KIND_R8) :: atm_wall_time = 0.d0
+      real(ESMF_KIND_R8) :: ocn_wall_time = 0.d0
+
       type(ESMF_Calendar) :: esmCal
       type(ESMF_Time) :: esmStartTime
       type(ESMF_Time) :: esmStopTime

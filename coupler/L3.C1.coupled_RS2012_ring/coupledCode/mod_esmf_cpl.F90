@@ -26,6 +26,8 @@
           NUOPC_Label_ExecuteRH => label_ExecuteRouteHandle,            &
           NUOPC_Label_ReleaseRH => label_ReleaseRouteHandle,            &
           NUOPC_ConnectorGet, NUOPC_ConnectorSet
+
+      use mod_types
 !
       implicit none
       private
@@ -177,11 +179,18 @@
       type(ESMF_RouteHandle)        :: rh1, rh2
       type(ESMF_State)              :: state
       type(ESMF_FieldBundle)        :: dstFields, srcFields
+      real(ESMF_KIND_R8) :: timeStart, timeEnd
+      character(160)  :: msgString
 
 !
       rc = ESMF_SUCCESS
 !
       PRINT *, "CPL_ExecuteRH running..."
+
+      call ESMF_VMWtime(timeStart)
+      write (msgString,*) "START TIME: ", timeStart
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+
       call NUOPC_ConnectorGet(ccomp, srcFields=srcFields,               &
                               dstFields=dstFields, state=state, rc=rc)
 
@@ -196,6 +205,19 @@
 
       call ESMF_FieldBundleRegrid(interDstFields, dstFields,            &
                                   routehandle=rh2, rc=rc)
+
+      call ESMF_VMWtime(timeEnd)
+      write (msgString,*) "END TIME: ", timeEnd
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+       
+      esm_wall_time = esm_wall_time + timeEnd - timeStart
+
+      write (msgString,*) "ESM TIME: ", esm_wall_time
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+      write (msgString,*) "ATM TIME: ", atm_wall_time
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+      write (msgString,*) "OCN TIME: ", ocn_wall_time
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
 
       end subroutine
 !

@@ -135,6 +135,12 @@
         call ESMF_TimeIntervalSet(ocnTimeStep,                          &
                                   s=ocn_step_seconds, rc=rc)
 !
+        call ESMF_ConfigGetAttribute(cf, coupleMode,                    &
+                                     label='coupleMode:', rc=rc)
+        call ESMF_ConfigGetAttribute(cf, cpuOCN,                        &
+                                     label='cpuOCN:', rc=rc)
+        call ESMF_ConfigGetAttribute(cf, cpuATM,                        &
+                                     label='cpuATM:', rc=rc)
       end if
 
       currentTimeStep = 1

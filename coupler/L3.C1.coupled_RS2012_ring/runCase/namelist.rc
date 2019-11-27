@@ -1,5 +1,12 @@
 DebugLevel:     0
 
+## mode 1 = sequential mode
+## mode 2 = concurrent mode
+coupleMode:     1
+cpuOCN:         4
+cpuATM:         4
+
+
 StartYear:      2012
 StartMonth:     06
 StartDay:       01

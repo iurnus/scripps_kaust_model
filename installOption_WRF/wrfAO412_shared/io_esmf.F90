@@ -495,7 +495,7 @@ END MODULE module_ext_esmf
 !TODO:  Pass staggering info into this routine once ESMF can support staggered 
 !TODO:  grids.  For now, it is hard-coded for WRF-ARW.  
       gridID = gridID + 1
-      WRITE ( gridname,'(a,i0)' ) 'WRF_grid_', gridID
+      WRITE ( gridname, *) 'WRF_grid_test'
 
 !! CALL wrf_debug ( 5 , 'DEBUG WRF:  Calling ESMF_GridCreate' )
 !! WRITE( msg,* ) 'DEBUG WRF:  SIZE(coordX) = ', SIZE(coordX)
@@ -538,10 +538,10 @@ END MODULE module_ext_esmf
                            __LINE__
             CALL wrf_error_fatal ( msg )
           ENDIF
-      WRITE( msg,* ) 'DEBUG:  dimYCount(',j,') == allYCount(',pe,')'
-      CALL wrf_debug ( 5 , TRIM(msg) )
-          dimYCount(j) = allYCount(pe)
-          j = j + 1
+          WRITE( msg,* ) 'DEBUG:  dimYCount(',j,') == allYCount(',pe,')'
+          CALL wrf_debug ( 5 , TRIM(msg) )
+              dimYCount(j) = allYCount(pe)
+              j = j + 1
         ENDIF
         IF (allYStart(pe) == js_min) THEN
           IF (i >= numprocsX) THEN
@@ -551,16 +551,18 @@ END MODULE module_ext_esmf
                            __LINE__
             CALL wrf_error_fatal ( msg )
           ENDIF
-      WRITE( msg,* ) 'DEBUG:  dimXCount(',i,') == allXCount(',pe,')'
-      CALL wrf_debug ( 5 , TRIM(msg) )
-          dimXCount(i) = allXCount(pe)
-          i = i + 1
+          WRITE( msg,* ) 'DEBUG:  dimXCount(',i,') == allXCount(',pe,')'
+          CALL wrf_debug ( 5 , TRIM(msg) )
+              dimXCount(i) = allXCount(pe)
+              i = i + 1
         ENDIF
       ENDDO
-      WRITE( msg,* ) 'DEBUG:  i = ',i,'  dimXCount = ',dimXCount
-      CALL wrf_debug ( 5 , TRIM(msg) )
-      WRITE( msg,* ) 'DEBUG:  j = ',j,'  dimYCount = ',dimYCount
-      CALL wrf_debug ( 5 , TRIM(msg) )
+
+
+      ! WRITE( msg,* ) 'DEBUG:  i = ',i,'  dimXCount = ',dimXCount
+      ! CALL wrf_debug ( 5 , TRIM(msg) )
+      ! WRITE( msg,* ) 'DEBUG:  j = ',j,'  dimYCount = ',dimYCount
+      ! CALL wrf_debug ( 5 , TRIM(msg) )
 
 #if 0
       esmfgrid = ESMF_GridCreateHorzXY(                     &

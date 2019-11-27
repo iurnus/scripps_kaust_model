@@ -239,6 +239,9 @@
       type(ESMF_Time) :: currTime
       type(ESMF_TimeInterval) :: timeStep
       type(ESMF_Clock) :: internalClock
+      real(ESMF_KIND_R8) :: wTimeStart, wTimeEnd
+
+      call ESMF_VMWtime(wTimeStart)
       
       rc = ESMF_SUCCESS
 
@@ -277,6 +280,9 @@
 
       iLoop_ocn = iLoop_ocn + 1
       currentTimeStep = currentTimeStep + 1
+
+      call ESMF_VMWtime(wTimeEnd)
+      ocn_wall_time = ocn_wall_time + wTimeEnd - wTimeStart
 
       end subroutine
 !

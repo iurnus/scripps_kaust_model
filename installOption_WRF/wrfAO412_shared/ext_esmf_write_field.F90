@@ -168,8 +168,8 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
       WRITE(mess,*) ' ext_esmf_write_field: ESMF_FieldCreate failed, rc = ', rc
       CALL wrf_error_fatal( TRIM(mess) )
     ENDIF
-    CALL wrf_debug ( 100, 'ext_esmf_write_field: back from ESMF_FieldCreate' )
-    CALL wrf_debug ( 100 , TRIM(mess) )
+    !! CALL wrf_debug ( 100, 'ext_esmf_write_field: back from ESMF_FieldCreate' )
+    !! CALL wrf_debug ( 100 , TRIM(mess) )
 
     ! Add the Field to the export state...  
     !! PRINT *, "TESTBUG: writing tmpField1..."
