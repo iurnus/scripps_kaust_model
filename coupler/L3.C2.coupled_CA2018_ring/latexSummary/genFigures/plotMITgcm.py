@@ -54,10 +54,10 @@ for iStep in [1,2,3,4]:
                np.arange(-205,205.01,10),np.arange(-10,30.01,1),np.arange(0,16.01,0.1),\
                np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
                np.arange(0,2.01,0.1),np.arange(0,2.01,0.1)]
-  cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
-              cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
-              cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
-              cmocean.cm.dense,cmocean.cm.dense]
+  cmapList = [plt.cm.seismic,plt.cm.seismic,plt.cm.jet,\
+              plt.cm.seismic,plt.cm.jet,plt.cm.jet,\
+              plt.cm.jet,cmocean.cm.speed,plt.cm.jet,\
+              plt.cm.jet,cmocean.cm.speed,plt.cm.jet]
   tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
               np.arange(-200,201,100),np.arange(-10,30.01,5),np.arange(0,16.01,1),\
               np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
@@ -65,15 +65,6 @@ for iStep in [1,2,3,4]:
   nFigures = 11
   
   print "plot mitgcm..."
-  ## for i in range(128):
-  ##   for j in range(128):
-  ##     print i,j
-  ##     print mitgcm_sh[i,j]
-  ##     print mitgcm_lh[i,j]
-  ##     print mitgcm_swnet[i,j]
-  ##     print mitgcm_lwnet[i,j]
-  ##     print mitgcm_qnet[i,j]
-  ##     print - mitgcm_sh[i,j] - mitgcm_lh[i,j] + mitgcm_swnet[i,j] + mitgcm_lwnet[i,j]
     
   for i in range(nFigures):
     print "  plot " + fieldString[i] + ' field'

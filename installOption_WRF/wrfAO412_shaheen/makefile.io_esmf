@@ -3,7 +3,7 @@ CPP = /lib/cpp -P
 FC  = ftn -real-size 32 -i4  -w -ftz -fno-alias -align all -FR -convert big_endian
 ESMF_DIR = /home/x_sunr/scripps_kaust_model_github/esmf/
 ESMF_INCLUDE  = ${ESMF_DIR}/mod/modg/Unicos.intel.64.mpi.default/
-CURRENT_DIR = /home/x_sunr/scripps_kaust_model_github/WRFV412_AO/external/io_esmf/
+CURRENT_DIR = /home/x_sunr/scripps_kaust_model_github/WRFV412_AO_01/external/io_esmf/
 INCLUDE_MODULES = -I$(CURRENT_DIR)/../../ \
 			      -I$(CURRENT_DIR)/../../main \
                   -I$(CURRENT_DIR)/../../external/io_netcdf \

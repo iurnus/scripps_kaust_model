@@ -35,8 +35,8 @@ echo "wrf location: $wrfLocation"
 
 #  =1: compile
 # !=1: do not compile
-ifMITgcm=0
-ifESMF=0
+ifMITgcm=1
+ifESMF=1
 ifWRF=1
 ifWPS=0
 
@@ -64,16 +64,16 @@ fi
 
 
 if [ $ifWRF == "1" ]; then
-  # # How to make WRF3
-  # unzip $tarLocation/WRF-master.zip
-  # echo "compiling stand-alone WRF"
-  # mv WRF-master WRFV412.org
-  # cp -rf WRFV412.org WRFV412
-  # cd WRFV412
-  # echo "choosing 54th option to compile WRF"
-  # printf '54\n1\n' | ./configure &> log.configure
-  # ./compile em_real &> log.em_real0
-  # cd ../
+  # How to make WRF3
+  unzip $tarLocation/WRF-master.zip
+  echo "compiling stand-alone WRF"
+  mv WRF-master WRFV412.org
+  cp -rf WRFV412.org WRFV412
+  cd WRFV412
+  echo "choosing 54th option to compile WRF"
+  printf '54\n1\n' | ./configure &> log.configure
+  ./compile em_real &> log.em_real0
+  cd ../
   
   echo "compiling WRF for ocean-atmosphere coupling"
   WRF_CPL_DIR=WRFV412_AO_01

@@ -5,17 +5,12 @@ import sys, os, os.path
 import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 import numpy as np
-import MITgcmutils
 
-# iStep = 0
-
-p = [];
 wrf_output = '../../runCase/wrfout_d01_2018-01-27_00:00:00'
 
 wrf_output_results = Dataset(wrf_output,'r',format='NETCDF4');
 wrf_output_lh = wrf_output_results.variables['LH'][:];
 wrf_output_sh = wrf_output_results.variables['HFX'][:];
-# wrf_output_gsw = wrf_output_results.variables['GSW'][:];
 wrf_output_swupb = wrf_output_results.variables['SWUPB'][:];
 wrf_output_swdnb = wrf_output_results.variables['SWDNB'][:];
 wrf_output_gsw = - wrf_output_swupb + wrf_output_swdnb
@@ -52,11 +47,11 @@ clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001
              np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
              np.arange(0,2.01,0.1), np.arange(0,2.01,0.1),\
              np.arange(0,2.005,0.02),np.arange(0,40.1,1)]
-cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
-            cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
-            cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
-            cmocean.cm.dense, cmocean.cm.dense,\
-            cmocean.cm.deep,cmocean.cm.deep]
+cmapList = [plt.cm.seismic,plt.cm.seismic,plt.cm.jet,\
+            plt.cm.seismic,plt.cm.jet,plt.cm.jet,\
+            plt.cm.jet,cmocean.cm.speed,plt.cm.jet,\
+            plt.cm.jet,plt.cm.jet,\
+            plt.cm.jet,plt.cm.jet]
 tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
             np.arange(-200,201,100),np.arange(-10,30.01,5),np.arange(0,16.01,1),\
             np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\

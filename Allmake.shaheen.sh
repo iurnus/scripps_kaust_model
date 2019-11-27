@@ -35,8 +35,8 @@ echo "wrf location: $wrfLocation"
 
 #  =1: compile
 # !=1: do not compile
-ifMITgcm=0
-ifESMF=0
+ifMITgcm=1
+ifESMF=1
 ifWRF=1
 ifWPS=0
 
@@ -73,7 +73,7 @@ if [ $ifWRF == "1" ]; then
   cd ../
   
   echo "compiling WRF for ocean-atmosphere coupling"
-  WRF_CPL_DIR=WRFV412_AO
+  WRF_CPL_DIR=WRFV412_AO_01
   rm -rf $WRF_CPL_DIR
   cp -r WRFV412.org $WRF_CPL_DIR
   ln -sf installOption_WRF/installWRF412_ao_shaheen.sh .
@@ -83,7 +83,7 @@ if [ $ifWRF == "1" ]; then
   sed -i "17s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_shaheen/configure.wrf
   sed -i "4s@.*@ESMF_DIR=$esmfLocation@" installOption_WRF/wrfAO412_shaheen/makefile.io_esmf
   sed -i "6s@.*@CURRENT_DIR=$PWD/$WRF_CPL_DIR/external/io_esmf/@" installOption_WRF/wrfAO412_shaheen/makefile.io_esmf
-  sed -i "3s@.*@cd $WRF_CPL_DIR" ./installWRF412_ao_shaheen.sh
+  sed -i "3s@.*@cd $WRF_CPL_DIR@" ./installWRF412_ao_shaheen.sh
   ./installWRF412_ao_shaheen.sh
 fi
 
