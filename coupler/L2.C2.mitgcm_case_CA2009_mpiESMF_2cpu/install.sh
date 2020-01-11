@@ -1,6 +1,5 @@
 #!/bin/csh -f
-setenv MPI_HOME "/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
-setenv MITGCM_DIR "${HOME}/scripps_kaust_model_github/MITgcm_c67m"
+setenv MITGCM_DIR "${SKRIPS_DIR}/MITgcm_c67m"
 setenv L2C1_DIR "../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/"
 
 # build the MITGCM as a library
@@ -12,7 +11,7 @@ cp patches/SIZE.h code/ # update from patch
 cd build
 ./makescript_fwd.sio.ring ${MITGCM_DIR}# install MITGCM, generate *.f files
 
-cp ${MPI_HOME}/mpif* . 
+cp ${SKRIPS_MPI_DIR}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

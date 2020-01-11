@@ -514,7 +514,7 @@
         ! deduce coupling time-step
         foundcoupling = .FALSE.
    
-        #include "med_find_esmf_coupling.inc"
+        include "med_find_esmf_coupling.inc"
    
         ! look for erroneous use of io_form...  
         CALL nl_get_io_form_restart( 1, io_form )
@@ -619,7 +619,7 @@
         PRINT *, "in name is: ", config_flags%auxinput5_inname
         PRINT *, "out name is: ", config_flags%auxhist5_outname
    
-        #include "med_open_esmf_calls.inc"
+        include "med_open_esmf_calls.inc"
    
       END SUBROUTINE wrf_state_populate
 

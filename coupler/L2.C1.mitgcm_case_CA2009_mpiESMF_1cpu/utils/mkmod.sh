@@ -19,12 +19,13 @@
 # 
 
 # Set compile options (need to be updated for other machines)
-set comp         = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpif77
-set cccommand    = /project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/bin/mpicc
-set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse)
+set comp         = $MPI_DIR/bin/mpif77
+set cccommand    = $MPI_DIR/bin/mpicc
+set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
 set compopts_num = ( $compopts )
-set complibs     = (-L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib/ -lnetcdff -lnetcdf )
-set compinc      = (-I/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include/ )
+set complibs     = ($SKRIPS_NETCDF_LIB -lnetcdff -lnetcdf )
+set compinc      = ($SKRIPS_NETCDF_INCLUDE )
+
 set ccopts       = "-c"
 
 set arcommand    = ar

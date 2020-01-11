@@ -1,16 +1,15 @@
 #!/bin/sh
-export MPI_HOME="/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include"
-export MITGCM_DIR="${HOME}/scripps_kaust_model_github/MITgcm_c67m"
+setenv MITGCM_DIR "${SKRIPS_DIR}/MITgcm_c67m"
 
-read -e -p "WRF412 (with OA coupling) location? :" -i "$PWD/../../WRFV412_AO_01/" wrfLocation
-read -e -p "ESMF location? :" -i "$PWD/../../esmf/" esmfLocation
-sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
-sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
-
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
+read -e -p "WRF412 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV412_AO/" wrfLocation
+read -e -p "ESMF location? :" -i "${SKRIPS_DIR}/esmf/" esmfLocation
+# sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
+# sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
+# 
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
@@ -31,7 +30,7 @@ cp mitSettingRS/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.ring ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp ${MPI_HOME}/mpif* . 
+cp ${SKRIPS_MPI_DIR}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WRF_DIR=/home/rus043/scripps_kaust_model_github/coupler/L3.C2.coupled_CA2018_ring/../../WRFV412_AO_01/
+WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
 
 make distclean
 
