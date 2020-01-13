@@ -21,13 +21,3 @@ UCAR be liable for any damages, whatsoever, whether direct,
 indirect, consequential or special, that arise out of or in
 connection with the access, use or performance of WRF, including
 infringement actions.
-
-----------------------------------------------
-Implementations of the WRF in the coupled code
-----------------------------------------------
-
-On Ring:
-  wrfTestImplementations: Coupled WRF--ESMF test code. Only a test of the data interface.
-  wrfAOMITBulkImplementations: For atmosphere--ocean coupling. Send radiations (lwdown/swdown). Use mitgcm bulk formula to calculate net hflux.
-  wrfAOImplementations: For atmosphere--ocean coupling. Send net hflux, LH/SH, and wind to mitgcm.
-  wrfAO3911Implementations: For atmosphere--ocean coupling. Send net hflux, LH/SH, and wind to mitgcm. Use WRF 3911

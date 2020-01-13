@@ -17,6 +17,7 @@ echo "copying other files to compile ESMF--WRF"
 ln -sf ${WRF_UPDATE_DIR0}/Makefile.wrf Makefile
 ln -sf ${WRF_UPDATE_DIR0}/module_domain.F frame/
 ln -sf ${WRF_UPDATE_DIR0}/module_diag_rasm.F phys/
+ln -sf ${WRF_UPDATE_DIR0}/module_ltng_iccg.F phys/
 ln -sf ${WRF_UPDATE_DIR0}/input_wrf.F share/
 
 ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_write_field.F90 external/io_esmf/
