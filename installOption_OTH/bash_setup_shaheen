@@ -27,10 +27,6 @@ export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
 export TZ='/usr/share/zoneinfo/US/Pacific'
 # 
-export ESMF_PATH=/home/x_sunr/scripps_kaust_model_1.1/esmf/
-export ESMFMKFILE=$ESMF_PATH/lib/libg/Unicos.intel.64.mpi.default/esmf.mk
-export LD_LIBRARY_PATH=$ESMF_PATH/lib/libg/Unicos.intel.64.mpi.default${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-
 ## # For WW3 and WW3_NC options
 # export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/bin:${PATH}
 # export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/exe:${PATH}

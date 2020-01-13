@@ -14,7 +14,7 @@
 # To permanently change options, change the settings for your platform
 # in the file arch/configure.defaults then rerun configure.
 #
-ESMF_DIR=/home/x_sunr/scripps_kaust_model_github/esmf/
+# ESMF_DIR=/home/x_sunr/scripps_kaust_model_github/esmf/
 
 SHELL           =       /bin/sh
 DEVTOP          =       `pwd`
@@ -342,7 +342,7 @@ wrf_ioapi_includes :
 
 wrfio_esmf :
 	( cd $(WRF_SRC_ROOT_DIR)/external/io_esmf ; \
-          make FC="$(FC) $(PROMOTION) $(FCDEBUG) $(FCBASEOPTS) $(ESMF_MOD_INC)" \
+          make FC="$(FC) $(PROMOTION) $(FCDEBUG) $(FCBASEOPTS) $(ESMF_MOD_INC) $(INCLUDE_MODULES)" \
           RANLIB="$(RANLIB)" CPP="$(CPP) $(POUND_DEF) " AR="$(AR)" ARFLAGS="$(ARFLAGS)" )
 
 #	There is probably no reason to modify these rules
