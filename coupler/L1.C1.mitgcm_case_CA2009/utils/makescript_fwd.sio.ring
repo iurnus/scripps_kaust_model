@@ -5,6 +5,6 @@ rm -f *.f
 make CLEAN
 rm Makefile
 
-../../../MITgcm_c67m/tools/genmake2 "-rootdir" "../../../MITgcm_c67m" "-mpi" "-mods" "../code" "-optfile" "./mitgcm_optfile"
+${SKRIPS_DIR}/MITgcm_c67m/tools/genmake2 "-rootdir" "${SKRIPS_DIR}/MITgcm_c67m" "-mpi" "-mods" "../code" "-optfile" "$MITGCM_OPT"
 make depend
 make -j8

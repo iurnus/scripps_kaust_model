@@ -1,6 +1,8 @@
-#!/bin/csh -f
-setenv MITGCM_DIR "${SKRIPS_DIR}/MITgcm_c67m"
-setenv L2C1_DIR "../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/"
+#!/bin/sh
+export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
+
+export MITGCM_OPT=mitgcm_optfile
+echo "The option file is: $MITGCM_OPT"
 
 # build the MITGCM as a library
 mkdir build/

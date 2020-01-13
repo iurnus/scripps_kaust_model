@@ -45,7 +45,7 @@ module mod_esmf_atm
 !-----------------------------------------------------------------------
 !
   type(ESMF_GridComp) :: gcomp
-  integer, intent(inout) :: rc
+  integer, intent(out) :: rc
 !
   rc = ESMF_SUCCESS
 
@@ -84,10 +84,10 @@ module mod_esmf_atm
 !
   subroutine ATM_Init1(gcomp, importState, exportState, clock, rc)
 
-  TYPE(ESMF_GridComp), TARGET, INTENT(INOUT) :: gcomp
-  TYPE(ESMF_State),    TARGET, INTENT(INOUT) :: importState
-  TYPE(ESMF_State),    TARGET, INTENT(INOUT) :: exportState
-  TYPE(ESMF_Clock),    TARGET, INTENT(INOUT) :: clock
+  TYPE(ESMF_GridComp) :: gcomp
+  TYPE(ESMF_State)    :: importState
+  TYPE(ESMF_State)    :: exportState
+  TYPE(ESMF_Clock)    :: clock
 
   TYPE(ESMF_VM) :: vm
   INTEGER :: mpicomtmp
@@ -212,8 +212,8 @@ module mod_esmf_atm
 !
   subroutine ATM_Run(gcomp, rc)
 
-  TYPE(ESMF_GridComp), TARGET, INTENT(INOUT) :: gcomp
-  INTEGER,                     INTENT(  OUT) :: rc
+  TYPE(ESMF_GridComp)    :: gcomp
+  INTEGER, INTENT(  OUT) :: rc
 
   type(ESMF_State),    TARGET:: importState
   type(ESMF_State),    TARGET:: exportState

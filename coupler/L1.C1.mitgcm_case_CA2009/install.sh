@@ -1,8 +1,11 @@
-#!/bin/csh -f
+#!/bin/sh
 
 # build the MITGCM as a library
 echo "building MITgcm..."
 echo "WARNING:: NEED MITGCM SOURCE FILE in ../../MITgcm_c67m/"
+
+export MITGCM_OPT=mitgcm_optfile.ifort
+echo "The option file is: $MITGCM_OPT"
 
 mkdir build/
 cp utils/* build/ # copy the scripts to install MITGCM

@@ -1,5 +1,8 @@
-#!/bin/csh -f
-setenv MITGCM_DIR "${SKRIPS_DIR}/MITgcm_c67m"
+#!/bin/sh
+export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
+
+export MITGCM_OPT=mitgcm_optfile.pgi
+echo "The option file is: $MITGCM_OPT"
 
 # build the MITGCM as a library
 mkdir build/
