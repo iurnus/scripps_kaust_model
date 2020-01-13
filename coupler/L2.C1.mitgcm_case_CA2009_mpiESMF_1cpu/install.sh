@@ -11,7 +11,7 @@ cp -rf mitCode/ code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.ring ${MITGCM_DIR}# install MITGCM, generate *.f files
 
-cp ${SKRIPS_MPI_DIR}/mpif* . 
+cp ${SKRIPS_MPI_DIR}/include/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
@@ -25,9 +25,9 @@ ln -s ../build/sigreg.o .
 make
 cd ..
 
-if ( -f ./coupledSolver/esmf_application ) then
+if [ -f ./coupledSolver/esmf_application ]; then
   echo Installation is successful!
   echo The coupled model is installed as ./coupledSolver/esmf_application
 else 
   echo ERROR! Installation is NOT successful!
-endif
+fi

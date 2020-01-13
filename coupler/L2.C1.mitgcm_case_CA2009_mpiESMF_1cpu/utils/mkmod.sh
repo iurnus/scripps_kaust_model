@@ -19,8 +19,8 @@
 # 
 
 # Set compile options (need to be updated for other machines)
-set comp         = $MPI_DIR/bin/mpif77
-set cccommand    = $MPI_DIR/bin/mpicc
+set comp         = $SKRIPS_MPI_DIR/bin/mpif77
+set cccommand    = $SKRIPS_MPI_DIR/bin/mpicc
 set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
 set compopts_num = ( $compopts )
 set complibs     = ($SKRIPS_NETCDF_LIB -lnetcdff -lnetcdf )

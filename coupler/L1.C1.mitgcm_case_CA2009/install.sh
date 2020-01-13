@@ -4,7 +4,7 @@
 echo "building MITgcm..."
 echo "WARNING:: NEED MITGCM SOURCE FILE in ../../MITgcm_c67m/"
 
-export MITGCM_OPT=mitgcm_optfile.ifort
+export MITGCM_OPT=mitgcm_optfile.pgi
 echo "The option file is: $MITGCM_OPT"
 
 mkdir build/

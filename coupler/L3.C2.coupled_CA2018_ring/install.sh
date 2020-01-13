@@ -1,5 +1,5 @@
 #!/bin/sh
-setenv MITGCM_DIR "${SKRIPS_DIR}/MITgcm_c67m"
+export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
 read -e -p "WRF412 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV412_AO/" wrfLocation
 read -e -p "ESMF location? :" -i "${SKRIPS_DIR}/esmf/" esmfLocation
@@ -30,7 +30,7 @@ cp mitSettingCA/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.ring ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp ${SKRIPS_MPI_DIR}/mpif* . 
+cp ${SKRIPS_MPI_DIR}/include/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
