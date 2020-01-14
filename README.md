@@ -1,6 +1,6 @@
 The SKRIPS is under continous development. 
 
-The most recent stable version is v1.0. It is available here: [download v1.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.0)
+The most recent stable version is v1.1. It is available here: [download v1.1](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.1)
 
 
 This is the repository for the Scripps-KAUST Regional Integrated Prediction System (SKRIPS). 
