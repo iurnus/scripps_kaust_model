@@ -22,3 +22,4 @@ rm -rf data.*
 rm -rf eedata *_data run-off* CAM* bathy*
 rm -rf update*.m
 rm -rf namelist.input
+rm -rf large_files

@@ -1,19 +1,19 @@
 #!/bin/sh
-export MPI_HOME=/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include/
+export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
 
-read -e -p "WRF412 (with OA coupling) location? :" -i "$HOME/scripps_kaust_model_github/WRFV412_AO_01/" wrfLocation
-read -e -p "ESMF location? :" -i "$HOME/scripps_kaust_model_github/esmf/" esmfLocation
-read -e -p "MITgcm location? :" -i "$HOME/scripps_kaust_model_github/MITgcm_c67m/" MITGCM_DIR
-read -e -p "COUPLER location? :" -i "$HOME/scripps_kaust_model_github/coupler/" couplerLocation
-sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
-sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
-sed -i "4s@.*@ESMF_DIR=$esmfLocation@" coupledCode/Allmake.sh
-sed -i "5s@.*@COUPLER_DIR=$couplerLocation@" coupledCode/Allmake.sh
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
-sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
+read -e -p "WRF412 (with OA coupling) location? :" -i "$SKRIPS_DIR/WRFV412_AO/" wrfLocation
+read -e -p "ESMF location? :" -i "$SKRIPS_DIR/esmf/" esmfLocation
+read -e -p "MITgcm location? :" -i "$SKRIPS_DIR/MITgcm_c67m/" MITGCM_DIR
+read -e -p "COUPLER location? :" -i "$SKRIPS_DIR/coupler/" couplerLocation
+# sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
+# sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
+# sed -i "4s@.*@ESMF_DIR=$esmfLocation@" coupledCode/Allmake.sh
+# sed -i "5s@.*@COUPLER_DIR=$couplerLocation@" coupledCode/Allmake.sh
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
+# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
@@ -36,7 +36,7 @@ cp mitSettingCA/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.shaheen ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp $MPI_HOME/mpif* . 
+cp ${SKRIPS_MPI_DIR}/include/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

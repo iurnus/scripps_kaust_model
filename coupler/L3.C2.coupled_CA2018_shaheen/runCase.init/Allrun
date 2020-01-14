@@ -1,9 +1,10 @@
 #!/bin/bash
 
-WRF_DIR=/home/x_sunr/scripps_kaust_model_github/WRFV412_AO_01/
-export CPL_FOLDER='/project/k1325/ar_project_wrf_nc/test_nc'
+WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
 
-ln -s ${CPL_FOLDER}/met_em.d01.2018-01-2[6-9]*.nc .
+git clone https://github.com/iurnus/scripps_kaust_large_files.git large_files
+unzip 'large_files/L3C2_case/*.zip'
+
 ln -sf ../caseInput/* .
 cp ${WRF_DIR}/main/real.exe .
 cp ${WRF_DIR}/main/wrf.exe .

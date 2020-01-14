@@ -1,5 +1,5 @@
-WRF_DIR=/home/x_sunr/scripps_kaust_model_github/WRFV412_AO_01/
-ESMF_DIR=/home/x_sunr/scripps_kaust_model_github/esmf/
+WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+ESMF_DIR=${SKRIPS_DIR}/esmf/
 
 WRF_INC = \
    -I${WRF_DIR}dyn_em \
