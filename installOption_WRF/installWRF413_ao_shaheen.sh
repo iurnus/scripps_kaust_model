@@ -1,9 +1,9 @@
 echo "installing WRF"
 WRF_PWD_DIR=${PWD}
-cd WRFV412_AO
+cd WRFV413_AO
 echo "WRF_PWD_DIR is: ${WRF_PWD_DIR}"
-WRF_UPDATE_DIR0=${WRF_PWD_DIR}/installOption_WRF/wrfAO412_shared/
-WRF_UPDATE_DIR1=${WRF_PWD_DIR}/installOption_WRF/wrfAO412_shaheen/
+WRF_UPDATE_DIR0=${WRF_PWD_DIR}/installOption_WRF/wrfAO413_shared/
+WRF_UPDATE_DIR1=${WRF_PWD_DIR}/installOption_WRF/wrfAO413_shaheen/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
@@ -29,7 +29,6 @@ ln -sf ${WRF_UPDATE_DIR0}/io_esmf.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
 ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
-ln -sf ${WRF_UPDATE_DIR1}/makefile.io_esmf external/io_esmf/makefile
 
 echo "compiling WRFv4.1.2"
 ./compile em_real &> log.em_real1

@@ -1,4 +1,4 @@
-WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 ESMF_DIR=${SKRIPS_DIR}/esmf/
 
 WRF_INC = \
@@ -16,72 +16,4 @@ WRF_INC = \
    -I${WRF_DIR}wrftladj \
 
 WRF_LIB = \
-	wrf_ESMFMod.o module_wrf_top.o libwrflib.a \
-    ${WRF_DIR}/external/fftpack/fftpack5/libfftpack.a \
-    ${WRF_DIR}/external/io_grib1/libio_grib1.a \
-    ${WRF_DIR}/external/io_grib_share/libio_grib_share.a \
-    ${WRF_DIR}/external/io_int/libwrfio_int.a \
-    -L${ESMF_DIR}/lib/libg/Unicos.intel.64.mpi.default \
-    -L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib/ \
-    -L/opt/cray/pe/parallel-netcdf/1.8.1.3/intel/16.0/lib \
-    -L/opt/cray/pe/libsci/17.12.1/INTEL/16.0/x86_64/lib \
-    -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib \
-    -L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -L/opt/cray/dmapp/default/lib64 \
-    -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib \
-    -L/opt/cray/dmapp/default/lib64 \
-    -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib \
-    -L/opt/cray/pe/hdf5/1.10.1.1/INTEL/16.0/lib \
-    -L/opt/cray/rca/2.2.16-6.0.5.0_15.34__g5e09e6d.ari/lib64 \
-    -L/opt/cray/alps/6.5.28-6.0.5.0_18.6__g13a91b6.ari/lib64 \
-    -L/opt/cray/xpmem/2.2.4-6.0.5.1_8.18__g35d5e73.ari/lib64 \
-    -L/opt/cray/pe/pmi/5.0.13/lib64 \
-    -L/opt/cray/ugni/6.0.14-6.0.5.0_16.9__g19583bb.ari/lib64 \
-    -L/opt/cray/udreg/2.3.2-6.0.5.0_13.12__ga14955a.ari/lib64 \
-    -L/sw/xc40cle6/darshan/3.1.4/sles12.3_gcc7.2.0/lib \
-    -L/opt/cray/pe/atp/2.1.1/libApp -L/lib64 \
-    -L/opt/cray/wlm_detect/1.3.2-6.0.5.0_3.1__g388ccd5.ari/lib64 \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/ipp/lib/intel64 \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/mkl/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/tbb/lib/intel64/gcc4.7 \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/tbb/lib/intel64/gcc4.7 \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/daal/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/usr/lib64/gcc/x86_64-suse-linux/4.8/ \
-    -L/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64 \
-    -L/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/ -L/lib/../lib64 \
-    -L/lib/../lib64/ -L/usr/lib/../lib64 -L/usr/lib/../lib64/ \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/ipp/lib/intel64/ \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/ \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/mkl/lib/intel64_lin/ \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/tbb/lib/intel64/gcc4.7/ \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/daal/lib/intel64_lin/ \
-    -L/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/lib/ \
-    -L/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../ -L/lib64 -L/lib/ -L/usr/lib64 \
-    -L/usr/lib \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -L/opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin \
-    -lesmf   -lhugetlbfs -lpnetcdf -lAtpSigHandler -lAtpSigHCommData -lpthread \
-    -ldarshan -ldarshan-stubs -lz -lnetcdf_c++4 -limf -lm -ldl -lnetcdf -lhdf5_hl \
-    -ldl -limf -lm -lz -lhdf5 -lrt -lz -ldl -limf -lm -lsci_intel -limf -lm -ldl \
-    -lsci_intel -limf -lm -lpthread -ldl -lhugetlbfs -lrt -lugni -lpthread -lpmi \
-    -limf -lm -ldl -lrt -lugni -lpthread -lpmi -limf -lm -ldl -lpmi -lpthread \
-    -lalpslli -lpthread -lwlm_detect -lalpsutil -lpthread -lrca -lugni -lpthread \
-    -lxpmem -ludreg -lstdc++ -limf -lm -lifport -lpthread -limf -lsvml -lirng \
-    -lstdc++ -lm -lipgo -ldecimal -lstdc++ -lgcc -lgcc_eh -lirc -lsvml -lgcc \
-    -lgcc_eh -lirc_s -ldl -lrt -ldl -lnetcdff -lnetcdf \
-    -L${WRF_DIR}/external/io_esmf \
-    -L${WRF_DIR}/external/io_netcdf \
-    -L${WRF_DIR}/external/io_pnetcdf \
-    ${WRF_DIR}/external/RSL_LITE/librsl_lite.a \
-    ${WRF_DIR}/frame/module_internal_header_util.o \
-    ${WRF_DIR}/frame/pack_utils.o \
-    -L${ESMF_DIR}/lib/libg/Unicos.intel.64.mpi.default \
-    -lwrfio_nf -L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -lnetcdff -lnetcdf \
-    -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib -lwrfio_esmf \
-    -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib -lpnetcdf     
+ wrf_ESMFMod.o ${WRF_DIR}/main/module_wrf_top.o libwrflib.a /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/fftpack/fftpack5/libfftpack.a /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_grib1/libio_grib1.a /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_grib_share/libio_grib_share.a /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_int/libwrfio_int.a -L/home/x_sunr/scripps_kaust_model-1.1//esmf//lib/libg/Unicos.intel.64.mpi.default -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib/, -L/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/lib  -lesmf   -cxxlib -lrt -ldl -lnetcdff -lnetcdf -L/home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_esmf -L/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/lib/ -lwrfio_esmf  /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/RSL_LITE/librsl_lite.a /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/frame/module_internal_header_util.o /home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/frame/pack_utils.o  /home/x_sunr/scripps_kaust_model-1.1//esmf//lib/libg/Unicos.intel.64.mpi.default/libesmf.a -L/home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L/home/x_sunr/scripps_kaust_model-1.1/WRFV413_AO/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf          

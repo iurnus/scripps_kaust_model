@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 
 make distclean
 

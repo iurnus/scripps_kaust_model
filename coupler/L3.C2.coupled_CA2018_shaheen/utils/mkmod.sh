@@ -23,8 +23,9 @@ set comp      = ftn
 set cccommand = cc
 set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
 set compopts_num = ( $compopts )
-set complibs = (-L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib -lnetcdf -lnetcdff -lpnetcdf)
-set compinc = (-I/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/include -I/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/include -I/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include)
+set compinc  = (-I/$SKRIPS_MPI_DIR/include -I$SKRIPS_NETCDF_INCLUDE)
+set complibs = (-L/$SKRIPS_MPI_DIR/lib -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
+
 set ccopts = "-c"
 
 set arcommand = ar

@@ -1,7 +1,7 @@
 #!/bin/sh
 export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
-read -e -p "WRF412 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV412_AO/" wrfLocation
+read -e -p "WRF413 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV413_AO/" wrfLocation
 read -e -p "ESMF location? :" -i "${SKRIPS_DIR}/esmf/" esmfLocation
 # sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
 # sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk

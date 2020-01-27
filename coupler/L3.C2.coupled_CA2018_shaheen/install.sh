@@ -2,7 +2,7 @@
 export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
 
-read -e -p "WRF412 (with OA coupling) location? :" -i "$SKRIPS_DIR/WRFV412_AO/" wrfLocation
+read -e -p "WRF413 (with OA coupling) location? :" -i "$SKRIPS_DIR/WRFV413_AO/" wrfLocation
 read -e -p "ESMF location? :" -i "$SKRIPS_DIR/esmf/" esmfLocation
 read -e -p "MITgcm location? :" -i "$SKRIPS_DIR/MITgcm_c67m/" MITGCM_DIR
 read -e -p "COUPLER location? :" -i "$SKRIPS_DIR/coupler/" couplerLocation

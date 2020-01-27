@@ -9,14 +9,6 @@ export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortra
 export LD_LIBRARY_PATH=/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/:${PATH}   
 
-## # WAVEWATCH III
-export PATH=/home/rus043/kaust_project/codeNew/regionalCOAM/ww3/bin:${PATH}
-export PATH=/home/rus043/kaust_project/codeNew/regionalCOAM/ww3/exe:${PATH}
-export WWATCH3_NETCDF=NC4
-export NETCDF_CONFIG='/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/bin/nc-config'
-export NETCDF_CONFIG_C='/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/bin/ncxx4-config'
-export NETCDF_CONFIG_F='/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/bin/nf-config'
-
 # Add JASPER path for WPS
 export JASPERINC=/home/rus043/wrf/build_wrf/grib2/include/
 export JASPERLIB=/home/rus043/wrf/build_wrf/grib2/lib/

@@ -10,8 +10,8 @@ EXTENDED_SRC_FLAG='-Mextend'
 GET_FC_VERSION="-V"
 CHECK_FOR_LAPACK=t
 
-INCLUDES='-I/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/include -I/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/include -I/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/include'
-LIBS='-L/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib -L/opt/cray/pe/parallel-netcdf/1.8.1.3/INTEL/16.0/lib -L/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/lib'
+INCLUDES="-I/$SKRIPS_MPI_DIR/include -I$SKRIPS_NETCDF_INCLUDE"
+LIBS="-L/$SKRIPS_MPI_DIR/lib -I$SKRIPS_NETCDF_LIB"
 
 NOOPTFLAGS='-O2'
 NOOPTFILES=''

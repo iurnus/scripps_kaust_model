@@ -26,14 +26,3 @@ export PNETCDF=$PARALLEL_NETCDF_DIR
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
 export TZ='/usr/share/zoneinfo/US/Pacific'
-# 
-## # For WW3 and WW3_NC options
-# export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/bin:${PATH}
-# export PATH=/home/x_sunr/kaust_project/regionalcoam/ww3/exe:${PATH}
-# export WWATCH3_NETCDF=NC4
-# export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.4.1.1.6/bin/nc-config'
-# export PNETCDF_CONFIG='/opt/cray/pe/parallel-netcdf/1.8.1.3/bin/pnetcdf-config'
-export PATH=/home/x_sunr/kaust_project/testWW5.16/bin:${PATH}
-export PATH=/home/x_sunr/kaust_project/testWW5.16/exe:${PATH}
-export WWATCH3_NETCDF=NC4
-export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.4.1.1.6/bin/nc-config'

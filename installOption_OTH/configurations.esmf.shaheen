@@ -2,12 +2,13 @@
 #
 # Update the following directories from line 4 to 13
 export SKRIPS_DIR=/home/x_sunr/scripps_kaust_model-1.1/
-export ESMF_NETCDF_INCLUDE="/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/include/, -I/opt/cray/pe/parallel-netcdf/1.8.1.3/intel/16.0/include"
-export ESMF_NETCDF_LIBPATH="/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib/, -L/opt/cray/pe/parallel-netcdf/1.8.1.3/intel/16.0/lib"
-export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.4.1.1.6/INTEL/16.0/lib/, -Wl,-rpath,/opt/cray/pe/parallel-netcdf/1.8.1.3/intel/16.0/lib/"
+export ESMF_NETCDF_INCLUDE="/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/include/, -I/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/include"
+export ESMF_NETCDF_LIBPATH="/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib/, -L/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/lib"
+export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib/, -Wl,-rpath,/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/lib/"
 export SKRIPS_NETCDF_INCLUDE=-I$NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$NETCDF_LIB
-export SKRIPS_MPI_DIR=/opt/cray/pe/mpt/7.7.0/gni/mpich-intel/16.0/
+# export SKRIPS_MPI_DIR=/opt/cray/pe/mpt/7.7.11/gni/mpich-intel/16.0/
+export SKRIPS_MPI_DIR=/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export ESMF_LIB=$ESMF_DIR/lib/libg/Unicos.intel.64.mpi.default/
 

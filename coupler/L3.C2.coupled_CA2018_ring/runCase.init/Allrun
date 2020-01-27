@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 
 # export CPL_FOLDER='/project/rus043_data/ar_2018_forecast/'
 # ln -s ${CPL_FOLDER}/save_nc/fine_loop_3911/2018_0127/met_em.d01.2018-01-2[6-9]*.nc .

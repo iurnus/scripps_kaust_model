@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 
 ln -sf ../save_nc/* .
 ln -sf ../caseInput/* .

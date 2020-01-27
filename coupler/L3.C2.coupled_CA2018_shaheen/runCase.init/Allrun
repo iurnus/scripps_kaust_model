@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV412_AO/
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 
 git clone https://github.com/iurnus/scripps_kaust_large_files.git large_files
 unzip 'large_files/L3C2_case/*.zip'
