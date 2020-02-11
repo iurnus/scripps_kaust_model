@@ -496,6 +496,8 @@
       PRINT *, 'WRF run loop: ', iLoop_atm
       iLoop_atm = iLoop_atm + 1
 
+      call ESMF_VMWtime(wTimeEnd)
+      atm_wall_time = atm_wall_time + wTimeEnd - wTimeStart
 
       end subroutine
 

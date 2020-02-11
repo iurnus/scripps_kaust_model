@@ -188,7 +188,7 @@
       PRINT *, "CPL_ExecuteRH running..."
 
       call ESMF_VMWtime(timeStart)
-      write (msgString,*) "START TIME: ", timeStart
+      write (msgString,*) "Total time spent on the coupled run: ", timeStart
       call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
 
       call NUOPC_ConnectorGet(ccomp, srcFields=srcFields,               &
@@ -207,16 +207,17 @@
                                   routehandle=rh2, rc=rc)
 
       call ESMF_VMWtime(timeEnd)
-      write (msgString,*) "END TIME: ", timeEnd
-      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
        
       esm_wall_time = esm_wall_time + timeEnd - timeStart
 
-      write (msgString,*) "ESM TIME: ", esm_wall_time
+      write (msgString,*) "  Time spent on ESMF coupler: ", esm_wall_time
       call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
-      write (msgString,*) "ATM TIME: ", atm_wall_time
+      write (msgString,*) "  Time spent on running ATM model: ", atm_wall_time
       call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
-      write (msgString,*) "OCN TIME: ", ocn_wall_time
+      write (msgString,*) "  Time spent on running OCN model: ", ocn_wall_time
+      call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
+      write (msgString,*) "  Time spent on other ESMF processes : ", &
+        timeEnd - atm_wall_time - ocn_wall_time - esm_wall_time
       call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)
 
       end subroutine
