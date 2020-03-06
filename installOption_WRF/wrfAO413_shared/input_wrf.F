@@ -515,7 +515,7 @@
     !  We do not want the CEN_LAT LON values from the boundary file.  For 1-way nests
     !  with ndown, this ends up being the data from the previous coarse domain.
 
-    IF (( switch .NE. boundary_only ) .AND. (switch .NE. auxinput5_only)) THEN
+    IF ( switch .NE. boundary_only ) THEN
        CALL wrf_get_dom_ti_real ( fid , 'CEN_LAT' ,  config_flags%cen_lat , 1 , icnt , ierr )
        WRITE(wrf_err_message,*)'input_wrf: wrf_get_dom_ti_real for CEN_LAT returns ',config_flags%cen_lat
        CALL wrf_debug ( 300 , wrf_err_message )
@@ -611,7 +611,6 @@
 #if ( ( EM_CORE == 1 ) && ( DA_CORE != 1 ) )
     IF ( ( ( switch .EQ. input_only ) .OR. ( switch .EQ. restart_only ) ) .AND. &
          ( ( config_flags%io_form_input .EQ.  2 ) .OR. &
-           ( config_flags%io_form_input .EQ.  5 ) .OR. &
            ( config_flags%io_form_input .EQ. 11 ) ) ) THEN
       CALL wrf_get_dom_ti_char ( fid , 'SIMULATION_INITIALIZATION_TYPE', sim_type , icnt )
       IF ( TRIM(sim_type) .NE. "IDEALIZED DATA" ) THEN
@@ -644,11 +643,14 @@
     if (index(mminlu, char(0)) > 0) mminlu(index(mminlu, char(0)):) = " "
     WRITE(wrf_err_message,*)'input_wrf: wrf_get_dom_ti_char for MMINLU returns ' // TRIM(mminlu)
     CALL wrf_debug ( 300 , wrf_err_message )
-    IF ( ( ( switch .EQ. input_only ) .OR. ( switch .EQ. restart_only ) ) .AND. &
-             ( config_flags%io_form_input .NE. 5 ) ) THEN
+    ! IF ( ( ( switch .EQ. input_only ) .OR. ( switch .EQ. restart_only ) ) .AND. &
+    !          ( config_flags%io_form_input .NE. 5 ) ) THEN
+    ! IF ( ( config_flags%io_form_input .NE. 5 ) ) THEN
+    ! IF ( ( switch .NE. auxinput5_only ) .AND. ( config_flags%io_form_input .NE. 5 ) ) THEN
+    IF ( switch .NE. auxinput5_only ) THEN
       CALL nl_set_mminlu ( grid%id, mminlu )
     ELSE
-      CALL nl_set_mminlu ( grid%id, mminlu )
+      !! CALL nl_set_mminlu ( grid%id, mminlu )
     END IF
 
 
