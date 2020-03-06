@@ -6,6 +6,10 @@ cd runCase/
 ./Allclean
 cd ..
 
+cd runCase.restart/
+./Allclean
+cd ..
+
 cd runCase.init/
 ./Allclean
 cd ..

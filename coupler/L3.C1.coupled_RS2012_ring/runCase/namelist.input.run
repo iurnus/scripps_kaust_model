@@ -21,7 +21,7 @@
  history_interval_s                  = 60,  60,   60,
  frames_per_outfile                  = 500000, 1000, 1000,
  restart                             = .false.,
- restart_interval                    = 5000000,
+ restart_interval_s                  = 1800,
  io_form_history                     = 2
  io_form_restart                     = 2
  io_form_input                       = 2

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
+ln -sf ../caseInput/* .
+
+cp $WRF_DIR/main/wrf.exe .
+cp ../runCase.init/wrfbdy_d01 . 
+cp ../runCase.init/wrfinput_d01 .
+cp ../runCase.init/wrflowinp_d01 .
+
+ln -sf ../runCase/pickup.0000000060.* .
+ln -sf ../runCase/wrfrst* .
+
+cp ../coupledCode/esmf_application .
+
+mpirun -np 4 esmf_application &> log.esmf 

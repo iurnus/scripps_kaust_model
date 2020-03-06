@@ -27,6 +27,7 @@
           NUOPC_Label_DataInitialize => label_DataInitialize
 !
       use mitgcm_org_ocn, only : mit_init
+      use mitgcm_org_ocn, only : mit_getclock
       use mitgcm_org_ocn, only : mit_run
       use mitgcm_org_ocn, only : get_domain_size
       use ieee_arithmetic, only : ieee_is_nan
@@ -251,13 +252,18 @@
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
           line=__LINE__, file=FILENAME)) return
 
+      call OCN_Get(gcomp, iLoop_ocn, rc)
+
+      if (currentTimeStep == 0) then
+        call mit_getclock(myTime, myIter)
+        nTimeStepsIn = INT( esm_step_seconds/ocn_step_seconds )
+      end if
+
       print *, "calling OCN_Run function"
       print *, "iLoop_ocn is: ", iLoop_ocn
       print *, "myTime is: ", myTime
       print *, "myIter is: ", myIter
       print *, "nTimeStepsIn is: ", nTimeStepsIn
-
-      call OCN_Get(gcomp, iLoop_ocn, rc)
 
       call mit_run(iLoop_ocn, myTime, myIter, nTimeStepsIn, myThid)
 
@@ -1023,7 +1029,7 @@
 
       PRINT *, "current time step is: ", currentTimeStep
 
-      if (currentTimeStep == 1) then
+      if (currentTimeStep == 0) then
         call set_sst_ini(sst_ini_ESMF, myThid)
       end if
 !

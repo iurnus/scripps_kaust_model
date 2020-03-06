@@ -17,6 +17,7 @@ cp utils/* build_mit/ # copy the scripts to install MITGCM
 cp mitCode/* code_mit/ # copy the scripts to install MITGCM
 cp mitSettingRS/* code_mit/ # copy the scripts to install MITGCM
 rm code_mit/exf_get* # remove the exf_get file so that MITGCM read the file input
+rm code_mit/main.F # remove the main file
 cd build_mit
 sed -i s/code/code_mit/g makescript_fwd.sio.ring
 ./makescript_fwd.sio.ring ${MITGCM_DIR} # install MITGCM, generate *.f files

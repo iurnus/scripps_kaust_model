@@ -3,7 +3,6 @@
 rm -rf *.data
 rm -rf *.meta
 rm -rf wrfout*
-rm -rf wrfrst*
 rm -rf tmp*.nc
 rm -rf rsl*
 rm -rf PET*
@@ -22,4 +21,4 @@ rm -rf Rs_*
 rm -rf data.*
 rm -rf eedata *_data run-off* CAM* bathy*
 rm -rf *.m 
-rm -rf namelist.input
+rm -rf wrfrst*

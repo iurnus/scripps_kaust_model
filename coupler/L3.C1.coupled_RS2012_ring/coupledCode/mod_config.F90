@@ -143,7 +143,7 @@
                                      label='cpuATM:', rc=rc)
       end if
 
-      currentTimeStep = 1
+      currentTimeStep = 0
 !
 !-----------------------------------------------------------------------
 !     Set field dictionary entries

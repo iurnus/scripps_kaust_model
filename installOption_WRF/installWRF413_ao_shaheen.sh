@@ -30,7 +30,7 @@ ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
 ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
 
-echo "compiling WRFv4.1.2"
+echo "compiling WRFv4.1.3"
 ./compile em_real &> log.em_real1
 echo "need to compile WRF twice..."
 ./compile em_real &> log.em_real2
