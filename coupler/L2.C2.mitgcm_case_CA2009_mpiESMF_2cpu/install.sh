@@ -22,7 +22,6 @@ cd ..
 # build the test coupler
 cp -rf ${L2C1_DIR}/coupledSolver/ coupledSolver/ # copy the coupledSolver DIR
 rm -rf coupledSolver/mod_esmf_atm.F90
-rm -rf coupledSolver/mod_esmf_ocn.F90
 cp -rf patches/*.F90 coupledSolver/ # update from patch
 cd coupledSolver
 # set the path of ESMF installation

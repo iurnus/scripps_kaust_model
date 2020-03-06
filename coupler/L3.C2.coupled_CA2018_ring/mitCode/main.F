@@ -111,6 +111,7 @@ C     !USES:
       dummyComm = -1
 
       CALL MIT_INIT(myThid, dummyComm)
+      CALL MIT_GETCLOCK(myTimeIn, myIterIn)
 
       print *, "myIterIn before the loop is: ", myIterIn
       print *, "myTimeIn before the loop is: ", myTimeIn

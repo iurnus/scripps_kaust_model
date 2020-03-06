@@ -26,6 +26,7 @@ module mod_esmf_ocn
       NUOPC_Label_DataInitialize => label_DataInitialize
 !
   use mitgcm_org_ocn, only : mit_init
+  use mitgcm_org_ocn, only : mit_getclock
   use mitgcm_org_ocn, only : mit_run
   use mitgcm_org_ocn, only : get_domain_size
   use ieee_arithmetic, only : ieee_is_nan
@@ -265,6 +266,10 @@ module mod_esmf_ocn
                       exportState=exportState, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
+
+  if (iLoopOCN == 1) then
+    call mit_getclock(myTime, myIter)
+  end if
 
   print *, "calling OCN_Run function"
   print *, "OCN iLoop is: ", iLoopOCN
