@@ -21,7 +21,13 @@
 # Set compile options (need to be updated for other machines)
 set comp         = $SKRIPS_MPI_DIR/bin/mpif77
 set cccommand    = $SKRIPS_MPI_DIR/bin/mpicc
-set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+
+if ($ESMF_COMPILER == intel) then
+  set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
+else if ($ESMF_COMPILER == pgi) then
+  set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+endif
+
 set compopts_num = ( $compopts )
 set complibs     = ($SKRIPS_NETCDF_LIB -lnetcdff -lnetcdf )
 set compinc      = ($SKRIPS_NETCDF_INCLUDE )

@@ -51,7 +51,7 @@ module mod_esmf_ocn
 !-----------------------------------------------------------------------
 !
   type(ESMF_GridComp) :: gcomp
-  integer, intent(inout) :: rc
+  integer, intent(out) :: rc
 !
   rc = ESMF_SUCCESS
 
@@ -164,7 +164,7 @@ module mod_esmf_ocn
 !     Initialize the gridded component
 !-----------------------------------------------------------------------
 !
-  call MIT_INIT(myThid, comm)
+  call mit_init(myThid, comm)
 !
 !-----------------------------------------------------------------------
 !     Set-up grid and load coordinate data

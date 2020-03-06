@@ -61,7 +61,7 @@ CBOP
 C !ROUTINE: MAIN
 
 C !INTERFACE:
-      SUBROUTINE MIT_RUN(iLoopIn, myTimeIn, myIterIn, nTimeStepsIn, myThid)
+      SUBROUTINE MIT_RUN(iLoopIn,myTimeIn,myIterIn,nTimeStepsIn,myThid)
 
 C !DESCRIPTION:
 C     *==========================================================*
@@ -123,7 +123,6 @@ C     myThid       :: thread Id number
       INTEGER myIter
       INTEGER iLoop
       INTEGER iStep
-      INTEGER nTimeSteps
       INTEGER nTimeStepsIn
       INTEGER I
       INTEGER dummyComm
@@ -211,7 +210,6 @@ C--   Write closedown status
       ELSE
       ENDIF
 
-      RETURN
       END
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
