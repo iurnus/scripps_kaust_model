@@ -1,7 +1,14 @@
 #!/bin/sh
 export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
-export MITGCM_OPT=mitgcm_optfile.pgi
+read -e -p "Using intel compiler? (Y/N) :" -i "N" intelFlag
+if [ $intelFlag == 'Y' ]; then
+  echo "Using intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
+else 
+  echo "Using default PGI compiler"
+  export MITGCM_OPT=mitgcm_optfile.pgi
+fi
 echo "The option file is: $MITGCM_OPT"
 
 export L2C1_DIR=${SKRIPS_DIR}/coupler/L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu

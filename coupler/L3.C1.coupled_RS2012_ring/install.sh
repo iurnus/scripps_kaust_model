@@ -3,13 +3,16 @@ export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
 read -e -p "WRF413 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV413_AO/" wrfLocation
 read -e -p "ESMF location? :" -i "${SKRIPS_DIR}/esmf/" esmfLocation
-# sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
-# sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
-# 
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
+
+read -e -p "Using intel compiler? (Y/N) :" -i "N" intelFlag
+if [ $intelFlag == 'Y' ]; then
+  echo "Using intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
+else 
+  echo "Using default PGI compiler"
+  export MITGCM_OPT=mitgcm_optfile.pgi
+fi
+echo "The option file is: $MITGCM_OPT"
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
