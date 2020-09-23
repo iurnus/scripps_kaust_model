@@ -51,3 +51,17 @@ wrf_results.variables['VOCE'][0,:,:] = voce_write;
 
 wrf_results.close()
 
+wrf_results_low = Dataset('wrflowinp_d01','r+',format='NETCDF4');
+wrf_sst_low = wrf_results.variables['SST'][:];
+wrf_ssti_low = wrf_results.variables['SST_INPUT'][:];
+
+ssti_write_low = np.zeros((nYY,nXX))
+nt,ny,nx = np.shape(ssti_write_low)
+for j in range(nXX):
+  for i in range(nYY):
+    for k in range(nt):
+      ssti_write_low[k,i,j] = wrf_sst_low[k,i,j]
+
+wrf_results_low.variables['SST_INPUT'][0,:,:] = ssti_write_low;
+wrf_results_low.close()
+
