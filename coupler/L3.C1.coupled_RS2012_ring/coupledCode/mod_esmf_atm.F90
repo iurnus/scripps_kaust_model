@@ -331,18 +331,8 @@
       PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
                TRIM(timeStr)
 
+      ! run an empty step (for initialization)
       call wrf_run();
-
-      if (.not. allocated(sst_ini_wrf)) then
-        allocate(sst_ini_wrf(ips:MIN(ide-1,ipe),jps:MIN(jde-1,jpe)))
-      end if
-
-      do nJ = jps,MIN(jde-1,jpe)
-        do nI = ips,MIN(ide-1,ipe)
-          !! This is not available for WRFV3911?
-          sst_ini_wrf(nI,nJ) = head_grid%sst(nI,nJ)
-        end do
-      end do
 
       end subroutine
 !
@@ -397,7 +387,6 @@
       TYPE(ESMF_Time) :: currentTime, nextTime
       TYPE(ESMF_Time) :: startTime, stopTime
       TYPE(ESMF_TimeInterval) :: deltaTime
-      integer :: nIniSteps
       TYPE(ESMF_TimeInterval) :: runLength     ! how long to run in this call
       CHARACTER(LEN=256) :: timeStr
       CHARACTER(LEN=256) :: ofile
@@ -458,7 +447,6 @@
       CALL ESMF_SetCurrent( gcomp=p_gcomp, importState=p_importState, &
                             exportState=p_exportState, clock=p_clock)
   
-      
       CALL ESMF_ClockGet( clock, currTime=currentTime, &
                           timeStep=runLength, rc=rc )
       nextTime = currentTime + runLength
@@ -472,27 +460,8 @@
       PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
                TRIM(timeStr)
 
-      nIniSteps = esmTimeStep/atmTimeStep
-      if (iLoop_atm <= nIniSteps) then
-        call ESMF_StateGet(importState, itemName="SST", field=esmffield, rc=rc)
-        call ESMF_FieldGet(esmffield, localDE=0, farrayPtr=ptr_esmffield, rc=rc)
-        if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
-            line=__LINE__, file=FILENAME)) return
-
-        do nJ = jps,MIN(jde-1,jpe)
-          do nI = ips,MIN(ide-1,ipe)
-            ptr_esmffield(nI,nJ) = sst_ini_wrf(nI,nJ)
-          end do
-        end do
-
-        if (associated(ptr_esmffield)) then
-          nullify(ptr_esmffield)
-        end if
-      end if
-
       call wrf_run();
-  
-   
+
       PRINT *, 'WRF run loop: ', iLoop_atm
       iLoop_atm = iLoop_atm + 1
 

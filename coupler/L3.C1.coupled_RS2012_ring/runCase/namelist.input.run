@@ -1,7 +1,7 @@
  &time_control
  iofields_filename                   = "namelist.WRF_IO",
  run_days                            = 0,
- run_hours                           = 6,
+ run_hours                           = 1,
  run_minutes                         = 0,
  run_seconds                         = 0,
  start_year                          = 2012, 2000, 2000,
@@ -13,7 +13,7 @@
  end_year                            = 2012, 2000, 2000,
  end_month                           = 06,   01,   01,
  end_day                             = 01,   25,   25,
- end_hour                            = 06,   12,   12,
+ end_hour                            = 01,   12,   12,
  end_minute                          = 00,   00,   00,
  end_second                          = 00,   00,   00,
  interval_seconds                    = 21600
@@ -21,7 +21,7 @@
  history_interval_s                  = 60,  60,   60,
  frames_per_outfile                  = 500000, 1000, 1000,
  restart                             = .false.,
- restart_interval_s                  = 1800,
+ restart_interval_s                  = 60,
  io_form_history                     = 2
  io_form_restart                     = 2
  io_form_input                       = 2

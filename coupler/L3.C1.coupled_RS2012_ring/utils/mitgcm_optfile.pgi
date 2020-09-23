@@ -42,11 +42,11 @@ if test "x$IEEE" = x ; then
     FFLAGS="$FFLAGS"
 # to get plenty of warnings :
 # FFLAGS="$FFLAGS -Wconversion -Wimplicit-interface -Wunused-labels"
-    FOPTIM='-O0'
+    FOPTIM='-O0 -Kieee'
 # for automatic testing with testreport (but no relation with IEEE arithmetic):
     FOPTIM="$FOPTIM -g "
 fi
 
 F90FLAGS=$FFLAGS
 F90OPTIM=$FOPTIM
-CFLAGS='-O0 -mcmodel=medium'
+CFLAGS='-O0 -mcmodel=medium -Kieee'

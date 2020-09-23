@@ -113,7 +113,7 @@
                    (/'LANDMASK','XLAT','XLONG',&
                      'LH','HFX','SWUPB','SWDNB','LWUPB','LWDNB',&
                      'U10','V10','T2','Q2',&
-                     'SFCEVP','RAINC','RAINSH','RAINNC',&
+                     'QFX','RAINCV','RAINSHV','RAINNCV',&
                      'SST_INPUT','SST','UOCE','VOCE'/)
       character(ESMF_MAXSTR), dimension(1:21) :: nuopc_entryUnitList=&
                    (/'1','1','1',&

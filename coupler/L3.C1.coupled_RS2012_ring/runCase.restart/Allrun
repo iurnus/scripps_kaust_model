@@ -8,8 +8,8 @@ cp ../runCase.init/wrfbdy_d01 .
 cp ../runCase.init/wrfinput_d01 .
 cp ../runCase.init/wrflowinp_d01 .
 
-ln -sf ../runCase/pickup.0000000060.* .
-ln -sf ../runCase/wrfrst* .
+cp ../runCase/pickup.0000000030.* .
+cp ../runCase/wrfrst_d01_2012-06-01_00\:30\:00 .
 
 cp ../coupledCode/esmf_application .
 

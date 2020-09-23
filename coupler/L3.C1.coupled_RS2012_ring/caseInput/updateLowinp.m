@@ -14,6 +14,7 @@ fileID = fopen(hycomVFile);
 iniV = fread(fileID,128*128*40,'real*4','b');
 fclose(fileID);
 
+% update wrf input file
 iniT_ = reshape(iniT,[128,128,40]);
 iniU_ = reshape(iniU,[128,128,40]);
 iniV_ = reshape(iniV,[128,128,40]);
@@ -55,3 +56,22 @@ ncwrite('wrfinput_d01','SST_INPUT',sst_input);
 ncwrite('wrfinput_d01','TSK',tsk);
 ncwrite('wrfinput_d01','UOCE',uoce);
 ncwrite('wrfinput_d01','VOCE',voce);
+
+% update wrf low input file
+sst_low = ncread('wrflowinp_d01','SST');
+sst_input_low = ncread('wrflowinp_d01','SST_INPUT');
+[ni,nj,nt] = size(sst_low)
+
+for i = 1:128
+  for j = 1:128
+    for k = 1:nt
+      if k == 1
+        sst_low(i,j,k) = sst(i,j);
+      end
+
+      sst_input_low(i,j,k) = sst_low(i,j,k);
+    end
+  end
+end
+
+ncwrite('wrflowinp_d01','SST_INPUT',sst_input_low);

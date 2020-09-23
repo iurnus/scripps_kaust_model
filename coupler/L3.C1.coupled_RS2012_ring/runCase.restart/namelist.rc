@@ -10,14 +10,14 @@ cpuATM:         4
 StartYear:      2012
 StartMonth:     06
 StartDay:       01
-StartHour:      01
-StartMinute:    00
+StartHour:      00
+StartMinute:    30
 StartSecond:    00
 
 StopYear:        2012
 StopMonth:       06
 StopDay:         01
-StopHour:        06
+StopHour:        01
 StopMinute:      00
 StopSecond:      00
 

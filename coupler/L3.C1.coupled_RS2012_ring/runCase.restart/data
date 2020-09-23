@@ -45,10 +45,10 @@
  &
 # Time stepping parameters
  &PARM03
-#  startTime         = 60.,
-#  endTime           = 43200.,
- nIter0            = 60.,
- nTimeSteps        = 720.,
+#  startTime         = 1800.,
+#  endTime           = 3600.,
+ nIter0            = 30.,
+ nTimeSteps        = 60.,
  deltaTmom         = 60.,
  deltaTtracer      = 60.,
  deltaTClock       = 60.,
