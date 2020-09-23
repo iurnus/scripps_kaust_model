@@ -177,6 +177,28 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
     !! CALL ESMF_FieldWrite(tmpField, trim(ofile), rc=rc)
     CALL NUOPC_Realize( exportstate, field=tmpField, rc=rc )
 
+    if (.not.allocated(data_esmf_real_ptr)) then
+      ALLOCATE( data_esmf_real_ptr(ips:ipe,jps:jpe) )
+    end if
+
+    CALL ioesmf_insert_data_real( Field, data_esmf_real_ptr,            &
+                                  ips, ipe, jps, jpe, kps, kpe, &
+                                  ims, ime, jms, jme, kms, kme )
+
+    do nJ = jps, jpe
+      do nI = ips, ipe
+        tmp_esmf_r4_ptr_global(nI,nJ) = data_esmf_real_ptr(nI,nJ)
+
+        !! PRINT *, "TESTBUG0: write global is : ", TRIM(VarName), nI, nJ, tmp_esmf_r4_ptr_global(nI,nJ)
+        !! PRINT *, "TESTBUG0: write  local is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr(nI,nJ)
+      end do
+    end do
+
+    if (associated(tmp_esmf_r4_ptr_global)) then
+      nullify(tmp_esmf_r4_ptr_global)
+    end if
+    DEALLOCATE(data_esmf_real_ptr)
+
     IF ( rc /= ESMF_SUCCESS ) THEN
       CALL wrf_error_fatal("ext_esmf_write_field:  ESMF_StateAddfailed" )
     ENDIF
@@ -216,6 +238,8 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
         do nI = ips, ipe
           data_esmf_real_ptr_global(nI,nJ) = data_esmf_real_ptr(nI,nJ)
 
+          !! PRINT *, "TESTBUG1: write global is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr_global(nI,nJ)
+          !! PRINT *, "TESTBUG1: write  local is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr(nI,nJ)
         end do
       end do
 

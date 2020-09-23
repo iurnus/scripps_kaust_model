@@ -83,14 +83,13 @@ ESMF_IO_INC         = -I$(WRF_SRC_ROOT_DIR)/external/io_esmf
 # select -I options for separately installed ESMF library, if present
 ESMF_MOD_INC        = -I$(ESMF_DIR)/mod/modg/Unicos.intel.64.mpi.default -I$(WRF_SRC_ROOT_DIR)/main $(ESMF_IO_INC)
 # select cpp token for external/io_esmf vs. external/esmf_time_f90
-ESMF_IO_DEFS        = -DESMFIO 
+ESMF_IO_DEFS        = -DESMFIO
 # select build target for external/io_esmf vs. external/esmf_time_f90
 ESMF_TARGET         = wrfio_esmf
 
-# ESMFINCLUDEGOESHERE
-ESMFLIB         = $(ESMF_DIR)/lib/libg/Unicos.intel.64.mpi.default
+# add the lib of ESMF
+ESMF_LIB         = $(ESMF_DIR)/lib/libg/Unicos.intel.64.mpi.default
 include $(ESMFLIB)/esmf.mk
-
 
 
 #### NETCDF4 pieces
@@ -176,7 +175,9 @@ ARCHFLAGS       =    $(COREDEFS) -DIWORDSIZE=$(IWORDSIZE) -DDWORDSIZE=$(DWORDSIZ
                       -DNETCDF \
                       -DPNETCDF \
                        \
-                      -DESMFIO\
+                      -DESMFIO \
+                       \
+                       \
                        \
                        \
                        \
@@ -201,9 +202,9 @@ CFLAGS          =    $(CFLAGS_LOCAL) -DDM_PARALLEL  \
                       -DLANDREAD_STUB=1 \
                       -DMAX_HISTORY=$(MAX_HISTORY) -DNMM_CORE=$(WRF_NMM_CORE)
 FCFLAGS         =    $(FCOPTIM) $(FCBASEOPTS)
-ESMF_LIB_FLAGS  =    $(ESMF_LDFLAG)
+ESMF_LIB_FLAGS  =    
 # ESMF 5 -- these are defined in esmf.mk, included above
-ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/lib/ -lwrfio_esmf 
+ ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/lib/ -lwrfio_esmf 
 ESMF_IO_LIB_EXT =    $(ESMF_IO_LIB)
 INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                      $(ESMF_MOD_INC) $(ESMF_LIB_FLAGS) \
@@ -212,7 +213,6 @@ INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                       -I$(WRF_SRC_ROOT_DIR)/external/io_int \
                       -I$(WRF_SRC_ROOT_DIR)/frame \
                       -I$(WRF_SRC_ROOT_DIR)/share \
-                      -I$(ESMF_DIR)/mod/modg/Unicos.intel.64.mpi.default \
                       -I$(WRF_SRC_ROOT_DIR)/phys \
                       -I$(WRF_SRC_ROOT_DIR)/wrftladj \
                       -I$(WRF_SRC_ROOT_DIR)/chem -I$(WRF_SRC_ROOT_DIR)/inc \
@@ -232,7 +232,7 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      $(ESMF_DIR)/lib/libg/Unicos.intel.64.mpi.default/libesmf.a -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf   
+                      -L$(ESMF_LIB) -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf   
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO) $(NETCDF4_DEP_LIB)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 

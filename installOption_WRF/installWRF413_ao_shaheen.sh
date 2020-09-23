@@ -32,6 +32,10 @@ ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
 
 echo "compiling WRFv4.1.3"
 ./compile em_real &> log.em_real1
-echo "need to compile WRF twice..."
-./compile em_real &> log.em_real2
-cd ../
+
+echo "finished copying"
+linenumber=$(grep -n "bundled:" configure.wrf | cut -d : -f 1)
+echo "linenumber is: " $linenumber
+head -n $((linenumber-1)) configure.wrf > configure.wrf_cpl
+
+cd ..

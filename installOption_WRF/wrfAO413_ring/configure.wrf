@@ -88,8 +88,8 @@ ESMF_IO_DEFS        = -DESMFIO
 ESMF_TARGET         = wrfio_esmf
 
 # add the lib of ESMF
-ESMFLIB         = $(ESMF_DIR)/lib/libg/Linux.pgi.64.openmpi.default
-include $(ESMFLIB)/esmf.mk
+ESMF_LIB         = $(ESMF_DIR)/lib/libg/Linux.pgi.64.openmpi.default
+include $(ESMF_LIB)/esmf.mk
 
 
 #### NETCDF4 pieces
@@ -194,9 +194,9 @@ CFLAGS          =    $(CFLAGS_LOCAL) -DDM_PARALLEL  \
                       -DLANDREAD_STUB=1 \
                       -DMAX_HISTORY=$(MAX_HISTORY) -DNMM_CORE=$(WRF_NMM_CORE)
 FCFLAGS         =    $(FCOPTIM) $(FCBASEOPTS)
-ESMF_LIB_FLAGS  =    $(ESMF_LDFLAG)
+ESMF_LIB_FLAGS  =    
 # ESMF 5 -- these are defined in esmf.mk, included above
- ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib -lwrfio_esmf
+ ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -lwrfio_esmf
 ESMF_IO_LIB_EXT =    $(ESMF_IO_LIB)
 INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                      $(ESMF_MOD_INC) $(ESMF_LIB_FLAGS) \
@@ -205,7 +205,6 @@ INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                       -I$(WRF_SRC_ROOT_DIR)/external/io_int \
                       -I$(WRF_SRC_ROOT_DIR)/frame \
                       -I$(WRF_SRC_ROOT_DIR)/share \
-                      -I$(ESMF_DIR)/mod/modg/Linux.pgi.64.openmpi.default \
                       -I$(WRF_SRC_ROOT_DIR)/phys \
                       -I$(WRF_SRC_ROOT_DIR)/wrftladj \
                       -I$(WRF_SRC_ROOT_DIR)/chem -I$(WRF_SRC_ROOT_DIR)/inc \
@@ -225,7 +224,7 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      -L$(ESMF_DIR)/lib/libg/Linux.pgi.64.openmpi.default -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib -lnetcdff -lnetcdf    
+                      -L$(ESMF_LIB) -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib -lnetcdff -lnetcdf    
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 

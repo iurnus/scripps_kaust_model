@@ -109,6 +109,9 @@ framework_only : configcheck
 	/bin/rm -f main/libwrflib.a main/libwrflib.lib
 	$(MAKE) MODULE_DIRS="$(ALL_MODULES)" framework
 	$(MAKE) MODULE_DIRS="$(ALL_MODULES)" shared
+	# compile ext and framework twice
+	$(MAKE) MODULE_DIRS="$(ALL_MODULES)" ext
+	$(MAKE) MODULE_DIRS="$(ALL_MODULES)" framework
 
 wrf : framework_only
 	$(MAKE) MODULE_DIRS="$(ALL_MODULES)" physics

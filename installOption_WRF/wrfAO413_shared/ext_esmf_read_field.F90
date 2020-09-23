@@ -199,8 +199,8 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
         do nI = ips, ipe
           data_esmf_real_ptr(nI,nJ) = data_esmf_real_ptr_global(nI,nJ)
 
-          !! PRINT *, "TESTBUG: data_esmf_real_ptr_global is : ", data_esmf_real_ptr_global(nI,nJ)
-          !! PRINT *, "TESTBUG: data_esmf_real_ptr is : ", data_esmf_real_ptr(nI,nJ)
+          ! PRINT *, "TESTBUG: data_esmf_real_ptr_global is : ", nI, nJ, data_esmf_real_ptr_global(nI,nJ)
+          ! PRINT *, "TESTBUG: data_esmf_real_ptr is : ", nI, nJ, data_esmf_real_ptr(nI,nJ)
         end do
       end do
 
