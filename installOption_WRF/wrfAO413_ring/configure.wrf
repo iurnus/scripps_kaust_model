@@ -224,7 +224,7 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      -L$(ESMF_LIB) -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib -lnetcdff -lnetcdf    
+                      $(ESMF_LIB)/libesmf.a -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0//lib -L/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib -lnetcdff -lnetcdf    
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 

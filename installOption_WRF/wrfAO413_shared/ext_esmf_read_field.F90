@@ -41,10 +41,10 @@ SUBROUTINE ext_esmf_read_field ( DataHandle , DateStr , VarName , Field , FieldT
   TYPE(ESMF_Array) :: tmpArray
   TYPE(ESMF_ArraySpec) :: arrayspec
   INTEGER :: esmf_kind
-  REAL(ESMF_KIND_R4), POINTER :: tmp_esmf_r4_ptr(:,:)
-  REAL(ESMF_KIND_R4), POINTER :: tmp_esmf_r4_ptr_global(:,:)
-  REAL(ESMF_KIND_R4), DIMENSION(:,:), ALLOCATABLE :: data_esmf_real_ptr
-  REAL(ESMF_KIND_R4), POINTER :: data_esmf_real_ptr_global(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: tmp_esmf_r8_ptr(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: tmp_esmf_r8_ptr_global(:,:)
+  REAL(ESMF_KIND_R8), DIMENSION(:,:), ALLOCATABLE :: data_esmf_real_ptr
+  REAL(ESMF_KIND_R8), POINTER :: data_esmf_real_ptr_global(:,:)
   INTEGER(ESMF_KIND_I4), POINTER :: data_esmf_int_ptr(:,:)
   INTEGER(ESMF_KIND_I4), POINTER :: data_esmf_int_ptr_global(:,:)
   INTEGER, PARAMETER :: esmf_rank = 2
@@ -79,7 +79,7 @@ SUBROUTINE ext_esmf_read_field ( DataHandle , DateStr , VarName , Field , FieldT
 if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE') THEN
 
   IF      ( FieldType .EQ. WRF_REAL ) THEN
-    esmf_kind = ESMF_KIND_R4
+    esmf_kind = ESMF_KIND_R8
   ELSE IF ( FieldType .EQ. WRF_DOUBLE ) THEN
   !    esmf_kind = ESMF_KIND_R8
     CALL wrf_error_fatal( 'ext_esmf_read_field, WRF_DOUBLE not yet supported')
@@ -133,12 +133,12 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
       CALL wrf_error_fatal("ext_esmf_read_field, training:  ESMF_ImportStateGetCurrent failed" )
     ENDIF
 
-    !! ALLOCATE( tmp_esmf_r4_ptr(ips:ipe,jps:jpe) )
-    !! ALLOCATE( tmp_esmf_r4_ptr_global(ids:ide,jds:jde) )
+    !! ALLOCATE( tmp_esmf_r8_ptr(ips:ipe,jps:jpe) )
+    !! ALLOCATE( tmp_esmf_r8_ptr_global(ids:ide,jds:jde) )
     !! write(mess,*)'ext_esmf_read_field: calling ESMF_FieldCreate field=',trim(varname)
     !! PRINT *, "TESTBUG: ext_esmf_read_field, creating tmpfield", trim(VarName)
     !! CALL wrf_debug ( 100, mess )
-    call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R4, &
+    call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R8, &
                            rank=2, rc=rc)
 
     tmpField = ESMF_FieldCreate(         &
@@ -149,11 +149,11 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
                  name=TRIM(VarName),     &
                  rc=rc )
 
-    call ESMF_FieldGet(tmpField, localDe=0, farrayPtr=tmp_esmf_r4_ptr_global, rc=rc)
-    tmp_esmf_r4_ptr_global = MISSING_R8
+    call ESMF_FieldGet(tmpField, localDe=0, farrayPtr=tmp_esmf_r8_ptr_global, rc=rc)
+    tmp_esmf_r8_ptr_global = MISSING_R8
 
-    if (associated(tmp_esmf_r4_ptr_global)) then
-      nullify(tmp_esmf_r4_ptr_global)
+    if (associated(tmp_esmf_r8_ptr_global)) then
+      nullify(tmp_esmf_r8_ptr_global)
     end if
     IF ( rc /= ESMF_SUCCESS ) THEN
       WRITE(mess,*) ' ext_esmf_read_field: ESMF_FieldCreate failed, rc = ', rc
@@ -192,7 +192,7 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
       end if
       CALL ESMF_FieldGet( tmpField, localDe=0, farrayPtr=data_esmf_real_ptr_global, rc=rc )
       IF ( rc /= ESMF_SUCCESS ) THEN
-        CALL wrf_error_fatal("ext_esmf_read_field:  ESMF_FieldGetDataPointer(r4) failed" )
+        CALL wrf_error_fatal("ext_esmf_read_field:  ESMF_FieldGetDataPointer(r8) failed" )
       ENDIF
 
       do nJ = jps, jpe

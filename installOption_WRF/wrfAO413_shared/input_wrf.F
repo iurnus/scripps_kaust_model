@@ -643,6 +643,7 @@
     if (index(mminlu, char(0)) > 0) mminlu(index(mminlu, char(0)):) = " "
     WRITE(wrf_err_message,*)'input_wrf: wrf_get_dom_ti_char for MMINLU returns ' // TRIM(mminlu)
     CALL wrf_debug ( 300 , wrf_err_message )
+    !! CALL nl_set_mminlu ( grid%id, mminlu )
     ! IF ( ( ( switch .EQ. input_only ) .OR. ( switch .EQ. restart_only ) ) .AND. &
     !          ( config_flags%io_form_input .NE. 5 ) ) THEN
     ! IF ( ( config_flags%io_form_input .NE. 5 ) ) THEN

@@ -89,7 +89,7 @@ ESMF_TARGET         = wrfio_esmf
 
 # add the lib of ESMF
 ESMF_LIB         = $(ESMF_DIR)/lib/libg/Unicos.intel.64.mpi.default
-include $(ESMFLIB)/esmf.mk
+include $(ESMF_LIB)/esmf.mk
 
 
 #### NETCDF4 pieces
@@ -232,7 +232,7 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      -L$(ESMF_LIB) -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf   
+                      $(ESMF_LIB)/libesmf.a -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf   
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO) $(NETCDF4_DEP_LIB)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 

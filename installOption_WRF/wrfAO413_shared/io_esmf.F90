@@ -878,7 +878,7 @@ CALL wrf_debug ( 5 , TRIM(msg) )
    IMPLICIT NONE
    INTEGER,            INTENT(IN   ) :: ips, ipe, jps, jpe, kps, kpe
    INTEGER,            INTENT(IN   ) :: ims, ime, jms, jme, kms, kme
-   REAL(ESMF_KIND_R4), INTENT(IN   ) :: data_esmf_real( ips:ipe, jps:jpe )
+   REAL(ESMF_KIND_R8), INTENT(IN   ) :: data_esmf_real( ips:ipe, jps:jpe )
    REAL,               INTENT(  OUT) :: Field( ims:ime, jms:jme, kms:kme )
    Field( ips:ipe, jps:jpe, kms ) = data_esmf_real( ips:ipe, jps:jpe )
  END SUBROUTINE ioesmf_extract_data_real
@@ -907,10 +907,10 @@ CALL wrf_debug ( 5 , TRIM(msg) )
    INTEGER,               INTENT(IN   ) :: ips, ipe, jps, jpe, kps, kpe
    INTEGER,               INTENT(IN   ) :: ims, ime, jms, jme, kms, kme
    REAL,                  INTENT(IN   ) :: Field( ims:ime, jms:jme, kms:kme )
-   REAL(ESMF_KIND_R4),    INTENT(  OUT) :: data_esmf_real( ips:ipe, jps:jpe )
+   REAL(ESMF_KIND_R8),    INTENT(  OUT) :: data_esmf_real( ips:ipe, jps:jpe )
    !TODO:  Remove this hack once we no longer have to store non-staggered 
    !TODO:  arrays in space dimensioned for staggered arrays.  
-   data_esmf_real = 0.0_ESMF_KIND_R4
+   data_esmf_real = 0.0_ESMF_KIND_R8
    data_esmf_real( ips:ipe, jps:jpe ) = Field( ips:ipe, jps:jpe, kms )
  END SUBROUTINE ioesmf_insert_data_real
 

@@ -332,7 +332,7 @@
                TRIM(timeStr)
 
       ! run an empty step (for initialization)
-      call wrf_run();
+      ! call wrf_run();
 
       end subroutine
 !
@@ -411,7 +411,7 @@
       TYPE(ESMF_StateIntent_Flag) :: stateintent
       TYPE(ESMF_Time) :: currTime
       TYPE(ESMF_TimeInterval) :: timeStep
-      real(ESMF_KIND_R8), pointer :: ptrX(:,:), ptrY(:,:)
+      real(ESMF_KIND_R4), pointer :: ptrX(:,:), ptrY(:,:)
       real(ESMF_KIND_R4), pointer :: ptr_esmffield(:,:)
       INTEGER :: ids, ide, jds, jde, kds, kde
       INTEGER :: ims, ime, jms, jme, kms, kme
@@ -460,7 +460,9 @@
       PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
                TRIM(timeStr)
 
+
       call wrf_run();
+
 
       PRINT *, 'WRF run loop: ', iLoop_atm
       iLoop_atm = iLoop_atm + 1

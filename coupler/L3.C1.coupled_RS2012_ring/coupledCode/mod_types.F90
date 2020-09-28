@@ -48,7 +48,7 @@
       real(ESMF_KIND_R4), parameter :: TOL_R4 = MISSING_R4/2.0
 !
       real(ESMF_KIND_I4), parameter :: ZERO_I4 = 0
-      real(ESMF_KIND_R8), parameter :: ZERO_R4 = 0.0
+      real(ESMF_KIND_R4), parameter :: ZERO_R4 = 0.0
       real(ESMF_KIND_R8), parameter :: ZERO_R8 = 0.0d0
       real(ESMF_KIND_R8), parameter :: ONE_R8 = 1.0d0
 !
@@ -83,9 +83,9 @@
       integer :: cpuOCN
       integer :: cpuATM
 
-      real(ESMF_KIND_R8) :: esm_wall_time = 0.d0
-      real(ESMF_KIND_R8) :: atm_wall_time = 0.d0
-      real(ESMF_KIND_R8) :: ocn_wall_time = 0.d0
+      real(ESMF_KIND_R4) :: esm_wall_time = 0.d0
+      real(ESMF_KIND_R4) :: atm_wall_time = 0.d0
+      real(ESMF_KIND_R4) :: ocn_wall_time = 0.d0
 
       type(ESMF_Calendar) :: esmCal
       type(ESMF_Time) :: esmStartTime

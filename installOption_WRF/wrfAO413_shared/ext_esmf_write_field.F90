@@ -45,12 +45,12 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
   TYPE(ESMF_ArraySpec) :: sstiniarrayspec
 !  TYPE(ESMF_DataKind) :: esmf_kind
   INTEGER :: esmf_kind
-  REAL(ESMF_KIND_R4), POINTER :: tmp_esmf_r4_ptr(:,:)
-  REAL(ESMF_KIND_R4), POINTER :: tmp_esmf_r4_ptr_global(:,:)
-  REAL(ESMF_KIND_R4), DIMENSION(:,:), ALLOCATABLE :: data_esmf_real_ptr
-  REAL(ESMF_KIND_R4), POINTER :: data_sstini_real_ptr(:,:)
-  REAL(ESMF_KIND_R4), POINTER :: data_esmf_real_ptr_global(:,:)
-  REAL(ESMF_KIND_R4), POINTER :: data_sstini_real_ptr_global(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: tmp_esmf_r8_ptr(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: tmp_esmf_r8_ptr_global(:,:)
+  REAL(ESMF_KIND_R8), DIMENSION(:,:), ALLOCATABLE :: data_esmf_real_ptr
+  REAL(ESMF_KIND_R8), POINTER :: data_sstini_real_ptr(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: data_esmf_real_ptr_global(:,:)
+  REAL(ESMF_KIND_R8), POINTER :: data_sstini_real_ptr_global(:,:)
   INTEGER(ESMF_KIND_I4), POINTER :: data_esmf_int_ptr(:,:)
   INTEGER(ESMF_KIND_I4), POINTER :: data_esmf_int_ptr_global(:,:)
   INTEGER, PARAMETER :: esmf_rank = 2
@@ -64,7 +64,7 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
   character*256 mess
   character*256 ofile
   INTEGER :: nI, nJ, iG, jG
-  real(ESMF_KIND_R8), parameter :: MISSING_R8 = 1.0d20
+  real(ESMF_KIND_R8), parameter :: MISSING_R8 = 1.0e20
 
   CALL get_wrf_debug_level( debug_level )
 
@@ -82,7 +82,7 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
 !! call wrf_debug( 300, TRIM(mess) )
 
   IF      ( FieldType .EQ. WRF_REAL ) THEN
-    esmf_kind = ESMF_KIND_R4
+    esmf_kind = ESMF_KIND_R8
   ELSE IF ( FieldType .EQ. WRF_DOUBLE ) THEN
     CALL wrf_error_fatal( 'ext_esmf_write_field, WRF_DOUBLE not yet supported')
   ELSE IF ( FieldType .EQ. WRF_INTEGER ) THEN
@@ -142,11 +142,11 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
       CALL wrf_error_fatal("ext_esmf_write_field, training:  ESMF_ExportStateGetCurrent failed" )
     ENDIF
 
-    !! ALLOCATE( tmp_esmf_r4_ptr(ips:ipe,jps:jpe) )
-    ALLOCATE( tmp_esmf_r4_ptr_global(ids:ide,jds:jde) )
+    !! ALLOCATE( tmp_esmf_r8_ptr(ips:ipe,jps:jpe) )
+    ALLOCATE( tmp_esmf_r8_ptr_global(ids:ide,jds:jde) )
     CALL wrf_debug ( 100, 'ext_esmf_write_field: calling ESMF_FieldCreate' )
 
-    call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R4, &
+    call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R8, &
                            rank=2, rc=rc)
 
     tmpField = ESMF_FieldCreate(         &
@@ -157,11 +157,11 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
                  name=TRIM(VarName),     &
                  rc=rc )
 
-    call ESMF_FieldGet(tmpField, localDe=0, farrayPtr=tmp_esmf_r4_ptr_global, rc=rc)
-    tmp_esmf_r4_ptr_global = MISSING_R8
+    call ESMF_FieldGet(tmpField, localDe=0, farrayPtr=tmp_esmf_r8_ptr_global, rc=rc)
+    tmp_esmf_r8_ptr_global = MISSING_R8
 
-    !! if (associated(tmp_esmf_r4_ptr_global)) then
-    !!   nullify(tmp_esmf_r4_ptr_global)
+    !! if (associated(tmp_esmf_r8_ptr_global)) then
+    !!   nullify(tmp_esmf_r8_ptr_global)
     !! end if
 
     IF ( rc /= ESMF_SUCCESS ) THEN
@@ -187,15 +187,15 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
 
     do nJ = jps, jpe
       do nI = ips, ipe
-        tmp_esmf_r4_ptr_global(nI,nJ) = data_esmf_real_ptr(nI,nJ)
+        tmp_esmf_r8_ptr_global(nI,nJ) = data_esmf_real_ptr(nI,nJ)
 
-        !! PRINT *, "TESTBUG0: write global is : ", TRIM(VarName), nI, nJ, tmp_esmf_r4_ptr_global(nI,nJ)
+        !! PRINT *, "TESTBUG0: write global is : ", TRIM(VarName), nI, nJ, tmp_esmf_r8_ptr_global(nI,nJ)
         !! PRINT *, "TESTBUG0: write  local is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr(nI,nJ)
       end do
     end do
 
-    if (associated(tmp_esmf_r4_ptr_global)) then
-      nullify(tmp_esmf_r4_ptr_global)
+    if (associated(tmp_esmf_r8_ptr_global)) then
+      nullify(tmp_esmf_r8_ptr_global)
     end if
     DEALLOCATE(data_esmf_real_ptr)
 
@@ -227,7 +227,7 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
       end if
       CALL ESMF_FieldGet( tmpField, 0, data_esmf_real_ptr_global, rc=rc )
       IF ( rc /= ESMF_SUCCESS ) THEN
-        CALL wrf_error_fatal("ext_esmf_write_field:  ESMF_FieldGetDataPointer(r4) failed" )
+        CALL wrf_error_fatal("ext_esmf_write_field:  ESMF_FieldGetDataPointer(r8) failed" )
       ENDIF
 
       CALL ioesmf_insert_data_real( Field, data_esmf_real_ptr,            &
@@ -238,7 +238,7 @@ SUBROUTINE ext_esmf_write_field ( DataHandle , DateStr , VarName , Field , Field
         do nI = ips, ipe
           data_esmf_real_ptr_global(nI,nJ) = data_esmf_real_ptr(nI,nJ)
 
-          !! PRINT *, "TESTBUG1: write global is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr_global(nI,nJ)
+          !! PRINT *, "TESTBUG1: write global is : ", TRIM(VarName), nI, nJ, data_sstini_real_ptr_global(nI,nJ)
           !! PRINT *, "TESTBUG1: write  local is : ", TRIM(VarName), nI, nJ, data_esmf_real_ptr(nI,nJ)
         end do
       end do
