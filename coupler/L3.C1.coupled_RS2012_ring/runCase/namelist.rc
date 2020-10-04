@@ -1,4 +1,4 @@
-DebugLevel:     0
+DebugLevel:     1
 
 ## mode 1 = sequential mode
 ## mode 2 = concurrent mode

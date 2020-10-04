@@ -1,7 +1,5 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
-
 ln -sf ../save_nc/* .
 ln -sf ../caseInput/* .
 cp $WRF_DIR/main/real.exe .

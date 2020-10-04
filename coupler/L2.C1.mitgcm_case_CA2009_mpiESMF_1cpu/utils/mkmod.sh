@@ -19,8 +19,8 @@
 # 
 
 # Set compile options (need to be updated for other machines)
-set comp         = $SKRIPS_MPI_DIR/bin/mpif77
-set cccommand    = $SKRIPS_MPI_DIR/bin/mpicc
+set comp         = mpif77
+set cccommand    = mpicc
 
 if ($ESMF_COMPILER == intel) then
   set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)

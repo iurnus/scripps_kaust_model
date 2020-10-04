@@ -1,7 +1,5 @@
 #!/bin/sh
 
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
-
 make distclean
 
 ln -s ../../L3.C1.coupled_RS2012_ring/coupledCode/mod_*.F90 .

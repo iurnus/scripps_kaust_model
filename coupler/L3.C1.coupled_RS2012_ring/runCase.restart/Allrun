@@ -1,6 +1,5 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 ln -sf ../caseInput/* .
 
 cp $WRF_DIR/main/wrf.exe .
@@ -8,7 +7,7 @@ cp ../runCase.init/wrfbdy_d01 .
 cp ../runCase.init/wrfinput_d01 .
 cp ../runCase.init/wrflowinp_d01 .
 
-cp ../runCase/pickup.0000000030.* .
+cp ../runCase/pickup.0000000030* .
 cp ../runCase/wrfrst_d01_2012-06-01_00\:30\:00 .
 
 cp ../coupledCode/esmf_application .

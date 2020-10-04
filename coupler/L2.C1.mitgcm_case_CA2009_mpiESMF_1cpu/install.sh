@@ -1,14 +1,18 @@
 #!/bin/sh
-export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
-read -e -p "Using intel compiler? (Y/N) :" -i "N" intelFlag
-if [ $intelFlag == 'Y' ]; then
-  echo "Using intel compiler"
-  export MITGCM_OPT=mitgcm_optfile.ifort
-else 
-  echo "Using default PGI compiler"
+# build MITGCM
+echo "building MITgcm..."
+echo "WARNING:: NEED MITGCM SOURCE FILE in $MITGCM_DIR"
+
+read -e -p "Using PGI compiler? (Y/N) :" -i "Y" pgiFlag
+if [ $pgiFlag == 'Y' ]; then
+  echo "Using PGI compiler"
   export MITGCM_OPT=mitgcm_optfile.pgi
+else 
+  echo "Using default intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
 fi
+
 echo "The option file is: $MITGCM_OPT"
 
 # build the MITGCM as a library
@@ -16,9 +20,9 @@ mkdir build/
 cp utils/* build/ # copy the scripts to install MITGCM
 cp -rf mitCode/ code/ # copy the scripts to install MITGCM
 cd build
-./makescript_fwd.sio.ring ${MITGCM_DIR}# install MITGCM, generate *.f files
+./makescript_fwd.sio.ring # install MITGCM, generate *.f files
 
-cp ${SKRIPS_MPI_DIR}/include/mpif* . 
+cp ${MPI_INC}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

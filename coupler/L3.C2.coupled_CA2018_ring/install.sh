@@ -1,16 +1,15 @@
 #!/bin/sh
-export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
-read -e -p "WRF413 (with OA coupling) location? :" -i "${SKRIPS_DIR}/WRFV413_AO/" wrfLocation
-read -e -p "ESMF location? :" -i "${SKRIPS_DIR}/esmf/" esmfLocation
+read -e -p "WRF413 (with OA coupling) location? :" -i "${WRF_DIR}" wrfLocation
+read -e -p "ESMF location? :" -i "${ESMF_DIR}" esmfLocation
 
-read -e -p "Using intel compiler? (Y/N) :" -i "N" intelFlag
-if [ $intelFlag == 'Y' ]; then
-  echo "Using intel compiler"
-  export MITGCM_OPT=mitgcm_optfile.ifort
-else 
-  echo "Using default PGI compiler"
+read -e -p "Using PGI compiler? (Y/N) :" -i "Y" pgiFlag
+if [ $pgiFlag == 'Y' ]; then
+  echo "Using PGI compiler"
   export MITGCM_OPT=mitgcm_optfile.pgi
+else 
+  echo "Using default intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
 fi
 echo "The option file is: $MITGCM_OPT"
 
@@ -33,7 +32,7 @@ cp mitSettingCA/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.ring ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp ${SKRIPS_MPI_DIR}/include/mpif* . 
+cp ${MPI_INC}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
