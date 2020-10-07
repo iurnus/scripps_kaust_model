@@ -1,8 +1,0 @@
-#!/bin/bash
-
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
-cp ../runCase.init/wrf*d01 . 
-cp ../coupledCode/esmf_application .
-ln -sf ../caseInput/* .
-
-mpirun -np 16 esmf_application &> log.esmf

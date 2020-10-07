@@ -60,18 +60,14 @@ ncwrite('wrfinput_d01','VOCE',voce);
 % update wrf low input file
 sst_low = ncread('wrflowinp_d01','SST');
 sst_input_low = ncread('wrflowinp_d01','SST_INPUT');
-[ni,nj,nt] = size(sst_low)
 
-for i = 1:128
-  for j = 1:128
-    for k = 1:nt
-      if k == 1
-        sst_low(i,j,k) = sst(i,j);
-      end
-
-      sst_input_low(i,j,k) = sst_low(i,j,k);
-    end
+[nx,ny,nt] = size(sst_low)
+for k = 1:nt
+  if k == 1
+    sst_input_low(:,:,k) = sst(:,:);
+  else
+    sst_input_low(:,:,k) = sst_low(:,:,k);
   end
 end
-
 ncwrite('wrflowinp_d01','SST_INPUT',sst_input_low);
+

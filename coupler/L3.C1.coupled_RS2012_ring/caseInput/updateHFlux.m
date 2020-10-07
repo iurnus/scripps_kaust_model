@@ -17,8 +17,10 @@ ini_lwdnb = ncread(iniFile,'LWDNB');
 ini_lh    = ncread(iniFile,'LH');
 ini_hfx   = ncread(iniFile,'HFX');
 
-for i = 1:128
-  for j = 1:128
+[nx,ny,nt] = size(results_lh)
+
+for i = 1:nx
+  for j = 1:ny
     ini_swupb(i,j,1) = results_swupb(i,j,2);
     ini_swdnb(i,j,1) = results_swdnb(i,j,2);
     ini_lwupb(i,j,1) = results_lwupb(i,j,2);

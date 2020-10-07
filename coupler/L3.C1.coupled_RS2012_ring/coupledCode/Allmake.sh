@@ -1,7 +1,5 @@
 #!/bin/sh
 
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
-
 make distclean
 
 ln -s ../build/*.mod .

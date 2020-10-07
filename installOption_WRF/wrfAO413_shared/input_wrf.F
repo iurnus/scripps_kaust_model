@@ -73,6 +73,7 @@
     REAL dx_compare , dy_compare , dum
     INTEGER :: num_land_cat_compare
     CHARACTER (LEN=256) :: MMINLU
+    INTEGER :: ISLAKE_tmp
 
     !  Local variables for vertical interpolation.
 
@@ -648,10 +649,12 @@
     !          ( config_flags%io_form_input .NE. 5 ) ) THEN
     ! IF ( ( config_flags%io_form_input .NE. 5 ) ) THEN
     ! IF ( ( switch .NE. auxinput5_only ) .AND. ( config_flags%io_form_input .NE. 5 ) ) THEN
+
     IF ( switch .NE. auxinput5_only ) THEN
       CALL nl_set_mminlu ( grid%id, mminlu )
     ELSE
-      !! CALL nl_set_mminlu ( grid%id, mminlu )
+      call nl_get_mminlu ( grid%id, mminlu )
+      CALL nl_set_mminlu ( grid%id, mminlu )
     END IF
 
 
@@ -857,7 +860,12 @@
     WRITE(wrf_err_message,*)'input_wrf: wrf_get_dom_ti_integer for ISLAKE returns ',config_flags%islake
     CALL wrf_debug ( 300 , wrf_err_message )
     IF ( ierr .NE. 0 ) THEN
-         config_flags%islake = -1
+         IF (switch .EQ. auxinput5_only) THEN
+           call nl_get_islake ( grid%id, ISLAKE_tmp )
+           config_flags%islake = ISLAKE_tmp
+         ELSE
+           config_flags%islake = -1
+         END IF
     ENDIF
     CALL nl_set_islake ( grid%id , config_flags%islake )
     grid%islake = config_flags%islake

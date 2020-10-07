@@ -162,9 +162,6 @@ C--   Trap errors
         print *, "calling INITIALISE_VARIA"
         CALL INITIALISE_VARIA( myThid )
 
-        print *, "calling INI_TOTAL_PRECIP"
-        CALL INI_TOTAL_PRECIP( myThid )
-
       ENDDO
 
 #ifdef HAVE_PTHREADS

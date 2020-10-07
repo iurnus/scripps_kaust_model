@@ -206,9 +206,7 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 
-  ! Run 0 time step to initialize data
-  ! call OCN_SST_ini(gcomp, 0, rc)
-  ! call OCN_Get(gcomp, 0, rc)
+  ! Run 0 time step to initialize data (maybe not useful)
   call OCN_Put(gcomp, 0, rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
@@ -252,10 +250,6 @@ module mod_esmf_ocn
                       exportState=exportState, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
-
-  if (iLoop_ocn == 1) then
-    call mit_getclock(myTime, myIter)
-  end if
 
   call OCN_Get(gcomp, iLoop_ocn, rc)
 
@@ -693,8 +687,6 @@ module mod_esmf_ocn
 !-----------------------------------------------------------------------
 !
   use mitgcm_org_ocn, only : get_field_parameters
-  use mitgcm_org_ocn, only : get_total_precip
-  use mitgcm_org_ocn, only : set_sst_ini
 !
   implicit none
 !
@@ -722,7 +714,6 @@ module mod_esmf_ocn
   real(ESMF_KIND_R8), pointer :: ptr_t2(:,:), ptr_q2(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_evap(:,:), ptr_raincv(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_rainshv(:,:), ptr_rainncv(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
 !
   type(ESMF_VM) :: vm
   type(ESMF_Clock) :: clock
@@ -734,7 +725,6 @@ module mod_esmf_ocn
   type(ESMF_Field) :: field_t2, field_q2
   type(ESMF_Field) :: field_evap, field_raincv
   type(ESMF_Field) :: field_rainshv, field_rainncv
-  type(ESMF_Field) :: field_sst_input
   type(ESMF_State) :: importState
   INTEGER sNx, sNy, OLx, OLy, nSx, nSy, nPx, nPy, Nx, Ny, Nr
   INTEGER myXGlobalLo, myYGlobalLo
@@ -747,10 +737,7 @@ module mod_esmf_ocn
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: atemp_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: aqh_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: evap_ESMF
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: total_evap_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: precip_ESMF
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: total_precip_ESMF
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: sst_input_ESMF
   integer :: myThid = 1
 !
   rc = ESMF_SUCCESS
@@ -772,14 +759,7 @@ module mod_esmf_ocn
   ALLOCATE(atemp_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(aqh_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(evap_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-  ALLOCATE(total_evap_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(precip_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-  ALLOCATE(total_precip_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-  ALLOCATE(sst_input_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-
-  call get_total_precip(total_precip_ESMF, total_evap_ESMF, myThid)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
 
   call ESMF_GridCompGet(gcomp, name=cname, clock=clock, grid=gridIn,&
                         importState=importState, vm=vm, rc=rc)
@@ -822,7 +802,6 @@ module mod_esmf_ocn
   call ESMF_StateGet(importState, "RAINCV", field_raincv, rc=rc)
   call ESMF_StateGet(importState, "RAINSHV", field_rainshv, rc=rc)
   call ESMF_StateGet(importState, "RAINNCV", field_rainncv, rc=rc)
-  call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
@@ -856,11 +835,6 @@ module mod_esmf_ocn
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
         line=__LINE__, file=FILENAME)) return
 
-    call ESMF_FieldGet(field_sst_input, localDE=j, &
-                       farrayPtr=ptr_sst_input, rc=rc)
-    if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
-        line=__LINE__, file=FILENAME)) return
-
 !   ! Put data to OCN component variable
     sfac = 1.0d0
     addo = 0.0d0
@@ -882,7 +856,6 @@ module mod_esmf_ocn
     ! where (ieee_is_nan(ptr_raincv)) ptr_raincv = MISSING_R8
     ! where (ieee_is_nan(ptr_rainshv)) ptr_rainshv = MISSING_R8
     ! where (ieee_is_nan(ptr_rainncv)) ptr_rainncv = MISSING_R8
-    ! where (ieee_is_nan(ptr_sst_input)) ptr_sst_input = MISSING_R8
     ! ptr = MISSING_R8
 !
     do jj = 1-OLy, sNy+OLy
@@ -903,7 +876,6 @@ module mod_esmf_ocn
         aqh_ESMF(ii,jj,1,1)          =   0.0d0
         evap_ESMF(ii,jj,1,1)         =   0.0d0
         precip_ESMF(ii,jj,1,1)       =   0.0d0
-        sst_input_ESMF(ii,jj,1,1)      =   0.0d0
 
         if ((iG > imin .and. iG < imax) .and. (jG > jmin .and. jG < jmax)) then
           lwdown_ESMF(ii,jj,1,1) = (ptr_lwup(iG,jG)-ptr_lwdn(iG,jG))*sfac+addo
@@ -920,8 +892,6 @@ module mod_esmf_ocn
                                     +ptr_rainncv(iG,jG))*sfac    &
                                     +addo) /(atm_step_seconds+0.d0)     &
                                    /1000d0
-          sst_input_ESMF(ii,jj,1,1) = (ptr_sst_input(iG,jG)*sfac)+addo
-          ! PRINT *, 'mitgcm sst_input: ', iG, jG, iLoop, ptr_sst_input(iG,jG)
         endif
       end do
     end do
@@ -969,9 +939,6 @@ module mod_esmf_ocn
     if (associated(ptr_rainncv)) then
       nullify(ptr_rainncv)
     end if
-    if (associated(ptr_sst_input)) then
-      nullify(ptr_sst_input)
-    end if
 !
   end do       
 !
@@ -979,12 +946,7 @@ module mod_esmf_ocn
                             hl_ESMF, hs_ESMF, &
                             uwind_ESMF, vwind_ESMF, &
                             atemp_ESMF, aqh_ESMF, &
-                            evap_ESMF, total_evap_ESMF, &
-                            precip_ESMF, total_precip_ESMF, myThid)
-
-  if (currentTimeStep == 0) then
-    call set_sst_ini(sst_input_ESMF, myThid)
-  end if
+                            evap_ESMF, precip_ESMF, myThid)
 
   if (debugLevel >= 1) then
     write (ofile, "(A5,I6.6,A3)") "hlATM", iLoop, ".nc"
@@ -1001,147 +963,9 @@ module mod_esmf_ocn
   DEALLOCATE(atemp_ESMF)
   DEALLOCATE(aqh_ESMF)
   DEALLOCATE(evap_ESMF)
-  DEALLOCATE(total_evap_ESMF)
   DEALLOCATE(precip_ESMF)
-  DEALLOCATE(total_precip_ESMF)
 
   end subroutine OCN_Get
-!
-!-----------------------------------------------------------------------
-!     Initialize SST
-!-----------------------------------------------------------------------
-!
-  subroutine OCN_SST_ini(gcomp, iLoop, rc)
-!
-!-----------------------------------------------------------------------
-!     Used module declarations 
-!-----------------------------------------------------------------------
-!
-  use mitgcm_org_ocn, only : set_sst_ini
-!
-  implicit none
-!
-!-----------------------------------------------------------------------
-!     Imported variable declarations 
-!-----------------------------------------------------------------------
-!
-  type(ESMF_GridComp) :: gcomp
-  integer :: iLoop
-  integer, intent(out) :: rc
-!
-!-----------------------------------------------------------------------
-!     Local variable declarations 
-!-----------------------------------------------------------------------
-!
-  integer :: i, j, ii, jj, bi, bj, iG, jG, imax, jmax
-  integer :: imin, jmin
-  integer :: localPet, petCount, itemCount, localDECount
-  character(ESMF_MAXSTR) :: cname, ofile
-  real(ESMF_KIND_R8) :: sfac, addo
-  real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
-!
-  type(ESMF_VM) :: vm
-  type(ESMF_Clock) :: clock
-  type(ESMF_Grid) :: gridIn
-  type(ESMF_Field) :: field_sst_input
-  type(ESMF_State) :: importState
-  INTEGER sNx, sNy, OLx, OLy, nSx, nSy, nPx, nPy, Nx, Ny, Nr
-  INTEGER myXGlobalLo, myYGlobalLo
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: sst_input_ESMF
-  integer :: myThid = 1
-!
-  rc = ESMF_SUCCESS
-!
-!-----------------------------------------------------------------------
-!     Get gridded component 
-!-----------------------------------------------------------------------
-!
-  call get_domain_size(sNx, sNy, OLx, OLy,                          &
-        nSx, nSy, nPx, nPy, Nx, Ny, Nr,                             &
-        myXGlobalLo, myYGlobalLo)
-
-  ALLOCATE(sst_input_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-
-  call ESMF_GridCompGet(gcomp, name=cname, clock=clock, grid=gridIn,&
-                        importState=importState, vm=vm, rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
-!
-  call ESMF_VMGet(vm, localPet=localPet, petCount=petCount, rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
-!
-!-----------------------------------------------------------------------
-!     Get number of local DEs
-!-----------------------------------------------------------------------
-! 
-  call ESMF_GridGet(gridIn, localDECount=localDECount, rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
-!
-!-----------------------------------------------------------------------
-!     Get field
-!-----------------------------------------------------------------------
-!
-  call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
-!
-!-----------------------------------------------------------------------
-!     Loop over decomposition elements (DEs) 
-!-----------------------------------------------------------------------
-!
-  do j = 0, localDECount-1
-!
-!   ! Get pointer /from field
-    call ESMF_FieldGet(field_sst_input, localDE=j, &
-                       farrayPtr=ptr_sst_input, rc=rc)
-    if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
-        line=__LINE__, file=FILENAME)) return
-
-!   ! Put data to OCN component variable
-    sfac = 1.0d0
-    addo = 0.0d0
-!
-    bi = 1
-    bj = 1
-!
-    where (ieee_is_nan(ptr_sst_input)) ptr_sst_input = MISSING_R8
-    ! ptr = MISSING_R8
-!
-    do jj = 1-OLy, sNy+OLy
-      do ii = 1-OLx, sNx+OLx
-        iG = myXGlobalLo-1+(bi-1)*sNx+ii
-        jG = myYGlobalLo-1+(bj-1)*sNy+jj
-        imin = myXGlobalLo-1+(bi-1)*sNx
-        imax = myXGlobalLo-1+(bi-1)*sNx+sNx+1
-        jmin = myYGlobalLo-1+(bj-1)*sNy
-        jmax = myYGlobalLo-1+(bj-1)*sNy+sNy+1
-
-        sst_input_ESMF(ii,jj,1,1) = 0.0d0
-        if ((iG > imin .and. iG < imax) .and. (jG > jmin .and. jG < jmax)) then
-          sst_input_ESMF(ii,jj,1,1) = (ptr_sst_input(iG,jG)*sfac)+addo
-        end if
-      end do
-    end do
-!
-!   ! Nullify the pointer
-    if (associated(ptr_sst_input)) then
-      nullify(ptr_sst_input)
-    end if
-!
-  end do       
-!
-  call set_sst_ini(sst_input_ESMF, myThid)
-!
-  if (debugLevel >= 1) then
-    write (ofile, "(A9,I6.6,A3)") "sstiniOCN", iLoop, ".nc"
-    call ESMF_FieldWrite(field_sst_input, trim(ofile), rc=rc)
-  end if
-
-  DEALLOCATE(sst_input_ESMF)
-
-  end subroutine OCN_SST_ini
 !
 !-----------------------------------------------------------------------
 !     Ocean model put data to external
@@ -1155,7 +979,6 @@ module mod_esmf_ocn
 !
   use mitgcm_org_ocn, only : get_theta
   use mitgcm_org_ocn, only : get_uvoce
-  use mitgcm_org_ocn, only : get_sst_ini
   use mitgcm_org_ocn, only : get_grid_parameters
 !
   implicit none
@@ -1180,7 +1003,6 @@ module mod_esmf_ocn
   real(ESMF_KIND_R8), pointer :: ptr_uoce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_voce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_t2(:,:)
   integer(ESMF_KIND_I4), pointer :: ptr_mask(:,:)
 !
   type(ESMF_VM) :: vm
@@ -1188,13 +1010,11 @@ module mod_esmf_ocn
   type(ESMF_Field) :: field_sst
   type(ESMF_Field) :: field_uoce
   type(ESMF_Field) :: field_voce
-  type(ESMF_Field) :: field_t2
   type(ESMF_Field) :: field_sst_input
   type(ESMF_State) :: importState, exportState
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: theta_ESMF
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: uoce_ESMF
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: voce_ESMF
-  REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: sst_input_ESMF
 !
   INTEGER sNx, sNy, OLx, OLy, nSx, nSy, nPx, nPy, Nx, Ny, Nr
   INTEGER myXGlobalLo, myYGlobalLo
@@ -1214,11 +1034,9 @@ module mod_esmf_ocn
   ALLOCATE(theta_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
   ALLOCATE(uoce_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
   ALLOCATE(voce_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
-  ALLOCATE(sst_input_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
 
   call get_theta(theta_ESMF, myThid)
   call get_uvoce(uoce_ESMF, voce_ESMF, myThid)
-  call get_sst_ini(sst_input_ESMF, myThid)
 !
 !-----------------------------------------------------------------------
 !     Get gridded component 
@@ -1250,7 +1068,6 @@ module mod_esmf_ocn
   call ESMF_StateGet(exportState, "SST", field_sst, rc=rc)
   call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
   call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
-  call ESMF_StateGet(importState, "T2", field_t2, rc=rc)
   call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
@@ -1271,19 +1088,16 @@ module mod_esmf_ocn
     call ESMF_FieldGet(field_sst, localDE=j, farrayPtr=ptr_sst, rc=rc)
     call ESMF_FieldGet(field_uoce, localDE=j, farrayPtr=ptr_uoce, rc=rc)
     call ESMF_FieldGet(field_voce, localDE=j, farrayPtr=ptr_voce, rc=rc)
-    call ESMF_FieldGet(field_t2, localDE=j, farrayPtr=ptr_t2, rc=rc)
     call ESMF_FieldGet(field_sst_input, localDE=j,                    &
                        farrayPtr=ptr_sst_input, rc=rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
         line=__LINE__, file=FILENAME)) return
 !
 !   ! Set initial value to missing 
-    ptr_sst = MISSING_R8
-    ptr_uoce = MISSING_R8
-    ptr_voce = MISSING_R8
-    where (ieee_is_nan(ptr_t2)) ptr_t2 = MISSING_R8
+    !! ptr_sst = MISSING_R8
+    !! ptr_uoce = MISSING_R8
+    !! ptr_voce = MISSING_R8
     ! DO NOT initialize the initial sst?
-    ! where (ieee_is_nan(ptr_sst_input)) ptr_sst_input = MISSING_R8
 !
 !   ! Put data to export field 
     bi = 1
@@ -1312,8 +1126,6 @@ module mod_esmf_ocn
     if (debugLevel >= 1) then
       write (ofile, "(A9,I6.6,A3)") "sstOCNput", iLoop, ".nc"
       call ESMF_FieldWrite(field_sst, trim(ofile), rc=rc)
-      write (ofile, "(A9,I6.6,A3)") "sstATMini", iLoop, ".nc"
-      call ESMF_FieldWrite(field_sst_input, trim(ofile), rc=rc)
     end if
 
 !   ! Nullify the pointer
@@ -1326,9 +1138,6 @@ module mod_esmf_ocn
     if (associated(ptr_voce)) then
       nullify(ptr_voce)
     end if
-    if (associated(ptr_t2)) then
-      nullify(ptr_t2)
-    end if
     if (associated(ptr_mask)) then
       nullify(ptr_mask)
     end if
@@ -1338,7 +1147,6 @@ module mod_esmf_ocn
   DEALLOCATE(theta_ESMF)
   DEALLOCATE(uoce_ESMF)
   DEALLOCATE(voce_ESMF)
-  DEALLOCATE(sst_input_ESMF)
 !
   end subroutine OCN_Put
 !

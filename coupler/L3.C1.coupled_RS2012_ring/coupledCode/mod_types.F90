@@ -94,7 +94,6 @@
       type(ESMF_TimeInterval) :: ocnTimeStep
       type(ESMF_TimeInterval) :: atmTimeStep
       integer :: currentTimeStep = 0
-      REAL*4, DIMENSION(:,:), ALLOCATABLE :: sst_ini_wrf
 
       integer :: nList = 21
       character(ESMF_MAXSTR), dimension(1:21) :: nuopc_entryNameList=&
@@ -106,7 +105,7 @@
                      'TEMPERATURE_AT_2M','SPECIFIC_HUMIDITY_AT_2M',&
                      'SURFACE_EVAPORATION','PRECIP_CONVECTIVE',&
                      'PRECIP_SH_CONVECTIVE','PRECIP_NON_CONVECTIVE',&
-                     'INITIAL_SEA_SURFACE_TEMPERATURE',&
+                     'REANALYSIS_SEA_SURFACE_TEMPERATURE',&
                      'ACTIVE_SEA_SURFACE_TEMPERATURE',&
                      'OCEAN_SURFACE_U','OCEAN_SURFACE_V'/)
       character(ESMF_MAXSTR), dimension(1:21) :: wrf_nameList=&

@@ -209,15 +209,15 @@ C-    Atmospheric temperature.
 !!      I     atemp_nlon, atemp_nlat, xC, yC, atemp_interpMethod,
 !! #endif
 !!      I     myTime, myIter, myThid )
-      DO bj = myByLo(myThid),myByHi(myThid)
-       DO bi = myBxLo(myThid),myBxHi(myThid)
-        DO j = 1,sNy
-         DO i = 1,sNx
-          atemp(i,j,bi,bj) = atemp(i,j,bi,bj) + exf_offset_atemp
-         ENDDO
-        ENDDO
-       ENDDO
-      ENDDO
+!!       DO bj = myByLo(myThid),myByHi(myThid)
+!!        DO bi = myBxLo(myThid),myBxHi(myThid)
+!!         DO j = 1,sNy
+!!          DO i = 1,sNx
+!!           atemp(i,j,bi,bj) = atemp(i,j,bi,bj) + exf_offset_atemp
+!!          ENDDO
+!!         ENDDO
+!!        ENDDO
+!!       ENDDO
 
 C-    Atmospheric humidity.
 !!       CALL EXF_SET_FLD(

@@ -332,7 +332,7 @@
                TRIM(timeStr)
 
       ! run an empty step (for initialization)
-      ! call wrf_run();
+      call wrf_run();
 
       end subroutine
 !

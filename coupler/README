@@ -32,12 +32,10 @@ Level 3, CPL atmosphere--ocean cases:
   --Use WRF bulk formula
   --Ocean->Atmosphere: SST, ocean, surface, velocity
   --Atmosphere->Ocean: heat flux, momentum flux, fresh water flux
-\L3.C2.coupled_CA2018_ring
+\L3.C2.coupled_CA2018_shaheen
   --Atmospheric river event starts from 2018 01 27
   --MITgcm and WRF use East Pacific region
-  --For local desktop ring, use PGI compiler
-\L3.C2.coupled_CA2018_shaheen
-  --Same as the previous one, but for Shaheen-II supercomputer using Intel compiler
+  --For Shaheen-II supercomputer using cray Intel compiler
 
 post-processing scripts:
 \script-post

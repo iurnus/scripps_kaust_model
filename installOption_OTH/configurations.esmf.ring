@@ -1,15 +1,19 @@
 ## # BASH OPTIONS FOR THE COUPLER
 #
 # Update the following directories from line 4 to 13
-export SKRIPS_DIR=/home/rus043/scripps_kaust_model-1.1/
+export SKRIPS_DIR=/home/rus043/scripps_kaust_model/
 export ESMF_NETCDF_INCLUDE="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/include"
 export ESMF_NETCDF_LIBPATH="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
 export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
 export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
-export SKRIPS_MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
+export MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
+export MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include/
+export MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export ESMF_LIB=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/
+export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
+export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
 
 export ESMF_OS=Linux
 export ESMF_COMM=openmpi
