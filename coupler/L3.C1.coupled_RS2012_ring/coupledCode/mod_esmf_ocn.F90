@@ -152,9 +152,9 @@ module mod_esmf_ocn
   
   rc = ESMF_SUCCESS
 !
-!-----------------------------------------------------------------------
-!     Get gridded component
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get gridded component
+!-------------------------------------------------------------------
 !
   call ESMF_GridCompGet(gcomp, name=gname, vm=vm, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -165,15 +165,15 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Initialize the gridded component
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Initialize the gridded component
+!-------------------------------------------------------------------
 !
   call MIT_INIT(myThid, comm)
 !
-!-----------------------------------------------------------------------
-!     Set-up grid and load coordinate data
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Set-up grid and load coordinate data
+!-------------------------------------------------------------------
 !
   call OCN_SetGridArrays(gcomp, petCount, localPet, ocnGridIn, rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -309,17 +309,17 @@ module mod_esmf_ocn
 
   subroutine OCN_SetGridArrays(gcomp, petCount, localPet, gridIn,rc)
 !
-!-----------------------------------------------------------------------
-!     Used module declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Used module declarations 
+!-------------------------------------------------------------------
 !
   use mitgcm_org_ocn, only : get_grid_parameters
 !
   implicit none
 !
-!-----------------------------------------------------------------------
-!     Imported variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Imported variable declarations 
+!-------------------------------------------------------------------
 !
   type(ESMF_GridComp), intent(inout) :: gcomp
   integer, intent(in) :: localPet 
@@ -353,9 +353,9 @@ module mod_esmf_ocn
   character(ESMF_MAXSTR), allocatable :: meshTypeName(:)
   integer, allocatable :: mpi_myXGlobalLo(:), mpi_myYGlobalLo(:)
 !
-!-----------------------------------------------------------------------
-!     Local variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Local variable declarations 
+!-------------------------------------------------------------------
 !
   rc = ESMF_SUCCESS
   call get_domain_size(sNx, sNy, OLx, OLy,                          &
@@ -374,9 +374,9 @@ module mod_esmf_ocn
                            yC_ESMF, yG_ESMF, maskC_ESMF,            &
                            maskS_ESMF, maskW_ESMF, myThid)
 !
-!-----------------------------------------------------------------------
-!     Get gridded component 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get gridded component 
+!-------------------------------------------------------------------
 !
   call ESMF_GridCompGet(gcomp, vm=vm, name=cname, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -401,9 +401,9 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get limits of the grid arrays (based on PET and nest level)
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get limits of the grid arrays (based on PET and nest level)
+!-------------------------------------------------------------------
 !
   if (.not.allocated(deBlockList)) then
     allocate(deBlockList(2,2,1:nPx*nPy))
@@ -416,9 +416,9 @@ module mod_esmf_ocn
     deBlockList(2,2,tile) = mpi_myYGlobalLo(tile)+sNy-1
   end do
 !
-!-----------------------------------------------------------------------
-!     Create ESMF DistGrid based on model domain decomposition
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Create ESMF DistGrid based on model domain decomposition
+!-------------------------------------------------------------------
 !
   distGrid = ESMF_DistGridCreate(minIndex=(/ 1, 1 /),               &
                                  maxIndex=(/ Nx, Ny /),             &
@@ -427,15 +427,15 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Set staggering type 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Set staggering type 
+!-------------------------------------------------------------------
 !
   staggerLoc = ESMF_STAGGERLOC_CENTER ! Icross
 !
-!-----------------------------------------------------------------------
-!     Create ESMF Grid
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Create ESMF Grid
+!-------------------------------------------------------------------
 !
   ! Icross
   gridIn = ESMF_GridCreate(distgrid=distGrid,                       &
@@ -444,9 +444,9 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Allocate coordinates 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Allocate coordinates 
+!-------------------------------------------------------------------
 !
   call ESMF_GridAddCoord(gridIn, staggerLoc=staggerLoc, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -517,9 +517,9 @@ module mod_esmf_ocn
     end if
   end do
 !
-!-----------------------------------------------------------------------
-!     Write the grid to debug
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Write the grid to debug
+!-------------------------------------------------------------------
 ! 
   if (debugLevel >= 1) then
     call ESMF_GridGetCoord(gridIn,                                  &
@@ -534,9 +534,9 @@ module mod_esmf_ocn
                          status=ESMF_FILESTATUS_NEW, rc=rc)
   end if
 !
-!-----------------------------------------------------------------------
-!     Assign grid to gridded component 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Assign grid to gridded component 
+!-------------------------------------------------------------------
 !
   call ESMF_GridCompSet(gcomp, grid=gridIn, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -565,9 +565,9 @@ module mod_esmf_ocn
   type(ESMF_Grid) :: gridOut
   integer, intent(out) :: rc
 !
-!-----------------------------------------------------------------------
-!     Local variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Local variable declarations 
+!-------------------------------------------------------------------
 !
   integer :: i, j, k, itemCount, localDECount, localPet, petCount
   character(ESMF_MAXSTR), allocatable :: itemNameList(:)
@@ -589,9 +589,9 @@ module mod_esmf_ocn
   rc = ESMF_SUCCESS
 
 !
-!-----------------------------------------------------------------------
-!     Get information about gridded component 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get information about gridded component 
+!-------------------------------------------------------------------
 !
   call ESMF_GridCompGet(gcomp, importState=importState,             &
                         exportState=exportState, vm=vm, rc=rc)
@@ -602,18 +602,18 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Set array descriptor
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Set array descriptor
+!-------------------------------------------------------------------
 !
   call ESMF_ArraySpecSet(arraySpec, typekind=ESMF_TYPEKIND_R8,      &
                          rank=2, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get number of local DEs
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get number of local DEs
+!-------------------------------------------------------------------
 ! 
   call ESMF_GridGet(gridIn, localDECount=localDECount, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -625,9 +625,9 @@ module mod_esmf_ocn
 !
   staggerLoc = ESMF_STAGGERLOC_CENTER
 !
-!-----------------------------------------------------------------------
-!     Create export field 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Create export field 
+!-------------------------------------------------------------------
 !
   ! register the MITgcm entries in ESMF
   do iEntry = 1, nList
@@ -682,25 +682,25 @@ module mod_esmf_ocn
 !
   subroutine OCN_Get(gcomp, iLoop, rc)
 !
-!-----------------------------------------------------------------------
-!     Used module declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Used module declarations 
+!-------------------------------------------------------------------
 !
   use mitgcm_org_ocn, only : get_field_parameters
 !
   implicit none
 !
-!-----------------------------------------------------------------------
-!     Imported variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Imported variable declarations 
+!-------------------------------------------------------------------
 !
   type(ESMF_GridComp) :: gcomp
   integer :: iLoop
   integer, intent(out) :: rc
 !
-!-----------------------------------------------------------------------
-!     Local variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Local variable declarations 
+!-------------------------------------------------------------------
 !
   integer :: i, j, ii, jj, bi, bj, iG, jG, imax, jmax
   integer :: imin, jmin
@@ -742,9 +742,9 @@ module mod_esmf_ocn
 !
   rc = ESMF_SUCCESS
 !
-!-----------------------------------------------------------------------
-!     Get gridded component 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get gridded component 
+!-------------------------------------------------------------------
 !
   call get_domain_size(sNx, sNy, OLx, OLy,                          &
         nSx, nSy, nPx, nPy, Nx, Ny, Nr,                             &
@@ -770,17 +770,17 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get number of local DEs
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get number of local DEs
+!-------------------------------------------------------------------
 ! 
   call ESMF_GridGet(gridIn, localDECount=localDECount, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get field
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get field
+!-------------------------------------------------------------------
 !
   call ESMF_StateGet(importState, "LWUPB", field_lwup, rc=rc)
   call ESMF_StateGet(importState, "LWDNB", field_lwdn, rc=rc)
@@ -805,13 +805,13 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Loop over decomposition elements (DEs) 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Loop over decomposition elements (DEs) 
+!-------------------------------------------------------------------
 !
   do j = 0, localDECount-1
 !
-!       ! Get pointer /from field
+!   ! Get pointer /from field
     call ESMF_FieldGet(field_lwup, localDE=j, farrayPtr=ptr_lwup, rc=rc)
     call ESMF_FieldGet(field_lwdn, localDE=j, farrayPtr=ptr_lwdn, rc=rc)
     call ESMF_FieldGet(field_swup, localDE=j, farrayPtr=ptr_swup, rc=rc)
@@ -973,9 +973,9 @@ module mod_esmf_ocn
 !
   subroutine OCN_Put(gcomp, iLoop, rc)
 !
-!-----------------------------------------------------------------------
-!     Used module declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Used module declarations 
+!-------------------------------------------------------------------
 !
   use mitgcm_org_ocn, only : get_theta
   use mitgcm_org_ocn, only : get_uvoce
@@ -983,18 +983,18 @@ module mod_esmf_ocn
 !
   implicit none
 !
-!-----------------------------------------------------------------------
-!     Imported variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Imported variable declarations 
+!-------------------------------------------------------------------
 !
   type(ESMF_GridComp) :: gcomp
   type(ESMF_Grid) :: gridIn
   integer, intent(out) :: rc
   integer :: iLoop
 !
-!-----------------------------------------------------------------------
-!     Local variable declarations 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Local variable declarations 
+!-------------------------------------------------------------------
 !
   integer :: i, j, ii, jj, bi, bj, iG, jG, imax, jmax
   integer :: petCount, localPet, itemCount, localDECount
@@ -1022,9 +1022,9 @@ module mod_esmf_ocn
 !
   rc = ESMF_SUCCESS
 !
-!-----------------------------------------------------------------------
-!     Get ESMF domain size info
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get ESMF domain size info
+!-------------------------------------------------------------------
 !
   PRINT *, "PUTTING OCN DATA"
   call get_domain_size(sNx, sNy, OLx, OLy,                          &
@@ -1038,9 +1038,9 @@ module mod_esmf_ocn
   call get_theta(theta_ESMF, myThid)
   call get_uvoce(uoce_ESMF, voce_ESMF, myThid)
 !
-!-----------------------------------------------------------------------
-!     Get gridded component 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get gridded component 
+!-------------------------------------------------------------------
 !
   call ESMF_GridCompGet(gcomp, name=cname, clock=clock, grid=gridIn,&
                         exportState=exportState,                    &
@@ -1052,18 +1052,18 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get number of local DEs
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get number of local DEs
+!-------------------------------------------------------------------
 ! 
   !! TODO: check if gridin being used correctly
   call ESMF_GridGet(gridIn, localDECount=localDECount, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Get export field 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Get export field 
+!-------------------------------------------------------------------
 !
   call ESMF_StateGet(exportState, "SST", field_sst, rc=rc)
   call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
@@ -1072,9 +1072,9 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
-!-----------------------------------------------------------------------
-!     Loop over decomposition elements (DEs) 
-!-----------------------------------------------------------------------
+!-------------------------------------------------------------------
+! Loop over decomposition elements (DEs) 
+!-------------------------------------------------------------------
 !
   do j = 0, localDECount-1
 

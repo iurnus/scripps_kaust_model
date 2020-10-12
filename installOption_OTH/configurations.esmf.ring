@@ -1,7 +1,7 @@
 ## # BASH OPTIONS FOR THE COUPLER
 #
 # Update the following directories from line 4 to 13
-export SKRIPS_DIR=/home/rus043/scripps_kaust_model/
+export SKRIPS_DIR=$HOME/scripps_kaust_model/
 export ESMF_NETCDF_INCLUDE="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/include"
 export ESMF_NETCDF_LIBPATH="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
 export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
