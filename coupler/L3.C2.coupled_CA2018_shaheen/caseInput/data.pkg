@@ -1,1 +1,10 @@
-../../L3.C2.coupled_CA2018_ring/caseInput/data.pkg
+# Packages
+ &PACKAGES
+  useGMRedi=.FALSE.,
+  useKPP=.true.,
+  useECCO=.true.,
+  useEXF=.true.,
+  useOBCS=.true.,
+  useSEAICE=.false.,
+  useDiagnostics=.true.,
+ &

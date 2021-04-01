@@ -36,7 +36,7 @@ uoce_write = np.zeros((nYY,nXX))
 voce_write = np.zeros((nYY,nXX))
 for j in range(nXX):
   for i in range(nYY):
-    if wrf_landmask[0,i,j] == 0:
+    if wrf_landmask[0,i,j] < 0.5:
       sst_write[i,j] = ini_sst_[i,j]
       ssti_write[i,j] = ini_sst_[i,j]
       tsk_write[i,j] = ini_sst_[i,j]
@@ -52,8 +52,8 @@ wrf_results.variables['VOCE'][0,:,:] = voce_write;
 wrf_results.close()
 
 wrf_results_low = Dataset('wrflowinp_d01','r+',format='NETCDF4');
-wrf_sst_low = wrf_results.variables['SST'][:];
-wrf_ssti_low = wrf_results.variables['SST_INPUT'][:];
+wrf_sst_low = wrf_results_low.variables['SST'][:];
+wrf_ssti_low = wrf_results_low.variables['SST_INPUT'][:];
 
 ssti_write_low = np.zeros((nYY,nXX))
 nt,ny,nx = np.shape(ssti_write_low)

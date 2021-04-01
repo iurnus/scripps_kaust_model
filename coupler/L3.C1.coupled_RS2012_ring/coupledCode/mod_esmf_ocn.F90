@@ -1103,6 +1103,7 @@ module mod_esmf_ocn
     bi = 1
     bj = 1
 !
+    print *, "theta esmf infor: ", myXGlobalLo, myXGlobalLo, sNx, sNy
     do jj = 1, sNy
       do ii = 1, sNx
         iG = myXGlobalLo-1+(bi-1)*sNx+ii
@@ -1110,6 +1111,7 @@ module mod_esmf_ocn
         !! Make sure that theta + 273.15 is the true SST number
         if (ptr_mask(iG,jG) > 0.01) then
           !! if ocean, use theta_ESMF in MITgcm
+          print *, "theta esmf: ", ii, jj, theta_ESMF(ii,jj,1,1,1)
           ptr_sst(iG,jG) = theta_ESMF(ii,jj,1,1,1) + 273.15
           ptr_uoce(iG,jG) = uoce_ESMF(ii,jj,1,1,1)
           ptr_voce(iG,jG) = voce_ESMF(ii,jj,1,1,1)

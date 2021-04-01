@@ -1,1 +1,47 @@
-../../L3.C2.coupled_CA2018_ring/caseInput/data.obcs
+#
+# ***************
+# Open boundaries
+# ***************
+ &OBCS_PARM01
+ OB_Jnorth=   432*-1,
+ OB_Jsouth=   432*1,
+ OB_Iwest=    256*1,
+#
+ useOrlanskiNorth=.FALSE.,
+ useOBCSsponge=.TRUE.,
+ useOBCSbalance=.FALSE.,
+ useOBCSprescribe=.TRUE.,
+#
+ OBNuFile='Rs_UobcsN_ccs_01Jan2018_nPy1.bin',
+ OBNvFile='Rs_VobcsN_ccs_01Jan2018_nPy1_c1.bin',
+ OBNtFile='Rs_TobcsN_ccs_01Jan2018_nPy1.bin',
+ OBNsFile='Rs_SobcsN_ccs_01Jan2018_nPy1.bin',
+#
+ OBSuFile='Rs_UobcsS_ccs_01Jan2018_nPy1.bin',
+ OBSvFile='Rs_VobcsS_ccs_01Jan2018_nPy1_c1.bin',
+ OBStFile='Rs_TobcsS_ccs_01Jan2018_nPy1.bin',
+ OBSsFile='Rs_SobcsS_ccs_01Jan2018_nPy1.bin',
+#
+ OBWuFile='Rs_UobcsW_ccs_01Jan2018_nPx1_c1.bin',
+ OBWvFile='Rs_VobcsW_ccs_01Jan2018_nPx1.bin',
+ OBWtFile='Rs_TobcsW_ccs_01Jan2018_nPx1.bin',
+ OBWsFile='Rs_SobcsW_ccs_01Jan2018_nPx1.bin',
+#
+ &
+# *****************************************
+# Orlanski Boundary Condition Parameters.
+# *****************************************
+ &OBCS_PARM02
+# cvelTimeScale = 2000.,
+ &
+# *****************************************
+# Sponge Layer Parameters.
+# *****************************************
+ &OBCS_PARM03
+ Urelaxobcsinner=864000.E0,
+ Urelaxobcsbound=43200.E0,
+ Vrelaxobcsinner=864000.E0,
+ Vrelaxobcsbound=43200.E0,
+ spongeThickness=3,
+ &
+

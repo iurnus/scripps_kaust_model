@@ -20,6 +20,8 @@ module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
 module load grib2
+# module load ncl/6.4.0
+# module load nco/4.5.0
 
 export NETCDF=$NETCDF_DIR
 export PNETCDF=$PARALLEL_NETCDF_DIR

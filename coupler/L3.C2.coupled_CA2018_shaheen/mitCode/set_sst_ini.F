@@ -1,1 +1,0 @@
-../../L3.C2.coupled_CA2018_ring/mitCode/set_sst_ini.F

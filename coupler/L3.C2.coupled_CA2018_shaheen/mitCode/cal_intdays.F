@@ -1,1 +1,1 @@
-../../L3.C2.coupled_CA2018_ring/mitCode/cal_intdays.F
+../../L3.C1.coupled_RS2012_ring/mitCode/cal_intdays.F

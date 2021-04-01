@@ -23,8 +23,8 @@ set comp      = ftn
 set cccommand = cc
 set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
 set compopts_num = ( $compopts )
-set compinc  = (-I/$SKRIPS_MPI_DIR/include -I$SKRIPS_NETCDF_INCLUDE)
-set complibs = (-L/$SKRIPS_MPI_DIR/lib -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
+set compinc  = (-I/$MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
+set complibs = (-L/$MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
 
 set ccopts = "-c"
 
@@ -82,11 +82,8 @@ cat <<EOF > ${mpref_l}_mod.Ftmp
       PUBLIC GET_PARAMETERS
       PUBLIC GET_GRID_PARAMETERS
       PUBLIC GET_FIELD_PARAMETERS
-      PUBLIC GET_TOTAL_PRECIP
       PUBLIC GET_THETA
       PUBLIC GET_UVOCE
-      PUBLIC GET_SST_INI
-      PUBLIC SET_SST_INI
       CONTAINS
 EOF
 

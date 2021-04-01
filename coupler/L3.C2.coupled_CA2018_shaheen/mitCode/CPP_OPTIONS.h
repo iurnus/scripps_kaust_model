@@ -1,1 +1,1 @@
-../../L3.C2.coupled_CA2018_ring/mitCode/CPP_OPTIONS.h
+../../L3.C1.coupled_RS2012_ring/mitCode/CPP_OPTIONS.h

@@ -1,1 +1,9 @@
-../../L3.C2.coupled_CA2018_ring/caseInput/data.cal
+#
+# *******************
+# Calendar Parameters
+# *******************
+ &CAL_NML
+ TheCalendar = 'gregorian',
+ startDate_1 = 20180127,
+ startDate_2 = 000000,
+ &

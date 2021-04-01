@@ -36,7 +36,7 @@ cp mitSettingCA/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.shaheen ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp ${SKRIPS_MPI_DIR}/include/mpif* . 
+cp ${MPI_DIR}/include/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 
