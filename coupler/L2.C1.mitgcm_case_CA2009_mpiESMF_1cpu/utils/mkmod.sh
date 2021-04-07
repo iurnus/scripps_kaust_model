@@ -224,6 +224,8 @@ cat ${mpref_l}_mod.Ftmp | sed s'z\( *COMMON[^/]*\)/\(.*\)/\([^/]*\)z      COMMON
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
 cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIPRIV/MPIPRIV/' > f1.Ftmp
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
+cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIFCMB/MPIFCMB/' > f1.Ftmp
+cp f1.Ftmp ${mpref_l}_mod.Ftmp
 
 
 # Create output directory

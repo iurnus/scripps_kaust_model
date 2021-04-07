@@ -19,14 +19,30 @@
 # 
 
 # Set compile options (need to be updated for other machines)
-set comp      = ftn
-set cccommand = cc
-set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
-set compopts_num = ( $compopts )
-set compinc  = (-I/$MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
-set complibs = (-L/$MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
+if ($ESMF_COMPILER == Unicos) then
+  set comp      = ftn
+  set cccommand = cc
+else
+  set comp      = mpif77
+  set cccommand = mpicc
+endif
 
-set ccopts = "-c"
+if ($ESMF_COMPILER == intel) then
+  set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
+else if ($ESMF_COMPILER == pgi) then
+  set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+endif
+
+set compopts_num = ( $compopts )
+if ($ESMF_COMPILER == Unicos) then
+  set compinc  = (-I/$MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
+  set complibs = (-L/$MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
+else
+  set complibs     = ($SKRIPS_NETCDF_LIB  -lnetcdff -lnetcdf)
+  set compinc      = ($SKRIPS_NETCDF_INCLUDE )
+endif
+
+set ccopts    = "-c"
 
 set arcommand = ar
 set aropts    = "-rsc"
@@ -217,11 +233,9 @@ cp f1.Ftmp ${mpref_l}_mod.Ftmp
 # Change all the common block names in the module to use the module prefix
 cat ${mpref_l}_mod.Ftmp | sed s'z\( *COMMON[^/]*\)/\(.*\)/\([^/]*\)z      COMMON/C_'${mpref_s}'_\2/\3z' > f1.Ftmp
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
-cat ${mpref_l}_mod.Ftmp | sed s'/\/MPIFCMB5/\/C_ocn_MPIFCMB5/'> f1.Ftmp
-cp f1.Ftmp ${mpref_l}_mod.Ftmp
-cat ${mpref_l}_mod.Ftmp | sed s'/\/MPIFCMB9/\/C_ocn_MPIFCMB9/'> f1.Ftmp
-cp f1.Ftmp ${mpref_l}_mod.Ftmp
 cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIPRIV/MPIPRIV/' > f1.Ftmp
+cp f1.Ftmp ${mpref_l}_mod.Ftmp
+cat ${mpref_l}_mod.Ftmp | sed s'/C_'${mpref_s}'_MPIFCMB/MPIFCMB/' > f1.Ftmp
 cp f1.Ftmp ${mpref_l}_mod.Ftmp
 
 

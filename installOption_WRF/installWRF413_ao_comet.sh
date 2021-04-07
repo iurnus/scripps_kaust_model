@@ -2,15 +2,15 @@ echo "installing WRF"
 echo "WRF DIR is: ${SKRIPS_DIR}/WRFV413_AO"
 cd ${SKRIPS_DIR}/WRFV413_AO
 WRF_UPDATE_DIR0=${SKRIPS_DIR}/installOption_WRF/wrfAO413_shared/
-WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO413_ring/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO413_comet/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
 
-# WRF configure=54, then nesting=1
-echo "choosing 54th option to compile WRF"
+# WRF configure=15, then nesting=1
+echo "choosing 15th option to compile WRF"
 echo "nesting option is 1 (normal)"
-printf '54\n1\n' | ./configure &> log.configure
+printf '15\n1\n' | ./configure &> log.configure
 
 echo "copying other files to compile ESMF--WRF"
 ln -sf ${WRF_UPDATE_DIR0}/Makefile.wrf Makefile

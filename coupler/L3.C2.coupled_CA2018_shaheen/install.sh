@@ -1,19 +1,26 @@
 #!/bin/sh
-export MITGCM_DIR=${SKRIPS_DIR}/MITgcm_c67m
 
+echo "ESMF location? : " ${ESMF_DIR}
+echo "WRF413 (with OA coupling) location? : " ${WRF_DIR}
+echo "MITgcm (source code) location? : " ${MITGCM_DIR}
 
-read -e -p "WRF413 (with OA coupling) location? :" -i "$SKRIPS_DIR/WRFV413_AO/" wrfLocation
-read -e -p "ESMF location? :" -i "$SKRIPS_DIR/esmf/" esmfLocation
-read -e -p "MITgcm location? :" -i "$SKRIPS_DIR/MITgcm_c67m/" MITGCM_DIR
-read -e -p "COUPLER location? :" -i "$SKRIPS_DIR/coupler/" couplerLocation
-# sed -i "1s@.*@WRF_DIR=$wrfLocation@" coupledCode/wrflib.mk
-# sed -i "2s@.*@ESMF_DIR=$esmfLocation@" coupledCode/wrflib.mk
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" coupledCode/Allmake.sh
-# sed -i "4s@.*@ESMF_DIR=$esmfLocation@" coupledCode/Allmake.sh
-# sed -i "5s@.*@COUPLER_DIR=$couplerLocation@" coupledCode/Allmake.sh
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase.init/Allrun
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runCase/Allrun
-# sed -i "3s@.*@WRF_DIR=$wrfLocation@" runWRFtest/Allrun
+read -e -p "Using Intel compiler? (Y/N) :" -i "Y" intelFlag
+if [ $intelFlag == 'Y' ]; then
+  echo "Using Intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
+else 
+  echo "Using PGI compiler"
+  export MITGCM_OPT=mitgcm_optfile.pgi
+fi
+echo "The option file is: $MITGCM_OPT"
+
+read -e -p "Continue? (Y/N) :" -i "Y" continueFlag
+if [ $continueFlag == 'Y' ]; then
+  echo "continue"
+else 
+  echo "stop"
+  exit
+fi
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit
@@ -21,22 +28,21 @@ cp utils/* build_mit/ # copy the scripts to install MITGCM
 cp mitCode/* code_mit/ # copy the scripts to install MITGCM
 cp mitSettingCA/* code_mit/ # copy the scripts to install MITGCM
 rm code_mit/exf_get* # remove the exf_get file so that MITGCM read the file input
+rm code_mit/main.F # remove the main file
 cd build_mit
 sed -i s/code/code_mit/g makescript_fwd.sio.shaheen
 ./makescript_fwd.sio.shaheen ${MITGCM_DIR} # install MITGCM, generate *.f files
 cd ..
 
 # build the MITGCM as a library
-cp -rf ${couplerLocation}/L3.C1.coupled_RS2012_ring/mitCode . 
-mkdir build
-mkdir code
+mkdir build code
 cp utils/* build/ # copy the scripts to install MITGCM
 cp mitCode/* code/ # copy the scripts to install MITGCM
 cp mitSettingCA/* code/ # copy the scripts to install MITGCM
 cd build
 ./makescript_fwd.sio.shaheen ${MITGCM_DIR} # install MITGCM, generate *.f files
 
-cp ${MPI_DIR}/include/mpif* . 
+cp ${MPI_INC}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

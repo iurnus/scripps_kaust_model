@@ -11,5 +11,5 @@ cp ../coupledSolver/esmf_application .
 
 echo "running the NUOPC--WRF code..."
 # mpirun -np 2 esmf_application &> log
-mpirun -np 1 esmf_application &> log
+mpirun -np 1 ./esmf_application &> log
 # ./esmf_application

@@ -12,4 +12,4 @@ cp ../runCase/wrfrst_d01_2012-06-01_00\:30\:00 .
 
 cp ../coupledCode/esmf_application .
 
-mpirun -np 4 esmf_application &> log.esmf 
+mpirun -np 4 ./esmf_application &> log.esmf 

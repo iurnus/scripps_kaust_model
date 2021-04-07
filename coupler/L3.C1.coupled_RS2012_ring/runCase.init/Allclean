@@ -20,4 +20,4 @@ rm -rf hycom*
 rm -rf Rs_*
 rm -rf data.*
 rm -rf eedata *_data run-off* CAM* bathy*
-rm -rf *.m 
+rm -rf *.m *.py

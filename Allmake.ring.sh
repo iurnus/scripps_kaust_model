@@ -23,8 +23,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
   echo "tar files are located at: $tarLocation"
 else
   echo "please download the tar files via: git clone git@bitbucket.org:iurnus/regionalcoam_tarfiles.git"
-  echo "required tar files: MITgcm (version c67m), WRF (version 4.1.2), ESMF (version 8.0.0)"
-  echo "required tar file names: MITgcm_c67m.tar.gz, WRFV4.1.2.TAR.gz, esmf_8_0_0_src.tar"
+  echo "required tar files: MITgcm (version c67m), WRF (version 4.1.3), ESMF (version 8.0.0)"
+  echo "required tar file names: MITgcm_c67m.tar.gz, WRFV4.1.3.TAR.gz, esmf_8_0_0_src.tar"
   exit
 fi
 

@@ -8,4 +8,4 @@ cp ../coupledSolver/esmf_application .
 cp ../coupledSolver/namelist.rc .
 
 echo "running the NUOPC--WRF code..."
-mpirun -np 5 esmf_application
+mpirun -np 5 ./esmf_application

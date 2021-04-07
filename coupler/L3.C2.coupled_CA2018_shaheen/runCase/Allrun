@@ -1,11 +1,12 @@
 #!/bin/bash
 
-WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
+# WRF_DIR=${SKRIPS_DIR}/WRFV413_AO/
 
 cp ${WRF_DIR}/main/wrf.exe .
 cp ../coupledCode/esmf_application .
 cp ../runCase.init/wrf*d01 . 
 ln -sf ../caseInput/* .
 
-sbatch ./Allsubmit.sh
+echo "Please submit the job..."
+# sbatch ./Allsubmit-comet.sh
 

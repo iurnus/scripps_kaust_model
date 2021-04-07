@@ -5,4 +5,4 @@ ln -sf ../caseInput/* .
 cp $WRF_DIR/main/real.exe .
 cp $WRF_DIR/main/wrf.exe .
 
-mpirun -np 4 real.exe
+mpirun -np 4 ./real.exe

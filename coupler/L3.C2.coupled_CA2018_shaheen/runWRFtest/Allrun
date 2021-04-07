@@ -10,6 +10,6 @@ cp ../runCase/wrf*d01 .
 cp ../runCase/ozone* .
 
 ./genSSTin.sh
-./updateFlux.py
+~/anaconda3/bin/python updateFlux.py
 
-sbatch ./Allsubmit.sh
+# sbatch ./Allsubmit.sh

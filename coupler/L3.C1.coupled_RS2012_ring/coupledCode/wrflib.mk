@@ -11,6 +11,7 @@ WRF_INC = \
    -I${WRF_DIR}phys \
    -I${WRF_DIR}chem \
    -I${WRF_DIR}inc \
+   -I${WRF_DIR}wrftladj \
 
 include ${WRF_DIR}/configure.wrf_cpl
 WRF_LIB = \

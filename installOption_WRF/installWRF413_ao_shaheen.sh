@@ -1,9 +1,8 @@
 echo "installing WRF"
-WRF_PWD_DIR=${PWD}
-cd WRFV413_AO
-echo "WRF_PWD_DIR is: ${WRF_PWD_DIR}"
-WRF_UPDATE_DIR0=${WRF_PWD_DIR}/installOption_WRF/wrfAO413_shared/
-WRF_UPDATE_DIR1=${WRF_PWD_DIR}/installOption_WRF/wrfAO413_shaheen/
+echo "WRF DIR is: ${SKRIPS_DIR}/WRFV413_AO"
+cd ${SKRIPS_DIR}/WRFV413_AO
+WRF_UPDATE_DIR0=${SKRIPS_DIR}/installOption_WRF/wrfAO413_shared/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO413_shaheen/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf

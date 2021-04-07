@@ -1,17 +1,26 @@
 #!/bin/sh
 
-read -e -p "WRF413 (with OA coupling) location? :" -i "${WRF_DIR}" wrfLocation
-read -e -p "ESMF location? :" -i "${ESMF_DIR}" esmfLocation
+echo "ESMF location? : " ${ESMF_DIR}
+echo "WRF413 (with OA coupling) location? : " ${WRF_DIR}
+echo "MITgcm (source code) location? : " ${MITGCM_DIR}
 
-read -e -p "Using PGI compiler? (Y/N) :" -i "Y" pgiFlag
-if [ $pgiFlag == 'Y' ]; then
+read -e -p "Using Intel compiler? (Y/N) :" -i "Y" intelFlag
+if [ $intelFlag == 'Y' ]; then
+  echo "Using Intel compiler"
+  export MITGCM_OPT=mitgcm_optfile.ifort
+else 
   echo "Using PGI compiler"
   export MITGCM_OPT=mitgcm_optfile.pgi
-else 
-  echo "Using default intel compiler"
-  export MITGCM_OPT=mitgcm_optfile.ifort
 fi
 echo "The option file is: $MITGCM_OPT"
+
+read -e -p "Continue? (Y/N) :" -i "Y" continueFlag
+if [ $continueFlag == 'Y' ]; then
+  echo "continue"
+else 
+  echo "stop"
+  exit
+fi
 
 # build the MITGCM as an executable
 mkdir build_mit code_mit

@@ -36,7 +36,3 @@ Level 3, CPL atmosphere--ocean cases:
   --Atmospheric river event starts from 2018 01 27
   --MITgcm and WRF use East Pacific region
   --For Shaheen-II supercomputer using cray Intel compiler
-
-post-processing scripts:
-\script-post
-
