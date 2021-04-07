@@ -60,7 +60,9 @@ sh Allmake.ring.sh
 ```
 
 **Reference**
+
 Sun, R., Subramanian, A. C., Miller, A. J., Mazloff, M. R., Hoteit, I., and Cornuelle, B. D.: SKRIPS v1.0: a regional coupled ocean–atmosphere modeling framework (MITgcm–WRF) using ESMF/NUOPC, description and preliminary results for the Red Sea, Geoscientific Model Development, 12, 4221–4244, [https://doi.org/10.5194/gmd-12-4221-2019](https://doi.org/10.5194/gmd-12-4221-2019), 2019.
 
 **Other papers**
-Sun, R., Subramanian, A. C., Cornuelle, B. D., Mazloff, M. R., Miller, A. J., Ralph, F. M., Seo, H., and Hoteit, I.: The role of air–sea interactions in atmospheric rivers: Case studies using the SKRIPS regional coupled model, Journal of Geophysical Research: Atmospheres, 126(6), e2020JD032885, [https://doi.org/10.1029/2020JD032885](https://doi.org/10.1029/2020JD032885)], 2021.
+
+Sun, R., Subramanian, A. C., Cornuelle, B. D., Mazloff, M. R., Miller, A. J., Ralph, F. M., Seo, H., and Hoteit, I.: The role of air–sea interactions in atmospheric rivers: Case studies using the SKRIPS regional coupled model, Journal of Geophysical Research: Atmospheres, 126(6), e2020JD032885, [https://doi.org/10.1029/2020JD032885](https://doi.org/10.1029/2020JD032885), 2021.
