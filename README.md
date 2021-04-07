@@ -1,6 +1,6 @@
 The SKRIPS is under continous development. 
 
-The most recent stable version is v1.1. It is available here: [download v1.1](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.1)
+The most recent stable version is v1.2. It is available here: [download v1.2](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.2)
 
 The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases)
 
@@ -15,7 +15,7 @@ Its coupler is the Earth System Modeling Framework (ESMF).
 
 The designed modeling system currently includes the following models:
 
-* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.2) (version 4.1.2)
+* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.3) (version 4.1.3)
 * Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint67m) (version c67m)
 * Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
 
@@ -60,5 +60,7 @@ sh Allmake.ring.sh
 ```
 
 **Reference**
+Sun, R., Subramanian, A. C., Miller, A. J., Mazloff, M. R., Hoteit, I., and Cornuelle, B. D.: SKRIPS v1.0: a regional coupled ocean–atmosphere modeling framework (MITgcm–WRF) using ESMF/NUOPC, description and preliminary results for the Red Sea, Geoscientific Model Development, 12, 4221–4244, [https://doi.org/10.5194/gmd-12-4221-2019](https://doi.org/10.5194/gmd-12-4221-2019), 2019.
 
-Sun, R., Subramanian, A. C., Miller, A. J., Mazloff, M. R., Hoteit, I., and Cornuelle, B. D.: SKRIPS v1.0: a regional coupled ocean–atmosphere modeling framework (MITgcm–WRF) using ESMF/NUOPC, description and preliminary results for the Red Sea, Geosci. Model Dev., 12, 4221–4244, [https://doi.org/10.5194/gmd-12-4221-2019](https://doi.org/10.5194/gmd-12-4221-2019), 2019.
+**Other papers**
+Sun, R., Subramanian, A. C., Cornuelle, B. D., Mazloff, M. R., Miller, A. J., Ralph, F. M., Seo, H., and Hoteit, I.: The role of air–sea interactions in atmospheric rivers: Case studies using the SKRIPS regional coupled model, Journal of Geophysical Research: Atmospheres, 126(6), e2020JD032885, [https://doi.org/10.1029/2020JD032885](https://doi.org/10.1029/2020JD032885)], 2021.
