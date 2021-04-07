@@ -4,7 +4,7 @@ The most recent stable version is v1.2. It is available here: [download v1.2](ht
 
 The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases)
 
-To insall the code, please refer to the [code documentation](https://skrips.readthedocs.io).
+To insall the code, please refer to the [code documentation](https://skrips.readthedocs.io/en/v1.2/).
 
 
 ********************************************************************************************
