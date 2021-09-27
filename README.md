@@ -19,11 +19,9 @@ It is a regional coupled atmosphere-ocean model that includes the following comp
 The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/v1.2/). 
 There are several tutorial cases for testing the coupled model.
 
-Users can also extend this solver, utilities, and libraries of this
-coupled solver, using some pre-requisite knowledge of the underlying method,
-physics and programming techniques involved.
+Users can also extend this solver using some pre-requisite knowledge of the underlying method and programming techniques.
 
-In the GIT repository, we have:
+In this repository, we have:
 
 * Allmake.ring.sh - *script to compile the code on local desktop ring using PGI compiler*
 * Allmake.shaheen.sh - *script to compile the code on Shaheen-II supercomputer using Intel compiler*
@@ -34,15 +32,6 @@ In the GIT repository, we have:
 * installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
 * license\_statements/ - *license statements of the model components*
 * README.md - *readme file*
-
-The source code of MITgcm, WRF, and ESMF (not supported in the GIT repository) 
-should be added to finish the installation:
-
-* esmf/ - *ESMF code*
-* MITgcm\_c67m/ - *MITgcm source code*
-* WPS/ - *WRF preprocessor*
-* WRFV412\_AO/ - *WRF source code*
-
 
 **Reference**
 
