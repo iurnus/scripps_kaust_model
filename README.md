@@ -4,36 +4,26 @@ The most recent stable version is v1.2. It is available here: [download v1.2](ht
 
 The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases)
 
-To insall the code, please refer to the [code documentation](https://skrips.readthedocs.io/en/v1.2/).
+To insall the code, please refer to [code documentation](https://skrips.readthedocs.io/en/v1.2/).
 
 
 ********************************************************************************************
 
 This is the repository for the Scripps-KAUST Regional Integrated Prediction System (SKRIPS). 
-It is a regional coupled atmosphere-ocean model based on MITgcm and WRF. 
-Its coupler is the Earth System Modeling Framework (ESMF).
-
-The designed modeling system currently includes the following models:
+It is a regional coupled atmosphere-ocean model that includes the following components:
 
 * Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.3) (version 4.1.3)
 * Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint67m) (version c67m)
 * Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
 
-The features of the system includes:
+The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/v1.2/). 
+There are several tutorial cases for testing the coupled model.
 
-* Multiple coupling time step
-* Multiple execution styles (concurrent and sequential execution)
-
-Install the project requires the installation of MITgcm, WRF ESMF, and their
-dependencies. The instructions on the installation of each component and the
-coupler are detailed in the code documentation. Moreover, running the coupled
-code and post-processing tutorial examples are also included.
-
-Users can also extend this solver, utilities and libraries of this
-coupled-solver, using some pre-requisite knowledge of the underlying method,
+Users can also extend this solver, utilities, and libraries of this
+coupled solver, using some pre-requisite knowledge of the underlying method,
 physics and programming techniques involved.
 
-There are several folders in this GIT repository:
+In the GIT repository, we have:
 
 * Allmake.ring.sh - *script to compile the code on local desktop ring using PGI compiler*
 * Allmake.shaheen.sh - *script to compile the code on Shaheen-II supercomputer using Intel compiler*
@@ -45,7 +35,7 @@ There are several folders in this GIT repository:
 * license\_statements/ - *license statements of the model components*
 * README.md - *readme file*
 
-The source code of MITgcm, WRF and ESMF (not supported in the GIT repository) 
+The source code of MITgcm, WRF, and ESMF (not supported in the GIT repository) 
 should be added to finish the installation:
 
 * esmf/ - *ESMF code*
@@ -53,11 +43,6 @@ should be added to finish the installation:
 * WPS/ - *WRF preprocessor*
 * WRFV412\_AO/ - *WRF source code*
 
-To compile the coupled solver (use PGI compiler), please run:
-
-```
-sh Allmake.ring.sh
-```
 
 **Reference**
 
