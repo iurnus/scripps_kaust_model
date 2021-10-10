@@ -29,7 +29,7 @@ In this repository, we have:
 * coupler/ - *all coupler source code and examples*
 * esmf\_test\_application/ - *ESMF test cases*
 * installOption\_WRF/ - *WRF scripts with different install options*
-* installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
+* installOption\_OTH/ - *scripts to install other code*
 * license\_statements/ - *license statements of the model components*
 * README.md - *readme file*
 
