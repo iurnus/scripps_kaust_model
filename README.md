@@ -23,13 +23,11 @@ Users can also extend this solver using some pre-requisite knowledge of the unde
 
 In this repository, we have:
 
-* Allmake.ring.sh - *script to compile the code on local desktop ring using PGI compiler*
-* Allmake.shaheen.sh - *script to compile the code on Shaheen-II supercomputer using Intel compiler*
-* Allclean.sh - *script to uninstall the code*
 * coupler/ - *all coupler source code and examples*
 * esmf\_test\_application/ - *ESMF test cases*
-* installOption\_WRF/ - *WRF scripts with different install options*
 * installOption\_OTH/ - *install options for WPS ESMF MITgcm or other software*
+* installOption\_WRF/ - *scripts to install WRF*
+* installOption\_WW3/ - *scripts to install WW3*
 * license\_statements/ - *license statements of the model components*
 * README.md - *readme file*
 
