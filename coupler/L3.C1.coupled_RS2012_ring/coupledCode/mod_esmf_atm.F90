@@ -148,17 +148,13 @@
       
       CALL wrf_set_dm_communicator( mpicomtmp )
       
-      PRINT *, 'wrf_component_init1: initialize wrf setups'
       CALL wrf_init( no_init1=.TRUE. )
       
-      PRINT *, 'wrf_component_init1: setting wrf time intervals'
       call ESMF_TimeIntervalSet(couplingInterval, h=1, rc=rc)
       
-      PRINT *, 'wrf_component_init1: calling AttachDecompToState'
       CALL AttachTimesToState( exportState, esmStartTime, esmStopTime, &
                                couplingInterval)
 
-      PRINT *, 'wrf_component_init1: calling wrf_getDecompInfo'
       CALL wrf_getDecompInfo( ids, ide, jds, jde, kds, kde, &
                               ims, ime, jms, jme, kms, kme, &
                               ips, ipe, jps, jpe, kps, kpe, &
@@ -264,14 +260,8 @@
       CALL ESMF_StateGet( exportState, itemCount=itemCount, &
                           stateintent=stateintent, rc=rc )
 
-      PRINT *, 'wrf_component_init2: nuopc exportState itemCount = ', &
-               itemCount
-
       CALL ESMF_StateGet( importState, itemCount=itemCount, &
                           stateintent=stateintent, rc=rc )
-
-      PRINT *, 'wrf_component_init2: nuopc importState itemCount = ', &
-                itemCount
 
       t_gcomp = gcomp
       t_importState = importState
@@ -289,34 +279,34 @@
       CALL wrf_state_populate( rc )
 
       !! Examine importState
-      CALL ESMF_StateGet( importState, itemCount=itemCount, &
-                          stateintent=stateintent, name=statename, &
-                          rc=rc )
+      !! CALL ESMF_StateGet( importState, itemCount=itemCount, &
+      !!                     stateintent=stateintent, name=statename, &
+      !!                     rc=rc )
 
-      ALLOCATE ( itemNames(itemCount), itemTypes(itemCount) )
+      !! ALLOCATE ( itemNames(itemCount), itemTypes(itemCount) )
 
-      CALL ESMF_StateGet( importState, itemNameList=itemNames, &
-                          itemtypeList=itemTypes, rc=rc )
-      DO i=1, itemCount
-        PRINT *, 'nuopc wrf_component_init2: ', &
-                 'importState contains field <',TRIM(itemNames(i)),'>'
-      ENDDO
-      DEALLOCATE ( itemNames, itemTypes )
+      !! CALL ESMF_StateGet( importState, itemNameList=itemNames, &
+      !!                     itemtypeList=itemTypes, rc=rc )
+      !! DO i=1, itemCount
+      !!   PRINT *, 'nuopc wrf_component_init2: ', &
+      !!            'importState contains field <',TRIM(itemNames(i)),'>'
+      !! ENDDO
+      !! DEALLOCATE ( itemNames, itemTypes )
 
       !! Examine exportState
-      CALL ESMF_StateGet( exportState, itemCount=itemCount, &
-                          stateintent=stateintent, name=statename, &
-                          rc=rc )
+      !! CALL ESMF_StateGet( exportState, itemCount=itemCount, &
+      !!                     stateintent=stateintent, name=statename, &
+      !!                     rc=rc )
 
-      ALLOCATE ( itemNames(itemCount), itemTypes(itemCount) )
+      !! ALLOCATE ( itemNames(itemCount), itemTypes(itemCount) )
 
-      CALL ESMF_StateGet( exportState, itemNameList=itemNames, &
-                          itemtypeList=itemTypes, rc=rc )
-      DO i=1, itemCount
-        PRINT *, 'nuopc wrf_component_init2: ', &
-                 'exportState contains field <',TRIM(itemNames(i)),'>'
-      ENDDO
-      DEALLOCATE ( itemNames, itemTypes )
+      !! CALL ESMF_StateGet( exportState, itemNameList=itemNames, &
+      !!                     itemtypeList=itemTypes, rc=rc )
+      !! DO i=1, itemCount
+      !!   PRINT *, 'nuopc wrf_component_init2: ', &
+      !!            'exportState contains field <',TRIM(itemNames(i)),'>'
+      !! ENDDO
+      !! DEALLOCATE ( itemNames, itemTypes )
 
       !! run an empty step to fill the data
       CALL ESMF_ClockGet( clock, currTime=currentTime, rc=rc )
@@ -324,12 +314,12 @@
       head_grid%start_subtime = currentTime
       head_grid%stop_subtime = nextTime
   
-      CALL wrf_timetoa ( head_grid%start_subtime, timeStr )
-      PRINT *, 'wrf_component_run: head_grid%start_subtime ', &
-               TRIM(timeStr)
-      CALL wrf_timetoa ( head_grid%stop_subtime, timeStr )
-      PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
-               TRIM(timeStr)
+      !! CALL wrf_timetoa ( head_grid%start_subtime, timeStr )
+      !! PRINT *, 'wrf_component_run: head_grid%start_subtime ', &
+      !!          TRIM(timeStr)
+      !! CALL wrf_timetoa ( head_grid%stop_subtime, timeStr )
+      !! PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
+      !!          TRIM(timeStr)
 
       ! run an empty step (for initialization)
       call wrf_run();
@@ -453,18 +443,15 @@
       head_grid%start_subtime = currentTime
       head_grid%stop_subtime = nextTime
   
-      CALL wrf_timetoa ( head_grid%start_subtime, timeStr )
-      PRINT *, 'wrf_component_run: head_grid%start_subtime ', &
-               TRIM(timeStr)
-      CALL wrf_timetoa ( head_grid%stop_subtime, timeStr )
-      PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
-               TRIM(timeStr)
-
+      !! CALL wrf_timetoa ( head_grid%start_subtime, timeStr )
+      !! PRINT *, 'wrf_component_run: head_grid%start_subtime ', &
+      !!          TRIM(timeStr)
+      !! CALL wrf_timetoa ( head_grid%stop_subtime, timeStr )
+      !! PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
+      !!          TRIM(timeStr)
 
       call wrf_run();
 
-
-      PRINT *, 'WRF run loop: ', iLoop_atm
       iLoop_atm = iLoop_atm + 1
 
       call ESMF_VMWtime(wTimeEnd)
@@ -589,9 +576,6 @@
         stream = 0 
         ierr = 0
         
-        PRINT *, "in name is: ", config_flags%auxinput5_inname
-        PRINT *, "out name is: ", config_flags%auxhist5_outname
-   
         include "med_open_esmf_calls.inc"
    
       END SUBROUTINE wrf_state_populate

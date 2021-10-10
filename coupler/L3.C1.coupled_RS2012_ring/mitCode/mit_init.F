@@ -126,7 +126,6 @@ C     myThid       :: thread Id number
 
 CEOP
 
-      print *, "calling FGSL_IEEE_ENV_SETUP"
 #ifdef USE_GSL_IEEE
       CALL FGSL_IEEE_ENV_SETUP ()
 #endif
@@ -135,7 +134,6 @@ C--   Set up the execution environment
 C     EEBOOT loads a execution environment parameter file
 C     ( called "eedata" by default ) and sets variables accordingly.
       myThid = 1
-      print *, "calling EEBOOT"
       CALL EEBOOT( myComm )
 
 C--   Trap errors
@@ -156,10 +154,8 @@ C--   Trap errors
       DO I=1,nThreads
         myThid = I
 
-        print *, "calling INITIALISE_FIXED"
         CALL INITIALISE_FIXED( myThid )
 
-        print *, "calling INITIALISE_VARIA"
         CALL INITIALISE_VARIA( myThid )
 
       ENDDO

@@ -97,7 +97,6 @@
       integer                       :: iterI
 
       rc = ESMF_SUCCESS
-      PRINT *, "calling CPL_ComputeRH..."
       call NUOPC_ConnectorGet(ccomp, srcFields=srcFields,               &
                               dstFields=dstFields, state=state, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -185,8 +184,6 @@
 !
       rc = ESMF_SUCCESS
 !
-      PRINT *, "CPL_ExecuteRH running..."
-
       call ESMF_VMWtime(timeStart)
       write (msgString,*) "Total time spent on the coupled run: ", timeStart
       call ESMF_LogWrite(msgString, ESMF_LOGMSG_INFO, rc=rc)

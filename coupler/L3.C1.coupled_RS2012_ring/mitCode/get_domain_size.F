@@ -35,7 +35,5 @@ C     == Routine arguments ==
       myXGlobalLo_ESMF = myXGlobalLo
       myYGlobalLo_ESMF = myYGlobalLo
 
-      print *, "snx_ESMF = ", sNx_ESMF
-
       RETURN
       END

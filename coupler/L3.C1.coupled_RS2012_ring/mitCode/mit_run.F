@@ -172,15 +172,9 @@ C--      Invoke nThreads instances of the numerical model
           ! DO iStep = 1, nTimeSteps
             ! myTimeIn=startTime
             ! myIterIn=nIter0
-            print *, "mit_run iStep is: ", iStep
-            print *, "mit_run myTime is: ", myTimeIn
-            print *, "mit_run myIter is: ", myIterIn
 
             CALL MAIN_DO_LOOP( iStep, myTimeIn, myIterIn, myThid )
 
-            print *, "mit_run iStep after do loop is: ", iStep
-            print *, "mit_run myTime after do loop is: ", myTimeIn
-            print *, "mit_run myIter after do loop is: ", myIterIn
           ! ENDDO
 #endif
          ENDIF

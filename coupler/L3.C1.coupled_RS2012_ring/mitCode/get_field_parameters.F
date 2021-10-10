@@ -32,7 +32,6 @@ C     == global variables ==
       REAL*8 evap_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       REAL*8 precip_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
-      print *, "converting parameters"
       DO bj = myByLo(myThid), myByHi(myThid)
        DO bi = myBxLo(myThid), myBxHi(myThid)
          DO j=1-OLy,sNy+OLy

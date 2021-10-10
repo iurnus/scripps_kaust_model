@@ -258,11 +258,11 @@ module mod_esmf_ocn
     nTimeStepsIn = INT( esm_step_seconds/ocn_step_seconds )
   end if
 
-  print *, "calling OCN_Run function"
-  print *, "iLoop_ocn is: ", iLoop_ocn
-  print *, "myTime is: ", myTime
-  print *, "myIter is: ", myIter
-  print *, "nTimeStepsIn is: ", nTimeStepsIn
+  ! print *, "calling OCN_Run function"
+  ! print *, "iLoop_ocn is: ", iLoop_ocn
+  ! print *, "myTime is: ", myTime
+  ! print *, "myIter is: ", myIter
+  ! print *, "nTimeStepsIn is: ", nTimeStepsIn
 
   call mit_run(iLoop_ocn, myTime, myIter, nTimeStepsIn, myThid)
 
@@ -915,7 +915,7 @@ module mod_esmf_ocn
       nullify(ptr_swup)
     end if
     if (associated(ptr_swdn)) then
-      nullify(ptr_swup)
+      nullify(ptr_swdn)
     end if
     if (associated(ptr_u10)) then
       nullify(ptr_u10)
@@ -1028,7 +1028,6 @@ module mod_esmf_ocn
 ! Get ESMF domain size info
 !-------------------------------------------------------------------
 !
-  PRINT *, "PUTTING OCN DATA"
   call get_domain_size(sNx, sNy, OLx, OLy,                          &
                        nSx, nSy, nPx, nPy, Nx, Ny, Nr,              &
                        myXGlobalLo, myYGlobalLo)
