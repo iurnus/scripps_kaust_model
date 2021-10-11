@@ -6,7 +6,7 @@
 !/                  | WAVEWATCH III           NOAA/NCEP |
 !/                  |           H. L. Tolman            |
 !/                  |                        FORTRAN 90 |
-!/                  | Last update :         27-Aug-2015 |
+!/                  | Last update :         27-Jul-2018 |
 !/                  +-----------------------------------+
 !/
 !/    13-Dec-2004 : Origination.                        ( version 3.06 )
@@ -37,6 +37,12 @@
 !/    27-Aug-2015 : Adding interpolated ICEF (mean ice  ( version 5.10 )
 !/                  floe diameter), ICEH (ice thickness)
 !/                  and ICE (ice concentration).
+!/    01-Mar-2018 : Include UNDEF from constants.ftn to ( version 6.02 )
+!/                  avoid circular referencing in w3servmd
+!/    05-Jun-2018 : Add SETUP                           ( version 6.04 )
+!/    27-Jul-2018 : Added PTMETH and PTFCUT variables   ( version 6.05 )
+!/                  for alternative partition methods.
+!/                  (C. Bunney, UKMO)
 !/
 !/    Copyright 2009-2012 National Weather Service (NWS),
 !/       National Oceanic and Atmospheric Administration.  All rights
@@ -63,6 +69,8 @@
 !      NOTYPE    I.P.  Public   Number of output types
 !      NOEXTR    I.P.  Public   Number of extra (user available) 
 !                               output fields.
+!      DIMP      I.P.  Public   Number of parameters in partition
+!                               output group
 !      IDOUT     C.A.  Public   ID strings for output fields.
 !      FNMPRE    Char  Public   File name preamble.
 !      UNDEF     Real  Public   Value for undefined parameters in
@@ -288,6 +296,7 @@
 !  7. Source code :
 !
 !/ ------------------------------------------------------------------- /
+      USE CONSTANTS, ONLY : UNDEF
       PUBLIC
 !/
 !/ Module private variable for checking error returns
@@ -300,12 +309,14 @@
 !
       INTEGER, PARAMETER      :: NOGRP = 10
       INTEGER, PARAMETER      :: NGRPP = 20
+      INTEGER, PARAMETER      :: DIMP = 15
       INTEGER                 :: NOGE(NOGRP)
       INTEGER                 :: NOTYPE
       INTEGER, PARAMETER      :: NOEXTR=  2
       CHARACTER(LEN=20)       :: IDOUT(NOGRP,NGRPP)
       CHARACTER(LEN=80)       :: FNMPRE = './'
-      REAL                    :: UNDEF  = -999.9
+      !Moved UNDEF to constants and included above
+      !REAL                    :: UNDEF = -999.9
       LOGICAL                 :: UNIPTS = .FALSE., UPPROC = .FALSE.
 !/
 !/ Set NOGE and IDOUT identifiers in W3NOUT
@@ -330,6 +341,8 @@
                                  DPO(:), WAO(:), WDO(:), ASO(:),      &
                                  CAO(:), CDO(:), ICEO(:), ICEHO(:),   &
                                  ICEFO(:), SPCO(:,:)
+        REAL, POINTER         :: ZET_SETO(:)  ! For the wave setup.
+
         CHARACTER(LEN=10), POINTER :: PTNME(:), GRDID(:)
         LOGICAL               :: O2INIT
 !/MPI        LOGICAL               :: O2IRQI
@@ -375,6 +388,8 @@
         REAL                  :: HSPMIN, WSMULT, WSCUT
         REAL, POINTER         :: DTPRT(:,:)
         LOGICAL               :: FLFORM, FLCOMB, O6INIT
+        INTEGER               :: PTMETH   ! C. Bunney; Partitioning method
+        REAL                  :: PTFCUT   ! C. Bunney; Part. 5 freq cut
       END TYPE OTYPE6
 !/
       TYPE OUTPUT
@@ -430,6 +445,8 @@
                                  DPO(:), WAO(:), WDO(:), ASO(:),      &
                                  CAO(:), CDO(:), ICEO(:), ICEHO(:),   &
                                  ICEFO(:), SPCO(:,:)
+      REAL, POINTER           :: ZET_SETO(:)
+!
       CHARACTER(LEN=10), POINTER :: PTNME(:), GRDID(:)
       LOGICAL, POINTER        :: O2INIT
 !/MPI        LOGICAL, POINTER      :: O2IRQI
@@ -473,6 +490,8 @@
                                  IY0, IYN, IYS, ICPRT(:,:)
       REAL, POINTER           :: HSPMIN, WSMULT, WSCUT, DTPRT(:,:)
       LOGICAL, POINTER        :: FLFORM, FLCOMB, O6INIT
+      INTEGER, POINTER        :: PTMETH   ! C. Bunney; Partitioning method
+      REAL, POINTER           :: PTFCUT   ! C. Bunney; Part. 5 freq cut
 !/
       CONTAINS
 !/ ------------------------------------------------------------------- /
@@ -654,10 +673,11 @@
 !/BT4      IDOUT( 1, 8)  = 'Sediment diam D50   '
 !/IS2      IDOUT( 1, 9)  = 'ice thickness   '
 !/IS2      IDOUT( 1, 10) = 'Avg. ice floe diam. '
+!/SETUP    IDOUT( 1, 11)  = 'wave induced setup'
 !
 ! 2) Standard mean wave parameters
 !
-      NOGE(2) = 9
+      NOGE(2) = 17
 !
       IDOUT( 2, 1)  = 'Wave height         '
       IDOUT( 2, 2)  = 'Mean wave length    '
@@ -675,6 +695,7 @@
       IDOUT( 2, 14)  = 'Spc-Time Hmax^crest'
       IDOUT( 2, 15)  = 'STD Space-Time Hmax'
       IDOUT( 2, 16)  = 'STD ST Hmax^crest  '
+      IDOUT( 2, 17)  = 'Dominant wave bT   '
 !      IDOUT( 2,10)  = 'Mean wave dir. a2b2'
 !      IDOUT( 2,11)  = 'Mean dir. spr. a2b2'
 !      IDOUT( 2,12)  = 'Windsea height(Sin)'
@@ -694,16 +715,25 @@
 !
 ! 4) Spectral Partitions parameters
 !
-      NOGE(4) = 8
+      NOGE(4) = 17
 !
-      IDOUT( 4, 1)  = 'Part. wave heigt    '
+      IDOUT( 4, 1)  = 'Part. wave height   '
       IDOUT( 4, 2)  = 'Part. peak period   '
-      IDOUT( 4, 3)  = 'Part. peak wave l.  '
+      IDOUT( 4, 3)  = 'Part. peak wave len.'
       IDOUT( 4, 4)  = 'Part. mean direction'
       IDOUT( 4, 5)  = 'Part. dir. spread   '
       IDOUT( 4, 6)  = 'Part. wind sea frac.'
-      IDOUT( 4, 7)  = 'Total wind sea frac.'
-      IDOUT( 4, 8)  = 'Number of partitions'
+      IDOUT( 4, 7)  = 'Part. peak direction'
+      IDOUT( 4, 8)  = 'Part. peakedness    '
+      IDOUT( 4, 9)  = 'Part. peak enh. fac.'
+      IDOUT( 4,10)  = 'Part. gaussian width'
+      IDOUT( 4,11)  = 'Part. spectral width'
+      IDOUT( 4,12)  = 'Part. mean per. (-1)'
+      IDOUT( 4,13)  = 'Part. mean per. (+1)'
+      IDOUT( 4,14)  = 'Part. mean per. (+2)'
+      IDOUT( 4,15)  = 'Part. peak density  '
+      IDOUT( 4,16)  = 'Total wind sea frac.'
+      IDOUT( 4,17)  = 'Number of partitions'
 !
 ! 5) Atmosphere-waves layer
 !
@@ -723,7 +753,7 @@
 !
 ! 6) Wave-ocean layer
 !
-      NOGE(6) = 19 
+      NOGE(6) = 20 
 !
       IDOUT( 6, 1)  = 'Radiation stresses  '
       IDOUT( 6, 2)  = 'Wave-ocean mom. flux'
@@ -736,14 +766,15 @@
       IDOUT( 6, 9)  = '2nd ord press spectr'
       IDOUT( 6,10)  = 'Wave-ice mom. flux  '
       IDOUT( 6,11)  = 'Wave-ice energy flux'
-      IDOUT( 6,12)  = 'Dp.Int. Stokes drift'
-      IDOUT( 6,13)  = 'enhancement factor  '
-      IDOUT( 6,14)  = 'La_t                '
-      IDOUT( 6,15)  = 'La_{Proj}           '
-      IDOUT( 6,16)  = 'La_{SL}             '
-      IDOUT( 6,17)  = 'La_{SL,Proj}        '
-      IDOUT( 6,18)  = 'ave deg wind/Lamur  '
-      IDOUT( 6,19)  = 'surf deg wind/Lamur '
+      IDOUT( 6,12)  = 'Split Surface Stokes'
+      IDOUT( 6,13)  = 'Dp.Int. Stokes drift'
+      IDOUT( 6,14)  = 'enhancement factor  '
+      IDOUT( 6,15)  = 'La_t                '
+      IDOUT( 6,16)  = 'La_{Proj}           '
+      IDOUT( 6,17)  = 'La_{SL}             '
+      IDOUT( 6,18)  = 'La_{SL,Proj}        '
+      IDOUT( 6,19)  = 'ave deg wind/Lamur  '
+      IDOUT( 6,20)  = 'surf deg wind/Lamur '
 !
 ! 7) Wave-bottom layer
 !
@@ -761,18 +792,20 @@
 !
 ! 8) Spectrum parameters
 !
-      NOGE(8) = 2
+      NOGE(8) = 5
 !
       IDOUT( 8, 1)  = 'Mean square slopes  '
       IDOUT( 8, 2)  = 'Phillips tail const'
-      IDOUT( 8, 3)  = 'Lx-Ly mean wvlength'
-      IDOUT( 8, 4)  = 'Surf grad correl XT'
-      IDOUT( 8, 5)  = 'Surf grad correl YT'
-      IDOUT( 8, 6)  = 'Surf grad correl XY'
-      IDOUT( 8, 7)  = 'Surface crest param'
+      IDOUT( 8, 3)  = 'Slope direction     '
+      IDOUT( 8, 4)  = 'Tail slope direction'
+      IDOUT( 8, 5)  = 'Goda peakedness parm'
+!      IDOUT( 8, 3)  = 'Lx-Ly mean wvlength'
+!      IDOUT( 8, 4)  = 'Surf grad correl XT'
+!      IDOUT( 8, 5)  = 'Surf grad correl YT'
+!      IDOUT( 8, 6)  = 'Surf grad correl XY'
+!      IDOUT( 8, 7)  = 'Surface crest param'
 !      IDOUT( 8, 3)  = '3rd spectral moment '
 !      IDOUT( 8, 4)  = '4th spectral moment '
-!      IDOUT( 8, 5)  = 'Goda peakedness parm'
 !      IDOUT( 8, 6)  = 'Kurtosis            '
 !      IDOUT( 8, 7)  = 'Skewness            '
 !
@@ -937,6 +970,7 @@
                  OUTPTS(IMOD)%OUT2%GRDID(NPT)      ,                  &
                  OUTPTS(IMOD)%OUT2%DPO(NPT)        ,                  &
                  OUTPTS(IMOD)%OUT2%WAO(NPT)        ,                  &
+                 OUTPTS(IMOD)%OUT2%ZET_SETO(NPT)   ,                  &
                  OUTPTS(IMOD)%OUT2%WDO(NPT)        ,                  &
                  OUTPTS(IMOD)%OUT2%ASO(NPT)        ,                  &
                  OUTPTS(IMOD)%OUT2%CAO(NPT)        ,                  &
@@ -1506,6 +1540,7 @@
           PTIFAC => OUTPTS(IMOD)%OUT2%PTIFAC
           DPO    => OUTPTS(IMOD)%OUT2%DPO
           WAO    => OUTPTS(IMOD)%OUT2%WAO
+          ZET_SETO => OUTPTS(IMOD)%OUT2%ZET_SETO
           WDO    => OUTPTS(IMOD)%OUT2%WDO
           ASO    => OUTPTS(IMOD)%OUT2%ASO
           CAO    => OUTPTS(IMOD)%OUT2%CAO
@@ -1616,6 +1651,8 @@
       ICPRT  => OUTPTS(IMOD)%OUT6%ICPRT
       DTPRT  => OUTPTS(IMOD)%OUT6%DTPRT
       FLCOMB => OUTPTS(IMOD)%OUT6%FLCOMB
+      PTMETH => OUTPTS(IMOD)%OUT6%PTMETH
+      PTFCUT => OUTPTS(IMOD)%OUT6%PTFCUT
       FLFORM => OUTPTS(IMOD)%OUT6%FLFORM
       O6INIT => OUTPTS(IMOD)%OUT6%O6INIT
 !

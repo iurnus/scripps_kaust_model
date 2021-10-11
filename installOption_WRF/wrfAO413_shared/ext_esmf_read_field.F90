@@ -76,7 +76,14 @@ SUBROUTINE ext_esmf_read_field ( DataHandle , DateStr , VarName , Field , FieldT
   !! call wrf_debug( 300, TRIM(mess) )
 
 ! BY RUI, only do it when it is SST field
-if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE') THEN
+!! if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE') THEN
+if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE' &
+     .or. TRIM(VarNAME) == 'WAVEHS' .or. TRIM(VarNAME) == 'WAVEML' .or. TRIM(VarNAME) == 'WAVEMASK' &
+     .or. TRIM(VarNAME) == 'WAVESTOKESX' .or. TRIM(VarNAME) == 'WAVESTOKESY' .or. TRIM(VarNAME) == 'WAVELASL' &
+     .or. TRIM(VarNAME) == 'WAVETAUIX' .or. TRIM(VarNAME) == 'WAVETAUIY' &
+     .or. TRIM(VarNAME) == 'WAVETAUOX' .or. TRIM(VarNAME) == 'WAVETAUOY' .or. TRIM(VarNAME) == 'WAVENUMBER' &
+     .or. TRIM(VarNAME) == 'WAVELANGMUIR' .or. TRIM(VarNAME) == 'OCNMLD') THEN
+  PRINT *, 'now processing wrf_input: ', TRIM(VarNAME)
 
   IF      ( FieldType .EQ. WRF_REAL ) THEN
     esmf_kind = ESMF_KIND_R8
@@ -199,8 +206,8 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
         do nI = ips, ipe
           data_esmf_real_ptr(nI,nJ) = data_esmf_real_ptr_global(nI,nJ)
 
-          ! PRINT *, "TESTBUG: data_esmf_real_ptr_global is : ", nI, nJ, data_esmf_real_ptr_global(nI,nJ)
-          ! PRINT *, "TESTBUG: data_esmf_real_ptr is : ", nI, nJ, data_esmf_real_ptr(nI,nJ)
+          ! PRINT *, "TESTBUG: data_esmf_real_ptr_global is : ", data_esmf_real_ptr_global(nI,nJ)
+          ! PRINT *, "TESTBUG: data_esmf_real_ptr is : ", data_esmf_real_ptr(nI,nJ)
         end do
       end do
 

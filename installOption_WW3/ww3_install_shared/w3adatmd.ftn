@@ -1,12 +1,13 @@
 #include "w3macros.h"
 !/ ------------------------------------------------------------------- /
       MODULE W3ADATMD
+!/MEMCHECK        USE MallocInfo_m
 !/
 !/                  +-----------------------------------+
 !/                  | WAVEWATCH III           NOAA/NCEP |
 !/                  |           H. L. Tolman            |
 !/                  |                        FORTRAN 90 |
-!/                  | Last update :         27-Aug-2015 |
+!/                  | Last update :         05-Jun-2018 |
 !/                  +-----------------------------------+
 !/
 !/    28-Dec-2004 : Origination.                        ( version 3.06 )
@@ -33,6 +34,10 @@
 !/                  (Z0S, CDS, EMN, FMN, WNM, AMX)      ( version 4.13 )
 !/    30-Apr-2014 : Memory reduction for group3.        ( version 5.00 )
 !/    10-Dec-2014 : Add checks for allocate status      ( version 5.04 )
+!/    01-May-2017 : Adds directional MSS parameters     ( version 6.02 )
+!/    30-Jul-2017 : Adds TWS parameter                  ( version 6.02 )
+!/    05-Jun-2018 : Adds PDLIB and MEMCHECK             ( version 6.04 )
+!/    21-Aug-2018 : Add WBT parameter                   ( version 6.06 )
 !
 !/
 !/    Copyright 2009-2013 National Weather Service (NWS),
@@ -109,8 +114,11 @@
 !      HMAXD     R.A.  Public   Std of HMAXE
 !      HCMAXE    R.A.  Public   Expected maximum wave height (from crest)
 !      HCMAXD    R.A.  Public   STD of HCMAXE
+!      WBT       R.A.  Public   Dominant wave breaking probability
+!                               (b_T in Babanin et al. (2001, JGR))
 !
 !      CHARN     R.A.  Public   Charnock parameter for air-sea friction.
+!      TWS       R.A.  Public   Wind sea period (used for flux parameterizations)
 !      CGE       R.A.  Public   Energy flux.
 !      PHIAW     R.A.  Public   Wind to wave energy flux.
 !      TAUWIX/Y  R.A.  Public   Wind to wave energy flux.
@@ -130,6 +138,7 @@
 !      PHICE     R.A.  Public   Waves to ice energy flux.
 !
 !      US3D      R.A.  Public   3D Stokes drift.
+!      USSP      R.A.  Public   Partitioned Surface Stokes drift
 !
 !      ABA       R.A.  Public   Near-bottom rms wave ex. amplitude.
 !      ABD       R.A.  Public   Corresponding direction.
@@ -141,6 +150,9 @@
 !
 !      MSSX/Y    R.A.  Public   Surface mean square slopes in X and Y direction.
 !      MSCX/Y    R.A.  Public   Phillips constant.
+!      MSSD      R.A.  Public   Direction of MSSX
+!      MSCD      R.A.  Public   Direction of MSCX
+!      QP        R.A.  Public   Goda peakedness parameter.
 !
 !      DTDYN     R.A.  Public   Mean dynamic time step (raw).
 !      FCUT      R.A.  Public   Cut-off frequency for tail.
@@ -157,7 +169,7 @@
 !
 !      DRAT      R.A.  Public   Density ration air/water. Was
 !                               placeholder only. Now scalar in W3SRCE,
-!      TAUWX/Y   R.A.  Public   Stresses particularly for PALM.
+!      TAUWX/Y   R.A.  Public   Stresses.
 !
 !    Derivatives in space ....
 !
@@ -177,6 +189,16 @@
 !
 !      PWST      R.A.  Public   Total wind sea fraction.
 !      PNR       R.A.  Public   Number of partitions found.
+!
+!      PTHP0     R.A.  Public   Peak wave direction of partition.
+!      PQP       R.A.  Public   Goda peakdedness parameter of partition.
+!      PPE       R.A.  Public   JONSWAP peak enhancement factor of partition.
+!      PGW       R.A.  Public   Gaussian frequency width of partition.
+!      PSW       R.A.  Public   Spectral width of partition.
+!      PTM1      R.A.  Public   Mean wave period (m-1,0) of partition.
+!      PT1       R.A.  Public   Mean wave period (m0,1) of partition.
+!      PT2       R.A.  Public   Mean wave period (m0,2) of partition.
+!      PEP       R.A.  Public   Peak spectral density of partition.
 !
 !     Empty dummy fields (NOEXTR)
 !
@@ -342,14 +364,13 @@
                                  THS(:),  THP0(:),  FP1(:), THP1(:), &
                                  HSIG(:), STMAXE(:), STMAXD(:),      &
                                  HMAXE(:), HCMAXE(:), HMAXD(:),      &
-                                 HCMAXD(:)
+                                 HCMAXD(:), QP(:), WBT(:)
         REAL, POINTER         :: XHS(:), XWLM(:), XT02(:), XT0M1(:),  &
                                  XT01 (:), XFP0(:), XTHM(:),          &
                                  XTHS(:), XTHP0(:), XFP1(:), XTHP1(:),&
                                  XHSIG(:), XSTMAXE(:), XSTMAXD(:),    &
                                  XHMAXE(:), XHCMAXE(:), XHMAXD(:),    &
-                                 XHCMAXD(:)
- 
+                                 XHCMAXD(:), XQP(:), XWBT(:)
 !
 ! Output fields group 3)
 !
@@ -360,21 +381,27 @@
 !
 ! Output fields group 4)
 !
-        REAL, POINTER         ::  PHS(:,:),  PTP(:,:),  PLP(:,:),     &
-                                  PDIR(:,:),  PSI(:,:),  PWS(:,:),    &
-                                  PWST(:),  PNR(:)
+        REAL, POINTER         :: PHS(:,:),  PTP(:,:),  PLP(:,:),      &
+                                 PDIR(:,:),  PSI(:,:),  PWS(:,:),     &
+                                 PWST(:),  PNR(:), PGW(:,:),          &
+                                 PTHP0(:,:), PQP(:,:), PPE(:,:),      &
+                                 PSW(:,:), PTM1(:,:), PT1(:,:),       &
+                                 PT2(:,:), PEP(:,:)
         REAL, POINTER         :: XPHS(:,:), XPTP(:,:), XPLP(:,:),     &
                                  XPDIR(:,:), XPSI(:,:), XPWS(:,:),    &
-                                 XPWST(:), XPNR(:)
+                                 XPWST(:), XPNR(:), XPGW(:,:),        &
+                                 XPTHP0(:,:), XPQP(:,:), XPPE(:,:),   &
+                                 XPSW(:,:), XPTM1(:,:), XPT1(:,:),    &
+                                 XPT2(:,:), XPEP(:,:)
 !
 ! Output fields group 5)
 !
         REAL, POINTER         ::  CHARN(:),  CGE(:),  PHIAW(:),       &
                                   TAUWIX(:),  TAUWIY(:),  TAUWNX(:),  &
-                                  TAUWNY(:),  WHITECAP(:,:)
+                                  TAUWNY(:),  WHITECAP(:,:), TWS(:)
         REAL, POINTER         :: XCHARN(:), XCGE(:), XPHIAW(:),       &
                                  XTAUWIX(:), XTAUWIY(:), XTAUWNX(:),  &
-                                 XTAUWNY(:), XWHITECAP(:,:)
+                                 XTAUWNY(:), XWHITECAP(:,:), XTWS(:)
 !
 ! Output fields group 6)
 !
@@ -389,7 +416,7 @@
                                   LAMULT(:), LANGMT(:),               &
                                   LAPROJ(:), LASL(:), LASLPJ(:),      &
                                   ALPHAL(:), ALPHALS(:)
-        REAL, POINTER         ::  P2SMS(:,:),  US3D(:,:)
+        REAL, POINTER         ::  P2SMS(:,:),  US3D(:,:), USSP(:,:)
         REAL, POINTER         :: XSXX(:), XSYY(:), XSXY(:), XTAUOX(:),&
                                  XTAUOY(:), XBHD(:), XPHIOC(:),       &
                                  XTUSX(:), XTUSY(:), XUSSX(:),        &
@@ -399,7 +426,7 @@
                                  XLAMULT(:), XLANGMT(:),              &
                                  XLAPROJ(:), XLASL(:), XLASLPJ(:),    &
                                  XALPHAL(:), XALPHALS(:)
-        REAL, POINTER         :: XP2SMS(:,:), XUS3D(:,:)
+        REAL, POINTER         :: XP2SMS(:,:), XUS3D(:,:), XUSSP(:,:)
 !
 ! Output fields group 7)
 !
@@ -412,9 +439,10 @@
 !
 ! Output fields group 8)
 !
-        REAL, POINTER         ::  MSSX(:), MSSY(:), MSCX(:), MSCY(:)
-        REAL, POINTER         :: XMSSX(:), XMSSY(:), XMSCX(:),        &
-                                 XMSCY(:)
+        REAL, POINTER         ::  MSSX(:),  MSSY(:),  MSSD(:),        &
+                                  MSCX(:),  MSCY(:),  MSCD(:)
+        REAL, POINTER         ::  XMSSX(:), XMSSY(:), XMSSD(:),       &
+                                  XMSCX(:), XMSCY(:), XMSCD(:)
 !
 ! Output fields group 9)
 !
@@ -478,6 +506,7 @@
 !/MPI                                 WW3_FIELD_VEC, WW3_SPEC_VEC,         &
 !/MPI                                 NRQSG1 = 0, NRQSG2, IBFLOC, ISPLOC,  &
 !/MPI                                 NSPLOC
+!/PDLIB      INTEGER               :: NBFIELD, PDLIB_MPI_TYPE
 !/MPI        INTEGER               :: BSTAT(MPIBUF), BISPL(MPIBUF)
 !/MPI        INTEGER, POINTER      :: IRQSG1(:,:), IRQSG2(:,:)
 !/MPI        REAL, POINTER         :: GSTORE(:,:), SSTORE(:,:)
@@ -509,18 +538,21 @@
                                  T01 (:), FP0(:), THM(:), THS(:),     &
                                  THP0(:), FP1(:), THP1(:), HSIG(:),   &
                                  STMAXE(:), STMAXD(:), HMAXE(:),      &
-                                 HCMAXE(:), HMAXD(:), HCMAXD(:)
+                                 HCMAXE(:), HMAXD(:), HCMAXD(:), QP(:),&
+                                 WBT(:)
 !
       REAL, POINTER           :: EF(:,:), TH1M(:,:), STH1M(:,:),      &
                                  TH2M(:,:), STH2M(:,:)
 !
       REAL, POINTER           :: PHS(:,:), PTP(:,:), PLP(:,:),        &
                                  PDIR(:,:), PSI(:,:), PWS(:,:),       &
-                                 PWST(:), PNR(:)
+                                 PWST(:), PNR(:), PGW(:,:), PSW(:,:), &
+                                 PTHP0(:,:), PQP(:,:), PPE(:,:),      &
+                                 PTM1(:,:), PT1(:,:), PT2(:,:),PEP(:,:)
 !
       REAL, POINTER           :: CHARN(:), CGE(:), PHIAW(:),          &
                                  TAUWIX(:), TAUWIY(:), TAUWNX(:),     &
-                                 TAUWNY(:), WHITECAP(:,:)
+                                 TAUWNY(:), WHITECAP(:,:), TWS(:)
 !
       ! QL, 150525, USSXH, USSYH, LAMULT, LANGMT,
       !             LAPROJ, LASL, LASLPJ, ALPHAL, ALPHALS
@@ -533,12 +565,13 @@
                                  LAMULT(:), LANGMT(:),                &
                                  LAPROJ(:), LASL(:), LASLPJ(:),       &
                                  ALPHAL(:), ALPHALS(:)
-      REAL, POINTER           :: P2SMS(:,:), US3D(:,:)
+      REAL, POINTER           :: P2SMS(:,:), US3D(:,:), USSP(:,:)
 !
       REAL, POINTER           :: ABA(:), ABD(:), UBA(:), UBD(:),      &
                                  BEDFORMS(:,:), PHIBBL(:), TAUBBL(:,:)
 !
-      REAL, POINTER           :: MSSX(:), MSSY(:), MSCX(:), MSCY(:)
+      REAL, POINTER           :: MSSX(:), MSSY(:), MSSD(:),           &
+                                 MSCX(:), MSCY(:), MSCD(:) 
 !
       REAL, POINTER           :: DTDYN(:), FCUT(:), CFLXYMAX(:),      &
                                  CFLTHMAX(:), CFLKMAX(:)
@@ -602,6 +635,9 @@
       INTEGER, POINTER        :: ITIME, IPASS, IDLAST, NSEALM
       REAL, POINTER           :: ALPHA(:,:)
       LOGICAL, POINTER        :: AINIT, AINIT2, FL_ALL, FLCOLD, FLIWND
+
+!/MEMCHECK      type(MallInfo_t)        :: mallinfos
+
 !/
       CONTAINS
 !/ ------------------------------------------------------------------- /
@@ -660,6 +696,7 @@
 !/ ------------------------------------------------------------------- /
       USE W3GDATMD, ONLY: NGRIDS
       USE W3SERVMD, ONLY: EXTCDE
+      USE W3ODATMD, ONLY: IAPROC
 !/S      USE W3SERVMD, ONLY: STRACE
 !
       IMPLICIT NONE
@@ -800,8 +837,10 @@
 ! 10. Source code :
 !
 !/ ------------------------------------------------------------------- /
+      USE CONSTANTS, ONLY : LPDLIB
       USE W3GDATMD, ONLY: NGRIDS, IGRID, W3SETG, NK, NX, NY, NSEA,    &
-                          NSEAL, NSPEC, NTH, E3DF, P2MSF, US3DF, GTYPE, UNGTYPE
+                          NSEAL, NSPEC, NTH, E3DF, P2MSF, US3DF,      &
+                          USSPF, GTYPE, UNGTYPE
       USE W3ODATMD, ONLY: IAPROC, NAPROC, NTPROC, NAPFLD,             &
                           NOSWLL, NOEXTR, UNDEF, FLOGRD, FLOGR2
       USE W3IDATMD, ONLY: FLCUR, FLWIND
@@ -819,7 +858,7 @@
 !/ ------------------------------------------------------------------- /
 !/ Local parameters
 !/
-      INTEGER                 :: JGRID, NXXX
+      INTEGER                 :: JGRID, NXXX, NSEAL_tmp
 !/S      INTEGER, SAVE           :: IENT = 0
 !/
 !/S      CALL STRACE (IENT, 'W3DIMA')
@@ -827,6 +866,10 @@
 ! -------------------------------------------------------------------- /
 ! 1.  Test input and module status
 !
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 0'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
+
       IF ( PRESENT(D_ONLY) ) THEN
           FL_ALL = .NOT. D_ONLY
         ELSE
@@ -852,15 +895,19 @@
 !
       JGRID  = IGRID
       IF ( JGRID .NE. IMOD ) CALL W3SETG ( IMOD, NDSE, NDST )
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 1'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! -------------------------------------------------------------------- /
 ! 2.  Allocate arrays
 !     Call W3SETA to assure of pointes FLCUR an FLWND
 !
       CALL W3SETA ( IMOD, NDSE, NDST )
-!
-!/SHRD      NSEALM = NSEA
-!/DIST      NSEALM = 1 + (NSEA-1)/NAPROC
+
+! 
+!AR: Check this below more ... 
       NXXX   = NSEALM * NAPROC
 !
 !     Output and input parameteres by output type
@@ -881,6 +928,10 @@
                  WADATS(IMOD)%U10(NSEA)  , WADATS(IMOD)%U10D(NSEA) , &
                  WADATS(IMOD)%AS(0:NSEA) , STAT=ISTAT )
       CHECK_ALLOC_STATUS ( ISTAT )
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 2'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 !     Water level WLV stored in W3WDATMD
 !     Ice concentration ICE stored in W3WDATMD
@@ -893,6 +944,9 @@
 !    are allocated in W3MPIO only as needed to keep the memory
 !    footprint down.
 !
+      IF (NSEALM .eq. 0) THEN
+        NSEALM=NSEA
+      END IF
       ALLOCATE ( WADATS(IMOD)%HS   (NSEALM), WADATS(IMOD)%WLM (NSEALM), &
                  WADATS(IMOD)%T02  (NSEALM), WADATS(IMOD)%T0M1(NSEALM), &
                  WADATS(IMOD)%T01  (NSEALM), WADATS(IMOD)%FP0 (NSEALM), &
@@ -903,7 +957,9 @@
                  WADATS(IMOD)%STMAXD(NSEALM),                           &
                  WADATS(IMOD)%HMAXE(NSEALM), WADATS(IMOD)%HMAXD(NSEALM),&
                  WADATS(IMOD)%HCMAXE(NSEALM),                           &
-                 WADATS(IMOD)%HCMAXD(NSEALM), STAT=ISTAT )
+                 WADATS(IMOD)%HCMAXD(NSEALM), WADATS(IMOD)%QP(NSEALM),  &
+                 WADATS(IMOD)%WBT(NSEALM),                              &
+                 STAT=ISTAT )
       CHECK_ALLOC_STATUS ( ISTAT )
 !
       WADATS(IMOD)%HS     = UNDEF
@@ -924,17 +980,27 @@
       WADATS(IMOD)%HMAXD = UNDEF
       WADATS(IMOD)%HCMAXE= UNDEF
       WADATS(IMOD)%HCMAXD= UNDEF
+      WADATS(IMOD)%QP     = UNDEF
+      WADATS(IMOD)%WBT    = UNDEF
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 3'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! 3) Frequency-dependent standard parameters
 !
 ! For the 3D arrays: the allocation is performed only if these arrays are allowed
 !                    by specific variables defined through the mod_def file 
 !                    and read by w3iogr, which is called before W3DIMA. 
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'Before the EF allocation'
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'E3DF=', E3DF(1,1)
       IF (  E3DF(1,1).GT.0 ) THEN
+!/DEBUGINIT        WRITE(740+IAPROC,*) 'Now the allocation'
           ALLOCATE(WADATS(IMOD)%EF(NSEALM,E3DF(2,1):E3DF(3,1)),    &
                    STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
+!/DEBUGINIT      FLUSH(740+IAPROC)
       IF (  E3DF(1,2).GT.0 ) THEN
           ALLOCATE(WADATS(IMOD)%TH1M(NSEALM,E3DF(2,2):E3DF(3,2)),  &
                    STAT=ISTAT )
@@ -962,6 +1028,10 @@
       IF (  E3DF(1,4).GT.0 ) WADATS(IMOD)%TH2M    = UNDEF
       IF (  E3DF(1,5).GT.0 ) WADATS(IMOD)%STH2M   = UNDEF
 
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 4'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
+
 !
 ! 4) Spectral Partitions parameters
 !
@@ -973,6 +1043,15 @@
                  WADATS(IMOD)%PWS(NSEALM,0:NOSWLL),                   &
                  WADATS(IMOD)%PWST(NSEALM),                           &
                  WADATS(IMOD)%PNR(NSEALM),                            &
+                 WADATS(IMOD)%PTHP0(NSEALM,0:NOSWLL),                 &
+                 WADATS(IMOD)%PQP(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PPE(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PGW(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PSW(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PTM1(NSEALM,0:NOSWLL),                  &
+                 WADATS(IMOD)%PT1(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PT2(NSEALM,0:NOSWLL),                   &
+                 WADATS(IMOD)%PEP(NSEALM,0:NOSWLL),                   &
                  STAT=ISTAT )
       CHECK_ALLOC_STATUS ( ISTAT )
 !
@@ -984,12 +1063,22 @@
       WADATS(IMOD)%PWS    = UNDEF
       WADATS(IMOD)%PWST   = UNDEF
       WADATS(IMOD)%PNR    = UNDEF
+      WADATS(IMOD)%PTHP0  = UNDEF
+      WADATS(IMOD)%PQP    = UNDEF
+      WADATS(IMOD)%PPE    = UNDEF
+      WADATS(IMOD)%PGW    = UNDEF
+      WADATS(IMOD)%PSW    = UNDEF
+      WADATS(IMOD)%PTM1   = UNDEF
+      WADATS(IMOD)%PT1    = UNDEF
+      WADATS(IMOD)%PT2    = UNDEF
+      WADATS(IMOD)%PEP    = UNDEF
 !
 ! 5) Atmosphere-waves layer
 !
 !    Friction velocity UST and USTDIR in W3WDATMD
 !
       ALLOCATE ( WADATS(IMOD)%CHARN   (NSEALM),                       &
+                 WADATS(IMOD)%TWS     (NSEALM),                       &
                  WADATS(IMOD)%CGE     (NSEALM),                       &
                  WADATS(IMOD)%PHIAW   (NSEALM),                       &
                  WADATS(IMOD)%TAUWIX  (NSEALM),                       &
@@ -1001,6 +1090,7 @@
       CHECK_ALLOC_STATUS ( ISTAT )
 !
       WADATS(IMOD)%CHARN    = UNDEF
+      WADATS(IMOD)%TWS      = UNDEF
       WADATS(IMOD)%CGE      = UNDEF
       WADATS(IMOD)%PHIAW    = UNDEF
       WADATS(IMOD)%TAUWIX   = UNDEF
@@ -1008,6 +1098,11 @@
       WADATS(IMOD)%TAUWNX   = UNDEF
       WADATS(IMOD)%TAUWNY   = UNDEF
       WADATS(IMOD)%WHITECAP = UNDEF
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 5'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
+
 !
 ! 6) Wave-ocean layer
 !
@@ -1053,6 +1148,11 @@
                    STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
+      IF ( USSPF(1).GT.0 ) THEN
+          ALLOCATE(WADATS(IMOD)%USSP(NSEALM,NK*2), &
+                   STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
 !
       ! QL, 150525, USSXH, USSYH, LAMULT, LANGMT, 
       !             LAPROJ, LASL, LASLPJ, ALPHAL, ALPHALS
@@ -1082,6 +1182,11 @@
       WADATS(IMOD)%ALPHALS= UNDEF
       IF (  P2MSF(1).GT.0 ) WADATS(IMOD)%P2SMS  = UNDEF
       IF (  US3DF(1).GT.0 ) WADATS(IMOD)%US3D   = UNDEF
+      IF (  USSPF(1).GT.0 ) WADATS(IMOD)%USSP   = UNDEF
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 6'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! 7) Wave-bottom layer
 !
@@ -1099,18 +1204,28 @@
       WADATS(IMOD)%BEDFORMS = UNDEF
       WADATS(IMOD)%PHIBBL = UNDEF
       WADATS(IMOD)%TAUBBL = UNDEF
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 7'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! 8) Spectrum parameters
 !
       ALLOCATE ( WADATS(IMOD)%MSSX(NSEALM), WADATS(IMOD)%MSSY(NSEALM), &
-                WADATS(IMOD)%MSCX(NSEALM), WADATS(IMOD)%MSCY(NSEALM),  &
+                 WADATS(IMOD)%MSCX(NSEALM), WADATS(IMOD)%MSCY(NSEALM), &
+                 WADATS(IMOD)%MSSD(NSEALM), WADATS(IMOD)%MSCD(NSEALM), &
                 STAT=ISTAT )
       CHECK_ALLOC_STATUS ( ISTAT )
 !
       WADATS(IMOD)%MSSX   = UNDEF
       WADATS(IMOD)%MSSY   = UNDEF
+      WADATS(IMOD)%MSSD   = UNDEF
       WADATS(IMOD)%MSCX   = UNDEF
       WADATS(IMOD)%MSCY   = UNDEF
+      WADATS(IMOD)%MSCD   = UNDEF
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 8'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! 9) Numerical diagnostics
 !
@@ -1127,6 +1242,10 @@
       WADATS(IMOD)%CFLXYMAX = UNDEF
       WADATS(IMOD)%CFLTHMAX = UNDEF
       WADATS(IMOD)%CFLKMAX  = UNDEF
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 9'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
 ! 10) User defined
 !
@@ -1143,6 +1262,9 @@
 !/IC3     ALLOCATE (WADATS(IMOD)%IC3WN_I(0:NK+1,0:300), STAT=ISTAT )
 !/IC3     CHECK_ALLOC_STATUS ( ISTAT )
 
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 10'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
       IF ( FL_ALL ) THEN
 !
@@ -1177,15 +1299,34 @@
                      WADATS(IMOD)%ATRNY(NY*NX,-1:1) , STAT=ISTAT      )
           CHECK_ALLOC_STATUS ( ISTAT )
 !
-          ALLOCATE ( WADATS(IMOD)%DDDX(NY,NX)  ,                      &
-                     WADATS(IMOD)%DDDY(NY,NX)  ,                      &
-                     WADATS(IMOD)%DCDX(0:NK+1,NY,NX)  ,               &
-                     WADATS(IMOD)%DCDY(0:NK+1,NY,NX)  ,               &
-                     WADATS(IMOD)%DCXDX(NY,NX) ,                      &
-                     WADATS(IMOD)%DCYDX(NY,NX) ,                      &
-                     WADATS(IMOD)%DCXDY(NY,NX) ,                      &
-                     WADATS(IMOD)%DCYDY(NY,NX) , STAT=ISTAT           )
+          IF (.NOT. LPDLIB) THEN
+            ALLOCATE ( WADATS(IMOD)%DDDX(NY,NX)  ,                      &
+                       WADATS(IMOD)%DDDY(NY,NX)  ,                      &
+                       WADATS(IMOD)%DCDX(0:NK+1,NY,NX)  ,               &
+                       WADATS(IMOD)%DCDY(0:NK+1,NY,NX)  ,               &
+                       WADATS(IMOD)%DCXDX(NY,NX) ,                      &
+                       WADATS(IMOD)%DCYDX(NY,NX) ,                      &
+                       WADATS(IMOD)%DCXDY(NY,NX) ,                      &
+                       WADATS(IMOD)%DCYDY(NY,NX) , STAT=ISTAT           )
+          ELSE
+            ALLOCATE ( WADATS(IMOD)%DDDX(NY,NSEAL)  ,                      &
+                       WADATS(IMOD)%DDDY(NY,NSEAL)  ,                      &
+                       WADATS(IMOD)%DCDX(0:NK+1,NY,NSEAL)  ,               &
+                       WADATS(IMOD)%DCDY(0:NK+1,NY,NSEAL)  ,               &
+                       WADATS(IMOD)%DCXDX(NY,NSEAL) ,                      &
+                       WADATS(IMOD)%DCYDX(NY,NSEAL) ,                      &
+                       WADATS(IMOD)%DCXDY(NY,NSEAL) ,                      &
+                       WADATS(IMOD)%DCYDY(NY,NSEAL) , STAT=ISTAT           )
+          ENDIF
           CHECK_ALLOC_STATUS ( ISTAT )
+          WADATS(IMOD)%DDDX = 0.
+          WADATS(IMOD)%DDDY = 0.
+          WADATS(IMOD)%DCDX = 0.
+          WADATS(IMOD)%DCDY = 0.
+          WADATS(IMOD)%DCXDX = 0.
+          WADATS(IMOD)%DCYDX = 0.
+          WADATS(IMOD)%DCXDY = 0.
+          WADATS(IMOD)%DCYDY = 0.
 !
 !/SMC          ALLOCATE ( WADATS(IMOD)%DHDX(NSEA) ,                        &
 !/SMC                     WADATS(IMOD)%DHDY(NSEA) ,                        &
@@ -1241,6 +1382,11 @@
         END IF
 !
       WADATS(IMOD)%AINIT  = .TRUE.
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 11'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
+
 !
 !/T      WRITE (NDST,9001)
 !
@@ -1248,6 +1394,11 @@
 ! 3.  Point to allocated arrays
 !
       CALL W3SETA ( IMOD, NDSE, NDST )
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA 12'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
+
 !
 !/T      WRITE (NDST,9002)
 !
@@ -1260,6 +1411,10 @@
 ! 5.  Restore previous grid setting if necessary
 !
       IF ( JGRID .NE. IMOD ) CALL W3SETG ( JGRID, NDSE, NDST )
+ 
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3DIMA END'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
       RETURN
 !
@@ -1302,7 +1457,8 @@
 !
 !/ ------------------------------------------------------------------- /
       USE W3GDATMD, ONLY: NGRIDS, IGRID, W3SETG, NK, NX, NY, NSEA,    &
-                          NSEAL, NSPEC, NTH, E3DF, P2MSF, US3DF, GTYPE, UNGTYPE
+                          NSEAL, NSPEC, NTH, E3DF, P2MSF, US3DF,      &
+                          USSPF, GTYPE, UNGTYPE
       USE W3ODATMD, ONLY: IAPROC, NAPROC, NTPROC, NAPFLD,             &
                           NOSWLL, NOEXTR, UNDEF, FLOGRD, FLOGR2,      &
                           NOGRP, NGRPP
@@ -1352,8 +1508,6 @@
 ! -------------------------------------------------------------------- /
 ! 2.  Allocate arrays
 !
-!/SHRD      NSEALM = NSEA
-!/DIST      NSEALM = 1 + (NSEA-1)/NAPROC
       NXXX   = NSEALM * NAPROC
 !
       IF ( OUTFLAGS( 2, 1) ) THEN
@@ -1473,6 +1627,14 @@
           ALLOCATE ( WADATS(IMOD)%XHCMAXD(1) )
         END IF
 !
+      IF ( OUTFLAGS( 2, 17) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XWBT (NXXX), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XWBT (1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
 !     IF ( OUTFLAGS( 2,xx) ) THEN
 !         ALLOCATE ( WADATS(IMOD)%XFP1(NXXX), STAT=ISTAT )
 !         CHECK_ALLOC_STATUS ( ISTAT )
@@ -1505,6 +1667,7 @@
       WADATS(IMOD)%XHMAXD = UNDEF
       WADATS(IMOD)%XHCMAXE= UNDEF
       WADATS(IMOD)%XHCMAXD= UNDEF
+      WADATS(IMOD)%XWBT   = UNDEF
 !     WADATS(IMOD)%XFP1   = UNDEF
 !     WADATS(IMOD)%XTHP1  = UNDEF
 !
@@ -1603,6 +1766,78 @@
         END IF
 !
       IF ( OUTFLAGS( 4, 7) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XPTHP0(NXXX,0:NOSWLL), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XPTHP0(1,1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
+      IF ( OUTFLAGS( 4, 8) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XPQP(NXXX,0:NOSWLL), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XPQP(1,1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
+      IF ( OUTFLAGS( 4, 9) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XPPE(NXXX,0:NOSWLL), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XPPE(1,1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
+      IF ( OUTFLAGS( 4,10) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPGW(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPGW(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,11) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPSW(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPSW(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,12) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPTM1(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPTM1(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,13) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPT1(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPT1(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,14) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPT2(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPT2(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,15) ) THEN
+         ALLOCATE ( WADATS(IMOD)%XPEP(NXXX,0:NOSWLL), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       ELSE
+         ALLOCATE ( WADATS(IMOD)%XPEP(1,1), STAT=ISTAT )
+         CHECK_ALLOC_STATUS ( ISTAT )
+       END IF
+!
+      IF ( OUTFLAGS( 4,16) ) THEN
           ALLOCATE ( WADATS(IMOD)%XPWST(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
@@ -1610,7 +1845,7 @@
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
 !
-      IF ( OUTFLAGS( 4, 8) ) THEN
+      IF ( OUTFLAGS( 4,17) ) THEN
           ALLOCATE ( WADATS(IMOD)%XPNR(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
@@ -1626,6 +1861,15 @@
       WADATS(IMOD)%XPWS   = UNDEF
       WADATS(IMOD)%XPWST  = UNDEF
       WADATS(IMOD)%XPNR   = UNDEF
+      WADATS(IMOD)%XPTHP0 = UNDEF
+      WADATS(IMOD)%XPQP   = UNDEF
+      WADATS(IMOD)%XPPE   = UNDEF
+      WADATS(IMOD)%XPGW   = UNDEF
+      WADATS(IMOD)%XPSW   = UNDEF
+      WADATS(IMOD)%XPTM1  = UNDEF
+      WADATS(IMOD)%XPT1   = UNDEF
+      WADATS(IMOD)%XPT2   = UNDEF
+      WADATS(IMOD)%XPEP   = UNDEF
 !
       IF ( OUTFLAGS( 5, 2) ) THEN
           ALLOCATE ( WADATS(IMOD)%XCHARN(NXXX), STAT=ISTAT )
@@ -1684,7 +1928,16 @@
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
 !
+      IF ( OUTFLAGS( 5, 11) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XTWS(NXXX), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XTWS(1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
       WADATS(IMOD)%XCHARN    = UNDEF
+      WADATS(IMOD)%XTWS      = UNDEF
       WADATS(IMOD)%XCGE      = UNDEF
       WADATS(IMOD)%XPHIAW    = UNDEF
       WADATS(IMOD)%XTAUWIX   = UNDEF
@@ -1804,9 +2057,17 @@
           ALLOCATE ( WADATS(IMOD)%XPHICE(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
+!
+      IF ( OUTFLAGS( 6, 12) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XUSSP(NXXX,2*NK), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XUSSP(1,1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
       ! QL, 150525, USSXH, USSYH, LAMULT, LANGMT, 
       !             LAPROJ, LASL, LASLPJ, ALPHAL, ALPHALS
-      IF ( OUTFLAGS( 6,12) ) THEN
+      IF ( OUTFLAGS( 6,13) ) THEN
           ALLOCATE ( WADATS(IMOD)%XUSSXH(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
           ALLOCATE ( WADATS(IMOD)%XUSSYH(NXXX), STAT=ISTAT )
@@ -1817,55 +2078,56 @@
           ALLOCATE ( WADATS(IMOD)%XUSSYH(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,13) ) THEN
+      IF ( OUTFLAGS( 6,14) ) THEN
           ALLOCATE ( WADATS(IMOD)%XLAMULT(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XLAMULT(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,14) ) THEN
+      IF ( OUTFLAGS( 6,15) ) THEN
           ALLOCATE ( WADATS(IMOD)%XLANGMT(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XLANGMT(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,15) ) THEN
+      IF ( OUTFLAGS( 6,16) ) THEN
           ALLOCATE ( WADATS(IMOD)%XLAPROJ(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XLAPROJ(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,16) ) THEN
+      IF ( OUTFLAGS( 6,17) ) THEN
           ALLOCATE ( WADATS(IMOD)%XLASL(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XLASL(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,17) ) THEN
+      IF ( OUTFLAGS( 6,18) ) THEN
           ALLOCATE ( WADATS(IMOD)%XLASLPJ(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XLASLPJ(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,18) ) THEN
+      IF ( OUTFLAGS( 6,19) ) THEN
           ALLOCATE ( WADATS(IMOD)%XALPHAL(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XALPHAL(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
-      IF ( OUTFLAGS( 6,19) ) THEN
+      IF ( OUTFLAGS( 6,20) ) THEN
           ALLOCATE ( WADATS(IMOD)%XALPHALS(NXXX), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         ELSE
           ALLOCATE ( WADATS(IMOD)%XALPHALS(1), STAT=ISTAT )
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
+
 !
       ! QL, 150525, USSXH, USSYH, LAMULT, LANGMT, 
       !             LAPROJ, LASL, LASLPJ, ALPHAL, ALPHALS
@@ -1886,6 +2148,7 @@
       WADATS(IMOD)%XP2SMS  = UNDEF
       WADATS(IMOD)%XPHICE  = UNDEF
       WADATS(IMOD)%XTAUICE = UNDEF
+      WADATS(IMOD)%XUSSP   = UNDEF
       WADATS(IMOD)%XUSSXH  = UNDEF
       WADATS(IMOD)%XUSSYH  = UNDEF
       WADATS(IMOD)%XLAMULT = UNDEF
@@ -1976,10 +2239,35 @@
           CHECK_ALLOC_STATUS ( ISTAT )
         END IF
 !
+      IF ( OUTFLAGS( 8, 3) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XMSSD(NXXX), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XMSSD(1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
+      IF ( OUTFLAGS( 8, 4) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XMSCD(NXXX), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XMSCD(1), STAT=ISTAT )
+          CHECK_ALLOC_STATUS ( ISTAT )
+        END IF
+!
+       IF ( OUTFLAGS( 8,  5) ) THEN
+          ALLOCATE ( WADATS(IMOD)%XQP(NXXX) )
+        ELSE
+          ALLOCATE ( WADATS(IMOD)%XQP(1) )
+        END IF
+!
       WADATS(IMOD)%XMSSX   = UNDEF
       WADATS(IMOD)%XMSSY   = UNDEF
+      WADATS(IMOD)%XMSSD   = UNDEF
       WADATS(IMOD)%XMSCX   = UNDEF
       WADATS(IMOD)%XMSCY   = UNDEF
+      WADATS(IMOD)%XMSCD   = UNDEF
+      WADATS(IMOD)%XQP(1)  = UNDEF
 !
       IF ( OUTFLAGS( 9, 1) ) THEN
           ALLOCATE ( WADATS(IMOD)%XDTDYN(NXXX), STAT=ISTAT )
@@ -2048,6 +2336,10 @@
 ! 5.  Restore previous grid setting if necessary
 !
       IF ( JGRID .NE. IMOD ) CALL W3SETG ( JGRID, NDSE, NDST )
+
+!/MEMCHECK       WRITE(740+IAPROC,*) 'memcheck_____:', 'W3XDMA'
+!/MEMCHECK       call getMallocInfo(mallinfos)
+!/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
       RETURN
 !
@@ -2318,7 +2610,7 @@
 !/ ------------------------------------------------------------------- /
 !
       USE W3IDATMD, ONLY: INPUTS
-      USE W3GDATMD, ONLY: E3DF, P2MSF, US3DF, GTYPE, UNGTYPE
+      USE W3GDATMD, ONLY: E3DF, P2MSF, US3DF, USSPF, GTYPE, UNGTYPE
 !
       USE W3SERVMD, ONLY: EXTCDE
 !/S      USE W3SERVMD, ONLY: STRACE
@@ -2464,6 +2756,8 @@
           HMAXD  => WADATS(IMOD)%HMAXD
           HCMAXE => WADATS(IMOD)%HCMAXE
           HCMAXD => WADATS(IMOD)%HCMAXD
+          QP     => WADATS(IMOD)%QP
+          WBT    => WADATS(IMOD)%WBT
 !
           EF     => WADATS(IMOD)%EF
           TH1M   => WADATS(IMOD)%TH1M
@@ -2479,8 +2773,18 @@
           PWS    => WADATS(IMOD)%PWS
           PWST   => WADATS(IMOD)%PWST
           PNR    => WADATS(IMOD)%PNR
+          PTHP0  => WADATS(IMOD)%PTHP0
+          PQP    => WADATS(IMOD)%PQP
+          PPE    => WADATS(IMOD)%PPE
+          PGW    => WADATS(IMOD)%PGW
+          PSW    => WADATS(IMOD)%PSW
+          PTM1   => WADATS(IMOD)%PTM1
+          PT1    => WADATS(IMOD)%PT1
+          PT2    => WADATS(IMOD)%PT2
+          PEP    => WADATS(IMOD)%PEP
 !
           CHARN    => WADATS(IMOD)%CHARN
+          TWS      => WADATS(IMOD)%TWS
           CGE      => WADATS(IMOD)%CGE
           PHIAW    => WADATS(IMOD)%PHIAW
           TAUWIX   => WADATS(IMOD)%TAUWIX
@@ -2507,7 +2811,8 @@
           P2SMS  => WADATS(IMOD)%P2SMS
           US3D   => WADATS(IMOD)%US3D
           PHICE  => WADATS(IMOD)%PHICE
-          TAUICE  => WADATS(IMOD)%TAUICE
+          TAUICE => WADATS(IMOD)%TAUICE
+          USSP   => WADATS(IMOD)%USSP
           USSXH  => WADATS(IMOD)%USSXH
           USSYH  => WADATS(IMOD)%USSYH
           LAMULT => WADATS(IMOD)%LAMULT
@@ -2528,8 +2833,10 @@
 !
           MSSX   => WADATS(IMOD)%MSSX
           MSSY   => WADATS(IMOD)%MSSY
+          MSSD   => WADATS(IMOD)%MSSD
           MSCX   => WADATS(IMOD)%MSCX
           MSCY   => WADATS(IMOD)%MSCY
+          MSCD   => WADATS(IMOD)%MSCD
 !
           DTDYN    => WADATS(IMOD)%DTDYN
           FCUT     => WADATS(IMOD)%FCUT
@@ -2699,7 +3006,7 @@
 !/ ------------------------------------------------------------------- /
 !
       USE W3IDATMD, ONLY: INPUTS
-      USE W3GDATMD, ONLY: E3DF, P2MSF, US3DF, GTYPE, UNGTYPE
+      USE W3GDATMD, ONLY: E3DF, P2MSF, US3DF, USSPF, GTYPE, UNGTYPE
 !
       USE W3SERVMD, ONLY: EXTCDE
 !/S      USE W3SERVMD, ONLY: STRACE
@@ -2759,6 +3066,8 @@
           HMAXD  => WADATS(IMOD)%XHMAXD
           HCMAXE => WADATS(IMOD)%XHCMAXE
           HCMAXD => WADATS(IMOD)%XHCMAXD
+          QP     => WADATS(IMOD)%XQP
+          WBT    => WADATS(IMOD)%XWBT
 !         FP1    => WADATS(IMOD)%XFP1
 !         THP1   => WADATS(IMOD)%XTHP1
 !
@@ -2776,8 +3085,18 @@
           PWS    => WADATS(IMOD)%XPWS
           PWST   => WADATS(IMOD)%XPWST
           PNR    => WADATS(IMOD)%XPNR
+          PTHP0  => WADATS(IMOD)%XPTHP0
+          PQP    => WADATS(IMOD)%XPQP
+          PPE    => WADATS(IMOD)%XPPE
+          PGW    => WADATS(IMOD)%XPGW
+          PSW    => WADATS(IMOD)%XPSW
+          PTM1   => WADATS(IMOD)%XPTM1
+          PT1    => WADATS(IMOD)%XPT1
+          PT2    => WADATS(IMOD)%XPT2
+          PEP    => WADATS(IMOD)%XPEP
 !
           CHARN    => WADATS(IMOD)%XCHARN
+          TWS      => WADATS(IMOD)%XTWS
           CGE      => WADATS(IMOD)%XCGE
           PHIAW    => WADATS(IMOD)%XPHIAW
           TAUWIX   => WADATS(IMOD)%XTAUWIX
@@ -2814,7 +3133,7 @@
           LASLPJ => WADATS(IMOD)%XLASLPJ
           ALPHAL => WADATS(IMOD)%ALPHAL
           ALPHALS=> WADATS(IMOD)%ALPHALS
-
+          USSP   => WADATS(IMOD)%XUSSP
           ABA    => WADATS(IMOD)%XABA
           ABD    => WADATS(IMOD)%XABD
           UBA    => WADATS(IMOD)%XUBA
@@ -2825,8 +3144,10 @@
 !
           MSSX   => WADATS(IMOD)%XMSSX
           MSSY   => WADATS(IMOD)%XMSSY
+          MSSD   => WADATS(IMOD)%XMSSD
           MSCX   => WADATS(IMOD)%XMSCX
           MSCY   => WADATS(IMOD)%XMSCY
+          MSCD   => WADATS(IMOD)%XMSCD
 !
           DTDYN    => WADATS(IMOD)%XDTDYN
           FCUT     => WADATS(IMOD)%XFCUT
