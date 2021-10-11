@@ -47,7 +47,7 @@ module mod_esmf_esm
 !     Imported variable declarations 
 !-----------------------------------------------------------------------
 !
-  type(ESMF_GridComp)  :: driver
+  type(ESMF_GridComp) :: driver
   integer, intent(out) :: rc
 !
   rc = ESMF_SUCCESS
@@ -134,6 +134,7 @@ module mod_esmf_esm
                          rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                          line=__LINE__, file=FILENAME)) return
+
 !
 !-----------------------------------------------------------------------
 !     SetServices for connector components 
@@ -211,6 +212,7 @@ module mod_esmf_esm
 !
   type(ESMF_GridComp) :: driver
   integer, intent(out) :: rc
+  type(NUOPC_FreeFormat) :: runSeqFF
 !     
 !-----------------------------------------------------------------------
 !     Local variable declarations 
@@ -218,7 +220,6 @@ module mod_esmf_esm
 !
   integer :: i, j, maxdiv, runid, localPet, petCount
   character(ESMF_MAXSTR) :: cname
-  type(NUOPC_FreeFormat) :: runSeqFF
 !
   type(ESMF_VM) :: vm
   type(ESMF_Time) :: startTime

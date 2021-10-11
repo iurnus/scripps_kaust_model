@@ -256,7 +256,7 @@ module mod_esmf_atm
 !
   subroutine ATM_Run(gcomp, rc)
 
-  TYPE(ESMF_GridComp) :: gcomp
+  TYPE(ESMF_GridComp)    :: gcomp
   INTEGER, INTENT(  OUT) :: rc
 
   type(ESMF_State),    TARGET:: importState

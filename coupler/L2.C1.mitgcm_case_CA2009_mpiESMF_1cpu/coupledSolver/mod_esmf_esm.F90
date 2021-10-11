@@ -212,7 +212,7 @@ module mod_esmf_esm
 !
   type(ESMF_GridComp) :: driver
   integer, intent(out) :: rc
-  type(NUOPC_FreeFormat)              :: runSeqFF
+  type(NUOPC_FreeFormat) :: runSeqFF
 !     
 !-----------------------------------------------------------------------
 !     Local variable declarations 

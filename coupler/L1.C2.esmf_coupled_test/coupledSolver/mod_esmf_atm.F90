@@ -85,8 +85,7 @@ module mod_esmf_atm
   subroutine ATM_Init1(gcomp, importState, exportState, clock, rc)
 
   TYPE(ESMF_GridComp) :: gcomp
-  TYPE(ESMF_State)    :: importState
-  TYPE(ESMF_State)    :: exportState
+  TYPE(ESMF_State)    :: importState, exportState
   TYPE(ESMF_Clock)    :: clock
 
   TYPE(ESMF_VM) :: vm
@@ -166,7 +165,6 @@ module mod_esmf_atm
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
               line=__LINE__, file=FILENAME)) return
 
-  PRINT *, "setting atm grid arrays..."
   call ATM_SetGridArrays(gcomp, petCount, localPet, atmGridIn,rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
@@ -271,13 +269,13 @@ module mod_esmf_atm
   type(ESMF_DistGrid) :: distGrid
   integer, allocatable :: meshType(:)
   character(ESMF_MAXSTR), allocatable :: meshTypeName(:)
-  integer, allocatable  :: deBlockList(:,:,:)
+  integer, allocatable :: deBlockList(:,:,:)
   integer :: localDECount, j
   character(ESMF_MAXSTR) ::  ofile
 
   integer :: nx = 10
   integer :: ny = 10
-  integer :: localN 
+  integer :: localN
 !
 !-----------------------------------------------------------------------
 !     Local variable declarations 
@@ -355,7 +353,6 @@ module mod_esmf_atm
                          line=__LINE__, file=FILENAME)) return
   print *, "localDECount is: ", localDECount, " localPet is: ", localPet
 
-  !! do j = 0, localDECount-1
   do j = 0, localDECount-1
 
     print *, "j is: ", j
@@ -416,9 +413,9 @@ module mod_esmf_atm
       call ESMF_GridGetCoord(gridIn,                                &
                              staggerLoc=ESMF_STAGGERLOC_CENTER,     &
                              coordDim=2, array=arrY, rc=rc)
-      call ESMF_ArrayWrite(arrX, fileName="atm_xa.nc",              &
+      call ESMF_ArrayWrite(arrX, filename='atm_xa.nc',              &
                            status=ESMF_FILESTATUS_NEW, rc=rc)
-      call ESMF_ArrayWrite(arrY, fileName="atm_ya.nc",              &
+      call ESMF_ArrayWrite(arrY, filename='atm_ya.nc',              &
                            status=ESMF_FILESTATUS_NEW, rc=rc)
     end if
   end do
@@ -539,7 +536,6 @@ module mod_esmf_atm
     write (ofile, "(A9)") "rsnsATM.nc"
     call ESMF_FieldWrite(fieldOut2, trim(ofile), rc=rc)
   end if
-
   end subroutine ATM_SetInitData
 
   subroutine ATM_Get(gcomp, iLoop, rc)

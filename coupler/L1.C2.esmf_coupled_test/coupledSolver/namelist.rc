@@ -2,4 +2,4 @@
 ####  esmApp Run-Time Configuration File  #####
 ###############################################
 # Attributes for debug
-debugLevel: 1
+DebugLevel: 1

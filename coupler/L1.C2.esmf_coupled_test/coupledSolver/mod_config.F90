@@ -69,19 +69,20 @@ module mod_config
 !
   cf = ESMF_ConfigCreate(rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
+  line=__LINE__, file=FILENAME)) return
 !
   call ESMF_ConfigLoadFile(cf, trim(config_fname), rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
+  line=__LINE__, file=FILENAME)) return
 !
 !-----------------------------------------------------------------------
 !     Set debug level 
 !-----------------------------------------------------------------------
 !
-  call ESMF_ConfigGetAttribute(cf, debugLevel, label='debugLevel:', rc=rc)
+  call ESMF_ConfigGetAttribute(cf, debugLevel,                      &
+                           label='DebugLevel:', rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
+  line=__LINE__, file=FILENAME)) return
 !
   end if
 !

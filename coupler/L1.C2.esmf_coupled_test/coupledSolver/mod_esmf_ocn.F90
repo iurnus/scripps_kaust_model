@@ -85,8 +85,7 @@ module mod_esmf_ocn
   subroutine OCN_Init1(gcomp, importState, exportState, clock, rc)
 
   TYPE(ESMF_GridComp) :: gcomp
-  TYPE(ESMF_State)    :: importState
-  TYPE(ESMF_State)    :: exportState
+  TYPE(ESMF_State)    :: importState, exportState
   TYPE(ESMF_Clock)    :: clock
 
   TYPE(ESMF_VM) :: vm
@@ -164,11 +163,12 @@ module mod_esmf_ocn
 
   call ESMF_GridCompGet(gcomp, name=gname, vm=vm, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-         line=__LINE__, file=FILENAME)) return
+      line=__LINE__, file=FILENAME)) return
+
   call ESMF_VMGet(vm, localPet=localPet, petCount=petCount,         &
                   mpiCommunicator=comm, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-              line=__LINE__, file=FILENAME)) return
+      line=__LINE__, file=FILENAME)) return
 
   !! PRINT *, "setting grid arrays..."
   !! call OCN_SetGridArrays(gcomp, petCount, localPet, ocnGridIn,rc)
@@ -344,7 +344,7 @@ module mod_esmf_ocn
   call ESMF_GridCompGet(gcomp, vm=vm, name=cname, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
-
+!
   if (.not.allocated(deBlockList)) then
     allocate(deBlockList(2,2,1:2))
   end if

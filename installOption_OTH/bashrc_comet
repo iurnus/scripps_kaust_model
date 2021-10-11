@@ -8,7 +8,7 @@ export SKRIPS_DIR=/cw3e/mead/projects/csg102/rus043/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
-export WW3_DIR=$SKRIPS_WAVE_DIR/ww3-516/
+export WW3_DIR=$SKRIPS_WAVE_DIR/ww3_607/
 
 # NETCDF and MPI
 export NETCDF=/opt/netcdf/4.6.1/intel/intelmpi/

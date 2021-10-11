@@ -8,4 +8,3 @@ cp ../input_ca_mitgcm/*2009* .
 cp ../input_ca_mitgcm/* .
 
 mpirun -np 2 mitgcmuv
-# ./mitgcmuv

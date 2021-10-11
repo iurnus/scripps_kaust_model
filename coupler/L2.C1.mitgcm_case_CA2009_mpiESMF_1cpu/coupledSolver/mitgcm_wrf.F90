@@ -14,6 +14,7 @@ program esmf_application
   use NUOPC
   use mod_esmf_esm, only : ESM_SetServices 
   use mod_config, only : read_config
+  use mod_types
   ! use mod_config, only : set_field_dir
   
   implicit none
@@ -51,15 +52,7 @@ program esmf_application
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=__FILE__))                                &
       call ESMF_Finalize(endflag=ESMF_END_ABORT)
-!
-!-----------------------------------------------------------------------
-!     Add additional fields to NUOPC field dictionary 
-!-----------------------------------------------------------------------
-!
-!! call set_field_dir(vm, rc)
-!! if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-!!     line=__LINE__, file=__FILE__))                                &
-!!     call ESMF_Finalize(endflag=ESMF_END_ABORT)
+  PRINT *, "DEBUGLEVEL ESMF is: ", debugLevel
 !
 !-----------------------------------------------------------------------
 !     Register component 
@@ -87,7 +80,6 @@ program esmf_application
 !     Initialize component
 !-----------------------------------------------------------------------
 !
-  print *, "calling main init function"
   call ESMF_GridCompInitialize(esmComp, userRc=urc, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=__FILE__))                                &

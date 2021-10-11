@@ -103,6 +103,11 @@ module mod_esmf_ocn
   
   rc = ESMF_SUCCESS
 
+  call NUOPC_Advertise(exportState,                                 &
+      StandardName="sea_surface_temperature", name="sst", rc=rc)
+  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
+      line=__LINE__, file=FILENAME)) return
+
   call NUOPC_Advertise(importState,                                 &
       StandardName="air_pressure_at_sea_level", name="pmsl", rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -111,11 +116,6 @@ module mod_esmf_ocn
   call NUOPC_Advertise(importState,                                 &
       StandardName="surface_net_downward_shortwave_flux",           &
       name="rsns", rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
-      line=__LINE__, file=FILENAME)) return
-
-  call NUOPC_Advertise(exportState,                                 &
-      StandardName="sea_surface_temperature", name="sst", rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 
@@ -146,7 +146,7 @@ module mod_esmf_ocn
   type(ESMF_VM) :: vm
   
   rc = ESMF_SUCCESS
-!
+
 !-----------------------------------------------------------------------
 !     Get gridded component
 !-----------------------------------------------------------------------
@@ -444,9 +444,7 @@ module mod_esmf_ocn
 !     Allocate coordinates 
 !-----------------------------------------------------------------------
 !
-  call ESMF_GridAddCoord(gridIn,                                    &
-                         staggerLoc=staggerLoc,                     &
-                         rc=rc)
+  call ESMF_GridAddCoord(gridIn, staggerLoc=staggerLoc, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
                          line=__LINE__, file=FILENAME)) return
 !
@@ -1036,4 +1034,3 @@ module mod_esmf_ocn
   end subroutine OCN_Put
 
 end module mod_esmf_ocn
-
