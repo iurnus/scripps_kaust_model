@@ -14,6 +14,7 @@ It is a regional coupled atmosphere-ocean model that includes the following comp
 
 * Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.3) (version 4.1.3)
 * Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint67m) (version c67m)
+* Wave Solver: [WaveWatch III](https://github.com/NOAA-EMC/WW3/archive/refs/tags/6.07.1.zip) (version 6.07.1)
 * Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
 
 The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/v1.2/). 
