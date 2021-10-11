@@ -1,3 +1,5 @@
+echo "Setting up the bashrc for SKRIPS model..."
+
 module purge
 module load intel
 module load intelmpi
@@ -42,3 +44,5 @@ export ESMFMKFILE=$ESMF_LIB/esmf.mk
 export LD_LIBRARY_PATH=$NETCDF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=$MPI_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=$ESMF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+
+echo "SKRIPS_DIR is: $SKRIPS_DIR"
