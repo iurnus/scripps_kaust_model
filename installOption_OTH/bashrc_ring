@@ -1,13 +1,13 @@
-## # BASH OPTIONS FOR THE COUPLER
-#
-# Update the following directories from line 4 to 13
+echo "Setting up the bashrc for SKRIPS model..."
+
+# Location of the modules
 export SKRIPS_DIR=$HOME/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
 export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
-export WRF_DIR=$SKRIPS_DIR/ww3_607/
+export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
-## NETCDF and MPI
+# NETCDF and MPI
 export NETCDF=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/
 export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
@@ -18,7 +18,7 @@ export MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
 export MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include/
 export MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
 
-# WW3
+# For WW3
 export PATH=$WW3_DIR/bin:${PATH}
 export PATH=$WW3_DIR/exe:${PATH}
 export WWATCH3_ENV=$WW3_DIR/wwatch3.env
@@ -27,7 +27,7 @@ export NETCDF_CONFIG='/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-
 export NETCDF_CONFIG_C='/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/bin/ncxx4-config'
 export NETCDF_CONFIG_F='/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/bin/nf-config'
 
-## ESMF
+# For ESMF
 export ESMF_OS=Linux
 export ESMF_COMM=openmpi
 export ESMF_NETCDF=split
@@ -61,3 +61,5 @@ export JASPERLIB=/home/rus043/wrf/build_wrf/grib2/lib/
 # NCL
 alias ncl_add="export PATH='/home/rus043/anaconda2/bin:$PATH' && source activate ncl_stable"
 alias ncl_remove="source deactivate && PATH=`echo $PATH | sed -e 's/\/home\/rus043\/anaconda2\/bin://'`"
+
+echo "SKRIPS_DIR is: $SKRIPS_DIR"
