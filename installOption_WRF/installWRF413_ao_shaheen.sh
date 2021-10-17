@@ -1,6 +1,6 @@
 echo "installing WRF"
-echo "WRF DIR is: ${SKRIPS_DIR}/WRFV413_AO"
-cd ${SKRIPS_DIR}/WRFV413_AO
+echo "WRF DIR is: ${WRF_DIR}"
+cd ${WRF_DIR}
 WRF_UPDATE_DIR0=${SKRIPS_DIR}/installOption_WRF/wrfAO413_shared/
 WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO413_shaheen/
 
