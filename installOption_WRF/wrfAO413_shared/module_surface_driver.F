@@ -33,8 +33,9 @@ CONTAINS
      &          ,t_phy,u10,udrunoff,ust,uz0                           &
      &          ,u_frame,u_phy,v10,vegfra,uoce,voce                   &
      &          ,waveHS,waveML,waveMASK,waveSTOKESX,waveSTOKESY       & 
-     &          ,waveLANGMUIR,waveLASL,waveTAUIX,waveTAUIY          &
+     &          ,waveLANGMUIR,waveLASL,waveTAUIX,waveTAUIY            &
      &          ,waveTAUOX,waveTAUOY,waveNUMBER,ocnMLD                &
+     &          ,use_coare35                                          &
      &          ,vz0,v_frame,v_phy,warm_rain,wspd,xice,xland,z,znt    &
      &          ,max_edom,cplmask                                     &
 #if (HWRF==1)
@@ -1012,6 +1013,7 @@ CONTAINS
    REAL, DIMENSION( ims:ime, jms:jme ), OPTIONAL, INTENT(IN):: diffuse_frac
 
    INTEGER, OPTIONAL, INTENT(IN )::   ISFTCFLX,IZ0TLND
+   INTEGER, OPTIONAL, INTENT(IN )::   use_coare35
    INTEGER, OPTIONAL, INTENT(IN )::   SF_OCEAN_PHYSICS
    REAL   , OPTIONAL, INTENT(IN )::   OML_HML0
    REAL   , OPTIONAL, INTENT(IN )::   OML_GAMMA
@@ -1980,7 +1982,7 @@ CONTAINS
                  znt,ust,pblh,mavail,zol,mol,regime,psim,psih,fm,fhh, &
                  xland,hfx,qfx,lh,tsk,flhc,flqc,qgh,qsfc,rmol,       &
                  u10,v10,th2,t2,q2,                                  &
-                 waveHS,waveML,waveMASK,                             &
+                 waveHS,waveML,waveMASK,use_coare35,                 &
                  gz1oz0,wspd,br,isfflx,dx,                           &
                  svp1,svp2,svp3,svpt0,ep_1,ep_2,karman,eomeg,stbolt, &
                  P1000mb,                                            &
@@ -1999,7 +2001,7 @@ CONTAINS
                znt,ust,pblh,mavail,zol,mol,regime,psim,psih,fm,fhh, &
                xland,hfx,qfx,lh,tsk,flhc,flqc,qgh,qsfc,rmol,       &
                u10,v10,th2,t2,q2,                                  &
-               waveHS,waveML,waveMASK,                             &
+               waveHS,waveML,waveMASK,use_coare35,                 &
                gz1oz0,wspd,br,isfflx,dx,                           &
                svp1,svp2,svp3,svpt0,ep_1,ep_2,karman,eomeg,stbolt, &
                P1000mb,                                            &
@@ -2263,7 +2265,7 @@ CONTAINS
                znt,ust,pblh,mavail,zol,mol,regime,psim,psih,       &
                xland,hfx,qfx,lh,tsk,flhc,flqc,qgh,qsfc,rmol,       &
                u10,v10,th2,t2,q2,SNOWH,                            &
-               waveHS,waveML,waveMASK,                             &
+               waveHS,waveML,waveMASK,use_coare35,                 &
                gz1oz0,wspd,br,isfflx,dx,                           &
                svp1,svp2,svp3,svpt0,ep_1,ep_2,karman,              &
                &itimestep,ch,th_phy,pi_phy,qc_curr,rho,            &
@@ -2284,7 +2286,7 @@ CONTAINS
                znt,ust,pblh,mavail,zol,mol,regime,psim,psih,       &
                xland,hfx,qfx,lh,tsk,flhc,flqc,qgh,qsfc,rmol,       &
                u10,v10,th2,t2,q2,SNOWH,                            &
-               waveHS,waveML,waveMASK,                             &
+               waveHS,waveML,waveMASK,use_coare35,                 &
                gz1oz0,wspd,br,isfflx,dx,                           &
                svp1,svp2,svp3,svpt0,ep_1,ep_2,karman,              &
                &itimestep,ch,th_phy,pi_phy,qc_curr,rho,            &
@@ -4883,7 +4885,7 @@ CONTAINS
                      ZNT,UST,PBLH,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH, &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,SNOWH,                      &
-                     waveHS,waveML,waveMASK,                       &
+                     waveHS,waveML,waveMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,KARMAN,          &
                &itimestep,ch,th3d,pi3d,qc3d,rho,                   &
@@ -4984,6 +4986,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
      REAL, OPTIONAL, DIMENSION( ims:ime, jms:jme )              , &
                INTENT(INOUT)   ::                            ustm
      INTEGER,  OPTIONAL,  INTENT(IN )   ::     ISFTCFLX,IZ0TLND
+     INTEGER,  OPTIONAL,  INTENT(IN )   ::     use_coare35
 
 !--------------------------------------------------------------------
 !    New for wrapper
@@ -5146,7 +5149,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                ZNT,UST,PBLH,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH,       &
                XLAND,HFX,QFX,LH,TSK_LOCAL,FLHC,FLQC,QGH,QSFC,RMOL, &
                U10,V10,TH2,T2,Q2,SNOWH,                            &
-               waveHS,waveML,waveMASK,                             &
+               waveHS,waveML,waveMASK,use_coare35,                 &
                GZ1OZ0,WSPD,BR,ISFFLX,DX,                           &
                SVP1,SVP2,SVP3,SVPT0,EP1,EP2,KARMAN,                &
                &itimestep,ch,th3d,pi3d,qc3d,rho,                   &
@@ -5234,7 +5237,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                TSK_SEA,                                            &
                FLHC_SEA,FLQC_SEA,QGH_SEA,QSFC_sea,RMOL_SEA,        &
                U10_sea,V10_sea,TH2_sea,T2_sea,Q2_sea,SNOWH,        &
-               waveHS,waveML,waveMASK,                             &
+               waveHS,waveML,waveMASK,use_coare35,                 &
                GZ1OZ0_SEA,WSPD_SEA,BR_SEA,                         &
                ISFFLX,DX,                                          &
                SVP1,SVP2,SVP3,SVPT0,EP1,EP2,KARMAN,                &
@@ -5569,7 +5572,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                      FM,FH,                                        &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,                            &
-                     waveHS,waveML,waveMASK,                       &
+                     waveHS,waveML,waveMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,EOMEG,STBOLT,                          &
@@ -5661,6 +5664,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                INTENT(INOUT)   ::                            ustm
 
      INTEGER,  OPTIONAL,  INTENT(IN )   ::     ISFTCFLX,IZ0TLND
+     INTEGER,  OPTIONAL,  INTENT(IN )   ::     use_coare35
 
 !--------------------------------------------------------------------
 !    New for wrapper
@@ -5825,7 +5829,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                  FM,FH,                                        &
                  XLAND,HFX,QFX,LH,TSK_LOCAL,FLHC,FLQC,QGH,QSFC,RMOL, &
                  U10,V10,TH2,T2,Q2,                            &
-                 waveHS,waveML,waveMASK,                             &
+                 waveHS,waveML,waveMASK,use_coare35,           &
                  GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                  SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                  KARMAN,EOMEG,STBOLT,                          &
@@ -5915,7 +5919,7 @@ TICE2TSK_IF2COLD,XICE_THRESHOLD,                                   &
                  TSK_SEA,                                      & ! I
                  FLHC_SEA,FLQC_SEA,QGH_SEA,QSFC_sea,RMOL_SEA,  & ! I/O
                  U10_sea,V10_sea,TH2_sea,T2_sea,Q2_sea,        & ! O
-                 waveHS,waveML,waveMASK,                             &
+                 waveHS,waveML,waveMASK,use_coare35,           &
                  GZ1OZ0_SEA,WSPD_SEA,BR_SEA,                   & ! I/O
                  ISFFLX,DX,                                    &
                  SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &

@@ -75,7 +75,7 @@ MODULE module_sf_mynn
   REAL, PARAMETER :: wmin=0.1    ! Minimum wind speed
   REAL, PARAMETER :: VCONVC=1.25
   REAL, PARAMETER :: SNOWZ0=0.011
-  REAL, PARAMETER :: COARE_OPT=3.0  ! 3.0 or 3.5
+  ! REAL, PARAMETER :: COARE_OPT=3.0  ! 3.0 or 3.5
   !For debugging purposes:
   LOGICAL, PARAMETER :: debug_code = .false.
 
@@ -101,7 +101,7 @@ CONTAINS
                      ZNT,UST,PBLH,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH, &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,SNOWH,                      &
-                     waveHS,waveML,waveMASK,                       &
+                     waveHS,waveML,waveMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,itimestep,ch,th3d,pi3d,qc3d,rho3d,     &
@@ -227,6 +227,7 @@ CONTAINS
       REAL,     INTENT(IN)   ::        CP,G,ROVCP,R,XLV,DX
 !NAMELIST OPTIONS:
       INTEGER,  INTENT(IN)   ::        ISFFLX
+      INTEGER,  INTENT(IN)   ::        use_coare35
       INTEGER,  OPTIONAL,  INTENT(IN)   ::     ISFTCFLX, IZ0TLND,&
                                                 bl_mynn_cloudpdf,&
                                                 icloud_bl
@@ -427,6 +428,7 @@ CONTAINS
                 Q2(ims,j),FLHC(ims,j),FLQC(ims,j),SNOWH(ims,j),    &
                 QGH(ims,j),QSFC(ims,j),LH(ims,j),                  &
                 waveHS(ims,j),waveML(ims,j),waveMASK(ims,j),       &
+                use_coare35,                                       &
                 GZ1OZ0(ims,j),WSPD(ims,j),BR(ims,j),ISFFLX,DX,     &
                 SVP1,SVP2,SVP3,SVPT0,EP1,EP2,KARMAN,               &
                 ch(ims,j),vt1,vq1,qc1d,qcg(ims,j),                 &
@@ -456,7 +458,7 @@ CONTAINS
                      PBLH,RMOL,ZNT,UST,MAVAIL,ZOL,MOL,REGIME,      &
                      PSIM,PSIH,XLAND,HFX,QFX,TSK,                  &
                      U10,V10,TH2,T2,Q2,FLHC,FLQC,SNOWH,QGH,        &
-                     QSFC,LH,waveHS,waveML,waveMASK,               &
+                     QSFC,LH,waveHS,waveML,waveMASK,use_coare35,   &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,ch,vt1,vq1,qc1d,qcg,                   &
@@ -491,6 +493,7 @@ CONTAINS
 ! NAMELIST OPTIONS
 !-----------------------------
       INTEGER,  INTENT(IN) :: ISFFLX
+      INTEGER,  INTENT(IN) :: use_coare35
       INTEGER,  OPTIONAL,  INTENT(IN )   ::     ISFTCFLX, IZ0TLND
       INTEGER,    INTENT(IN)             ::     spp_pbl
 
@@ -581,7 +584,11 @@ CONTAINS
       REAL    ::  FLUXC,VSGD
       REAL    ::  restar,VISC,DQG,OLDUST,OLDTST
       REAL, PARAMETER :: psilim = -10.  ! ONLY AFFECTS z/L > 2.0
+      REAL    ::  COARE_OPT = 3.0
 !-------------------------------------------------------------------
+      IF(use_coare35 .eq. 1)THEN
+        COARE_OPT = 3.5
+      ENDIF
 
       DO I=its,ite
          ! CONVERT GROUND & LOWEST LAYER TEMPERATURE TO POTENTIAL TEMPERATURE:

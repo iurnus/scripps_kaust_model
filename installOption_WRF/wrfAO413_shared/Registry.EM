@@ -28,6 +28,7 @@ state    real   waveTAUOY        ij     misc        1         -     i01rh  "WAVE
 state    real   waveNUMBER       ij     misc        1         -     i01rh  "WAVENUMBER"  "WAVE NUMBER" ""
 state    real   waveMASK         ij     misc        1         -     i01rh  "WAVEMASK"  "WAVE MASK (1=wave on; 0=wave off)" ""
 state    real   ocnMLD           ij     misc        1         -     i01rh  "OCNMLD"  "Mixed Layer Depth in Ocean Model" "m"
+rconfig   integer use_coare35                namelist,physics      1            0         h     "use_coare35"    "switch to control coare algorithm in mynn"   ""
 
 
 # Registry entries that are exclusive to Registry.EM

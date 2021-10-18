@@ -17,7 +17,7 @@ CONTAINS
                      FM,FH,                                        &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,                            &
-                     waveHS,waveML,waveMASK,                       &
+                     waveHS,waveML,waveMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,EOMEG,STBOLT,                          &
@@ -192,6 +192,7 @@ CONTAINS
       REAL, OPTIONAL, DIMENSION( ims:ime, jms:jme )              , &
                 INTENT(INOUT)   ::                           USTM
 
+      INTEGER,  OPTIONAL,  INTENT(IN )   ::     use_coare35
       INTEGER,  OPTIONAL,  INTENT(IN )   ::     ISFTCFLX, IZ0TLND
       INTEGER,  OPTIONAL,  INTENT(IN )   ::     SCM_FORCE_FLUX
 ! LOCAL VARS

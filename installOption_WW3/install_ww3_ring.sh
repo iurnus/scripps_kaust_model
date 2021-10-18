@@ -1,9 +1,8 @@
 echo "installing ww3"
-WW3_PWD_DIR=${PWD}
-cd ww3-516
+cd $WW3_DIR/model/
 
-WW3_DIR0=${WW3_PWD_DIR}/installOption_ww3/ww3_install_shared/
-WW3_DIR1=${WW3_PWD_DIR}/installOption_ww3/ww3_install_ring/
+WW3_DIR0=${SKRIPS_DIR}/installOption_WW3/ww3_install_shared/
+WW3_DIR1=${SKRIPS_DIR}/installOption_WW3/ww3_install_ring/
 
 ln -sf ${WW3_DIR1}/comp ./bin/comp
 ln -sf ${WW3_DIR1}/link ./bin/link

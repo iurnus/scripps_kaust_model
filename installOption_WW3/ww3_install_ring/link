@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 # --------------------------------------------------------------------------- #
 # link  : Linker script for use in make (customized for hardware and          #
 #         optimization. Note that this script will not be replaced if part    #
@@ -13,13 +13,13 @@
 # remarks :                                                                   #
 #                                                                             #
 #  - Upon (first) installation of WAVEWATCH III the user needs to check the   #
-#    following parts of this scripts :                                        #
-#      sec. 3 : Provide correct link command                                  #
+#    existing compilers and options available in the script cmplr.env         #
 #                                                                             #
-#  - This version is made for the Portland Group compilers on x86_64.         #
+#  - This version is a template for mpt/intel/gnu/pgi with optimized or       #
+#    debugging options by adding _debug                                       #
 #                                                                             #
-#                                                      Hendrik L. Tolman      #
-#                                                      February 2005          #
+#                                                      M. Accensi             #
+#                                                      August   2018          #
 # --------------------------------------------------------------------------- #
 # 1. Preparations                                                             #
 # --------------------------------------------------------------------------- #
@@ -29,33 +29,20 @@
   then
     echo "usage: link name [name]" ; exit 1
   fi
-
   prog=$1
   echo "      Linking $prog"
   input="$*"
 
-# 1.b Internal variables - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# 1.b Get data from setup file - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# The following line must not be removed: it is a switch for local install
-# so that all bin scripts point to the local wwatch3.env
-  export ww3_env=${SKRIPS_WAVE_DIR}/ww3-516/wwatch3.env
-# For manual install (without install_ww3_tar or install_ww3_svn) make sure to
-# either use the generic ww3_env or to add your own ww3_env="${my_directory}"
+  source $(dirname $0)/w3_setenv
+  main_dir=$WWATCH3_DIR
+  temp_dir=$WWATCH3_TMP
+  source=$WWATCH3_SOURCE
+  list=$WWATCH3_LIST
 
-  if [ ${WWATCH3_ENV} ]; then ww3_env="${WWATCH3_ENV}"; fi # alternate setup file
 
-# 1.c Read data from the environment file  - - - - - - - - - - - - - - - - - -
-
-  if [ -f $ww3_env ]
-  then
-    set `grep WWATCH3_DIR $ww3_env` ; shift
-    main_dir="$*"
-  else
-    echo "*** Set-up file $ww3_env not found ***"
-    exit 2
-  fi
-
-# 1.d Initial clean-up - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# 1.c Initial clean-up - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
   rm -f $main_dir/exe/$prog
 
@@ -87,57 +74,38 @@
   fi
 
 # --------------------------------------------------------------------------- #
-# 3. Link all things                                                          #
+# 3. Link                                                                     #
 # --------------------------------------------------------------------------- #
-# Add here the correct linker call including switches
 
-# 3.a Build options and determine compiler name
-#     No GRIB libraries for this one
+# 3.a Build options and determine compiler name - - - - - - - - - - - - - - - -
+
+  # compiler
+  if [ "$mpi_mod" = 'yes' ] ; then
+    comp='mpif90'
+  else
+    comp='pgf90'
+  fi
 
   # linking options
-  libs=""
-  opt="-o $prog"
-
-  # mpi implementation
-  if [ "$mpi_mod" = 'yes' ]
-  then
-    comp=mpif90
-  else
-    comp=pgf90
-  fi
-
-  # open mpi implementation
-  if [ "$omp_mod" = 'yes' ]
-  then
-    opt="$opt -mp"
-  fi
-
-  # palm coupler archive
-  if [ "$prog" = 'ww3_shel' ] || [ "$prog" = 'ww3_multi' ] || [ "$prog" = 'ww3_sbs1' ]
-    then
-    if [ "$palm_mod" = 'yes' ]
-       then
-       comp=ar
-       opt="-rv $prog.a"
-       prog="$prog.a"
-    fi
-  fi
+  opt="-o $prog -p -g -O3"
 
   # oasis coupler archive
-  if [ "$prog" = 'ww3_shel' ] || [ "$prog" = 'ww3_multi' ] || [ "$prog" = 'ww3_sbs1' ] || \
+  if [ "$prog" = 'ww3_shel' ] || [ "$prog" = 'ww3_multi' ] || [ "$prog" = 'ww3_sbs1' ] ||  \
      [ "$prog" = 'ww3_prnc' ] || [ "$prog" = 'ww3_prep' ] || [ "$prog" = 'ww3_prtide' ] || \
-     [ "$prog" = 'ww3_gspl' ]
-  then
-    if [ "$oasis_mod" = 'yes' ]
-    then
+     [ "$prog" = 'ww3_gspl' ] ; then
+    if [ "$oasis_mod" = 'yes' ] ; then
+      if [ -z "$(env | grep OASISDIR)" ] ; then
+        echo ''
+        echo "[ERROR] OASISDIR is not defined"
+        exit 1
+      fi
       echo "link with oasis"
-      libs="$libs $OASISDIR/lib/libpsmile.MPI1.a $OASISDIR/lib/libmct.a $OASISDIR/lib/libmpeu.a $OASISDIR/lib/libscrip.a" ;
+      libs="$libs $OASISDIR/lib/libpsmile.MPI1.a $OASISDIR/lib/libmct.a $OASISDIR/lib/libmpeu.a $OASISDIR/lib/libscrip.a"
     fi
   fi
 
   # netcdf library dir
-  if [ "$netcdf_compile" = 'yes' ]
-  then
+  if [ "$netcdf_compile" = 'yes' ] ; then
     case $WWATCH3_NETCDF in
       NC3) libs="$libs -L$NETCDF_LIBDIR -lnetcdf" ;;
       NC4) if [ "$mpi_mod" = 'no' ]; then comp="`$NETCDF_CONFIG_F --fc`"; fi
@@ -147,9 +115,34 @@
     esac
   fi
 
-# 3.b Link
+  # parmetis library 
+  if [ "$prog" = 'ww3_shel' ] || [ "$prog" = 'ww3_multi' ] || [ "$prog" = 'ww3_sbs1' ] ; then
+    if [ "$pdlib_mod" = 'yes' ] ; then
+      if [ -z "$(env | grep METIS_PATH)" ] ; then
+        echo ''
+        echo "[ERROR] METIS_PATH is not defined"
+        exit 1
+      fi
+      echo "link with parmetis" 
+      libs="$libs $METIS_PATH/lib/libparmetis.a $METIS_PATH/lib/libmetis.a"
+    fi
+  fi
 
-  $comp $opt $objects $libs                         > link.out 2> link.err
+  opt="$opt $EXTRA_LINK_OPTIONS"
+
+# 3.b Link - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  rprfx="-Wl,-rpath,"
+  rpath=
+  for path in $libs
+  do
+    if [ "${path:0:2}" = '-L' ]
+    then
+      rpath="$rpath ${rprfx}${path//-L/}"
+    fi
+  done
+
+  $comp $opt $objects $libs $rpath                  > link.out 2> link.err
   OK="$?"
 
 # --------------------------------------------------------------------------- #

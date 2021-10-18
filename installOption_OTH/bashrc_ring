@@ -19,8 +19,8 @@ export MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/includ
 export MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
 
 # For WW3
-export PATH=$WW3_DIR/bin:${PATH}
-export PATH=$WW3_DIR/exe:${PATH}
+export PATH=$WW3_DIR/model/bin:${PATH}
+export PATH=$WW3_DIR/model/exe:${PATH}
 export WWATCH3_ENV=$WW3_DIR/wwatch3.env
 export WWATCH3_NETCDF=NC4
 export NETCDF_CONFIG='/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/bin/nc-config'

@@ -534,6 +534,7 @@ BENCH_START(surf_driver_tim)
      &        ,waveTAUIX=grid%waveTAUIX, waveTAUIY=grid%waveTAUIY                   &
      &        ,waveTAUOX=grid%waveTAUOX, waveTAUOY=grid%waveTAUOY                   &
      &        ,waveNUMBER=grid%waveNUMBER, ocnMLD=grid%ocnMLD                       &
+     &        ,use_coare35=config_flags%use_coare35                                 &
      ! wave coupling finished
      &        ,VEGFRA=grid%vegfra      ,VZ0=grid%vz0       ,V_FRAME=grid%v_frame    &
      &        ,V_PHY=grid%v_phy        ,WARM_RAIN=grid%warm_rain                    &
