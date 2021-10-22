@@ -31,7 +31,7 @@ rm code_mit/exf_get* # remove the exf_get file so that MITGCM read the file inpu
 rm code_mit/main.F # remove the main file
 cd build_mit
 sed -i s/code/code_mit/g makescript_fwd.sio.ring
-./makescript_fwd.sio.ring ${MITGCM_DIR} # install MITGCM, generate *.f files
+./makescript_fwd.sio.ring # install MITGCM, generate *.f files
 cd ..
 
 # build the MITGCM as a library

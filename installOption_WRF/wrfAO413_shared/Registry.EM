@@ -16,7 +16,7 @@ state    real   SST              ij     misc        1         -     i01245rh0d=(
 state    real   SST_INPUT        ij     misc        1         -     rh   "SST_INPUT"              "SEA SURFACE TEMPERATURE FROM WRFLOWINPUT FILE" "K"
 
 state    real   waveHS           ij     misc        1         -     i01rh  "WAVEHS"  "SIGNIFICANT WAVE HEIGHT" "m"
-state    real   waveML           ij     misc        1         -     i01rh  "WAVEML"  "WAVE MEAN LENGTH" "m"
+state    real   waveLP           ij     misc        1         -     i01rh  "WAVELP"  "PEAK WAVE LENGTH" "m"
 state    real   waveSTOKESX      ij     misc        1         -     i01rh  "WAVESTOKESX"  "WAVE STOKES VELOCITY X" "m/s"
 state    real   waveSTOKESY      ij     misc        1         -     i01rh  "WAVESTOKESY"  "WAVE STOKES VELOCITY Y" "m/s"
 state    real   waveLANGMUIR     ij     misc        1         -     i01rh  "WAVELANGMUIR"  "WAVE INDUCED LANGMUIR transport" "1"
@@ -27,6 +27,8 @@ state    real   waveTAUOX        ij     misc        1         -     i01rh  "WAVE
 state    real   waveTAUOY        ij     misc        1         -     i01rh  "WAVETAUOY"  "WAVE-OCEAN MOMENTUM FLUX, y-component" "m2 s-2"
 state    real   waveNUMBER       ij     misc        1         -     i01rh  "WAVENUMBER"  "WAVE NUMBER" ""
 state    real   waveMASK         ij     misc        1         -     i01rh  "WAVEMASK"  "WAVE MASK (1=wave on; 0=wave off)" ""
+state    real   waveFP           ij     misc        1         -     i01rh  "WAVEFP"  "WAVE PEAK FREQ" "1/s"
+state    real   waveCHA          ij     misc        1         -     i01rh  "WAVECHA"  "CHANOCK COEFFICIENT" ""
 state    real   ocnMLD           ij     misc        1         -     i01rh  "OCNMLD"  "Mixed Layer Depth in Ocean Model" "m"
 rconfig   integer use_coare35                namelist,physics      1            0         h     "use_coare35"    "switch to control coare algorithm in mynn"   ""
 

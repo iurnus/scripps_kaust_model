@@ -528,12 +528,13 @@ BENCH_START(surf_driver_tim)
      &        ,U_FRAME=grid%u_frame    ,U_PHY=grid%u_phy   ,V10=grid%v10            &
      &        ,UOCE=grid%uoce          ,VOCE=grid%voce                              &
      ! added by Rui for wave coupling
-     &        ,waveHS=grid%waveHS, waveML=grid%waveML, waveMASK=grid%waveMASK       &
+     &        ,waveHS=grid%waveHS, waveLP=grid%waveLP, waveMASK=grid%waveMASK       &
      &        ,waveSTOKESX=grid%waveSTOKESX, waveSTOKESY=grid%waveSTOKESY           &
      &        ,waveLANGMUIR=grid%waveLANGMUIR, waveLASL=grid%waveLASL               &
      &        ,waveTAUIX=grid%waveTAUIX, waveTAUIY=grid%waveTAUIY                   &
      &        ,waveTAUOX=grid%waveTAUOX, waveTAUOY=grid%waveTAUOY                   &
      &        ,waveNUMBER=grid%waveNUMBER, ocnMLD=grid%ocnMLD                       &
+     &        ,waveFP=grid%waveFP, waveCHA=grid%waveCHA                             &
      &        ,use_coare35=config_flags%use_coare35                                 &
      ! wave coupling finished
      &        ,VEGFRA=grid%vegfra      ,VZ0=grid%vz0       ,V_FRAME=grid%v_frame    &

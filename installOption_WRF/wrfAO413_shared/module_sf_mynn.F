@@ -101,7 +101,8 @@ CONTAINS
                      ZNT,UST,PBLH,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH, &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,SNOWH,                      &
-                     waveHS,waveML,waveMASK,use_coare35,           &
+                     waveHS,waveLP,waveMASK,                       &
+                     waveFP,waveCHA,use_coare35,                   &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,itimestep,ch,th3d,pi3d,qc3d,rho3d,     &
@@ -273,7 +274,8 @@ CONTAINS
                                                               HFX, &
                                                               QFX, &
                                                                LH, &
-                                           waveHS,waveML,waveMASK, &
+                                           waveHS,waveLP,waveMASK, &
+                                                   waveFP,waveCHA, &
                                                          MOL,RMOL, &
                                                         QSFC, QGH, &
                                                               ZNT, &
@@ -427,8 +429,8 @@ CONTAINS
                 U10(ims,j),V10(ims,j),TH2(ims,j),T2(ims,j),        &
                 Q2(ims,j),FLHC(ims,j),FLQC(ims,j),SNOWH(ims,j),    &
                 QGH(ims,j),QSFC(ims,j),LH(ims,j),                  &
-                waveHS(ims,j),waveML(ims,j),waveMASK(ims,j),       &
-                use_coare35,                                       &
+                waveHS(ims,j),waveLP(ims,j),waveMASK(ims,j),       &
+                waveFP(ims,j),waveCHA(ims,j),use_coare35,          &
                 GZ1OZ0(ims,j),WSPD(ims,j),BR(ims,j),ISFFLX,DX,     &
                 SVP1,SVP2,SVP3,SVPT0,EP1,EP2,KARMAN,               &
                 ch(ims,j),vt1,vq1,qc1d,qcg(ims,j),                 &
@@ -458,7 +460,8 @@ CONTAINS
                      PBLH,RMOL,ZNT,UST,MAVAIL,ZOL,MOL,REGIME,      &
                      PSIM,PSIH,XLAND,HFX,QFX,TSK,                  &
                      U10,V10,TH2,T2,Q2,FLHC,FLQC,SNOWH,QGH,        &
-                     QSFC,LH,waveHS,waveML,waveMASK,use_coare35,   &
+                     QSFC,LH,waveHS,waveLP,waveMASK,               &
+                     waveFP,waveCHA,use_coare35,                   &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,ch,vt1,vq1,qc1d,qcg,                   &
@@ -518,7 +521,8 @@ CONTAINS
 
       REAL,     DIMENSION( ims:ime ), INTENT(INOUT) ::     REGIME, &
                                                        HFX,QFX,LH, &
-                                           waveHS,waveML,waveMASK, &
+                                           waveHS,waveLP,waveMASK, &
+                                                   waveFP,waveCHA, &
                                                          MOL,RMOL, &
                                                          QGH,QSFC, &
                                                               ZNT, &
@@ -754,13 +758,13 @@ CONTAINS
                   CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
                 ENDIF
              ELSEIF ( ISFTCFLX .EQ. 6 ) THEN
-                CALL Taylor_Yelland_max10(ZNT(i))
+                CALL charnock_1955_wave(ZNT(i),UST(i),WSPD(i),waveCHA(i),waveMASK(i),visc,ZA(I))
              ELSEIF ( ISFTCFLX .EQ. 7 ) THEN
-                CALL Taylor_Yelland_wave(ZNT(i),UST(i),WSPD(i),waveHS(i),waveML(i),waveMASK(i))
+                CALL Taylor_Yelland_wave(ZNT(i),UST(i),WSPD(i),waveHS(i),waveLP(i),waveMASK(i))
              ELSEIF ( ISFTCFLX .EQ. 8 ) THEN
-                CALL Taylor_Yelland_max(ZNT(i))
+                CALL Taylor_Yelland_dghq(ZNT(i),UST(i),WSPD(i),waveHS(i),waveFP(i),waveMASK(i))
              ELSEIF ( ISFTCFLX .EQ. 9 ) THEN
-                CALL Taylor_Yelland_min(ZNT(i))
+                CALL Taylor_Yelland_oost(ZNT(i),UST(i),WSPD(i),waveLP(i),waveFP(i),waveMASK(i))
              ENDIF
           ELSE
              !DEFAULT TO COARE 3.0/3.5
@@ -1511,7 +1515,7 @@ END SUBROUTINE SFCLAY1D_mynn
 
    END SUBROUTINE Taylor_Yelland_2001
 !--------------------------------------------------------------------
-   SUBROUTINE Taylor_Yelland_wave(Z_0,ustar,wsp10,waveHS,waveML,waveMASK)
+   SUBROUTINE Taylor_Yelland_wave(Z_0,ustar,wsp10,waveHS,waveLP,waveMASK)
 
      !This formulation for roughness length was designed account for
      !wave steepness.
@@ -1521,7 +1525,7 @@ END SUBROUTINE SFCLAY1D_mynn
        REAL, INTENT(OUT) :: Z_0
        REAL, parameter  :: g=9.81, pi=3.14159265
        REAL :: hs, Tp, Lp
-       REAL :: waveHS, waveML, waveMASK
+       REAL :: waveHS, waveLP, waveMASK
        REAL :: Z_0_wave
 
        !hs is the significant wave height
@@ -1531,9 +1535,9 @@ END SUBROUTINE SFCLAY1D_mynn
        !Lp is the wavelength of the dominant wave
        Lp = g*Tp**2/(2*pi)
        
-       waveML=MAX(waveML,0.0083)
+       waveLP=MAX(waveLP,0.0083)
        if (waveMASK .gt. 0.5) then
-         Z_0 = 1200.*waveHS*(waveHS/waveML)**4.5
+         Z_0 = 1200.*waveHS*(waveHS/waveLP)**4.5
        else
          Z_0 = 1200.*hs*(hs/Lp)**4.5
        endif
@@ -1544,6 +1548,74 @@ END SUBROUTINE SFCLAY1D_mynn
        return
 
    END SUBROUTINE Taylor_Yelland_wave
+!--------------------------------------------------------------------
+   SUBROUTINE Taylor_Yelland_dghq(Z_0,ustar,wsp10,waveHS,waveFP,waveMASK)
+
+     !This formulation for roughness length was designed account for
+     !wave steepness.
+     
+       IMPLICIT NONE
+       REAL, INTENT(IN)  :: ustar,wsp10
+       REAL, INTENT(OUT) :: Z_0
+       REAL, parameter  :: g=9.81, pi=3.14159265
+       REAL :: hs, Tp, Lp
+       REAL :: waveHS, waveFP, waveCP, waveMASK
+       REAL :: Z_0_wave
+
+       !hs is the significant wave height
+       hs = 0.0248*(wsp10**2.)
+       !Tp dominant wave period
+       Tp = 0.729*MAX(wsp10,0.1)
+       !Lp is the wavelength of the dominant wave
+       Lp = g*Tp**2/(2*pi)
+       
+       waveCP=g/(2*pi)/max(waveFP,1e-5)
+       if (waveMASK .gt. 0.5) then
+         Z_0 = 3.35*waveHS*(ustar/waveCP)**3.4
+       else
+         Z_0 = 1200.*hs*(hs/Lp)**4.5
+       endif
+       
+       Z_0 = MAX(Z_0, 1.27e-7)  !These max/mins were suggested by
+       Z_0 = MIN(Z_0, 2.85e-3)  !Davis et al. (2008)
+
+       return
+
+   END SUBROUTINE Taylor_Yelland_dghq
+!--------------------------------------------------------------------
+   SUBROUTINE Taylor_Yelland_oost(Z_0,ustar,wsp10,waveLP,waveFP,waveMASK)
+
+     !This formulation for roughness length was designed account for
+     !wave steepness.
+     
+       IMPLICIT NONE
+       REAL, INTENT(IN)  :: ustar,wsp10
+       REAL, INTENT(OUT) :: Z_0
+       REAL, parameter  :: g=9.81, pi=3.14159265
+       REAL :: hs, Tp, Lp
+       REAL :: waveLP, waveFP, waveCP, waveMASK
+       REAL :: Z_0_wave
+
+       !hs is the significant wave height
+       hs = 0.0248*(wsp10**2.)
+       !Tp dominant wave period
+       Tp = 0.729*MAX(wsp10,0.1)
+       !Lp is the wavelength of the dominant wave
+       Lp = g*Tp**2/(2*pi)
+       
+       waveCP=g/(2*pi)/max(waveFP,1e-5)
+       if (waveMASK .gt. 0.5) then
+         Z_0 = 25.0/pi*waveLP*(ustar/waveCP)**4.5
+       else
+         Z_0 = 1200.*hs*(hs/Lp)**4.5
+       endif
+       
+       Z_0 = MAX(Z_0, 1.27e-7)  !These max/mins were suggested by
+       Z_0 = MIN(Z_0, 2.85e-3)  !Davis et al. (2008)
+
+       return
+
+   END SUBROUTINE Taylor_Yelland_oost
 !--------------------------------------------------------------------
    SUBROUTINE Taylor_Yelland_max(Z_0)
 
@@ -1558,20 +1630,6 @@ END SUBROUTINE SFCLAY1D_mynn
        return
 
    END SUBROUTINE Taylor_Yelland_max
-!--------------------------------------------------------------------
-   SUBROUTINE Taylor_Yelland_max10(Z_0)
-
-     !This formulation for roughness length was designed account for
-     !wave steepness.
-     
-       IMPLICIT NONE
-       REAL, INTENT(OUT) :: Z_0
-
-       Z_0 = 2.85e-2
-
-       return
-
-   END SUBROUTINE Taylor_Yelland_max10
 !--------------------------------------------------------------------
    SUBROUTINE Taylor_Yelland_min(Z_0)
 
@@ -1611,6 +1669,36 @@ END SUBROUTINE SFCLAY1D_mynn
        return
 
    END SUBROUTINE charnock_1955
+!--------------------------------------------------------------------
+   SUBROUTINE charnock_1955_wave(Z_0,ustar,wsp10,waveCHA,waveMASK,visc,zu)
+ 
+    !This version of Charnock's relation employs a varying
+    !Charnock parameter, similar to COARE3.0 [Fairall et al. (2003)].
+    !The Charnock parameter CZC is varied from .011 to .018 
+    !between 10-m wsp = 10 and 18. 
+
+       IMPLICIT NONE
+       REAL, INTENT(IN)  :: ustar, visc, wsp10, zu
+       REAL, INTENT(OUT) :: Z_0
+       REAL, PARAMETER   :: G=9.81, CZO2=0.011
+       REAL              :: CZC    !variable charnock "constant"   
+       REAL              :: wsp10m ! logarithmically calculated 10 m
+       REAL              :: waveCHA, waveMASK
+
+       wsp10m = wsp10*log(10./1e-4)/log(zu/1e-4)
+       CZC = CZO2 + 0.007*MIN(MAX((wsp10m-10.)/8., 0.), 1.0)
+
+       if (waveMASK .gt. 0.5) then
+         Z_0 = waveCHA*ustar*ustar/G + (0.11*visc/MAX(ustar,0.05))
+       else
+         Z_0 = CZC*ustar*ustar/G + (0.11*visc/MAX(ustar,0.05))
+       endif
+       Z_0 = MAX( Z_0, 1.27e-7)  !These max/mins were suggested by
+       Z_0 = MIN( Z_0, 2.85e-3)  !Davis et al. (2008)
+
+       return
+
+   END SUBROUTINE charnock_1955_wave
 !--------------------------------------------------------------------
    SUBROUTINE edson_etal_2013(Z_0,ustar,wsp10,visc,zu)
 

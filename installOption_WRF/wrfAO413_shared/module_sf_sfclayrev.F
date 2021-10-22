@@ -17,7 +17,7 @@ CONTAINS
                      FM,FH,                                        &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,                            &
-                     waveHS,waveML,waveMASK,use_coare35,           &
+                     waveHS,waveLP,waveMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
                      KARMAN,EOMEG,STBOLT,                          &
@@ -144,7 +144,7 @@ CONTAINS
                                                                T2, &
                                                                Q2, &
                                                            waveHS, &
-                                                           waveML, &
+                                                           waveLP, &
                                                          waveMASK, &
                                                              QSFC
 
@@ -231,7 +231,7 @@ CONTAINS
                 FM(ims,j),FH(ims,j),                               &
                 XLAND(ims,j),HFX(ims,j),QFX(ims,j),TSK(ims,j),     &
                 U10(ims,j),V10(ims,j),TH2(ims,j),T2(ims,j),        &
-                Q2(ims,j),waveHS(ims,j),waveML(ims,j),waveMASK(ims,j), &
+                Q2(ims,j),waveHS(ims,j),waveLP(ims,j),waveMASK(ims,j), &
                 FLHC(ims,j),FLQC(ims,j),QGH(ims,j),                &
                 QSFC(ims,j),LH(ims,j),                             &
                 GZ1OZ0(ims,j),WSPD(ims,j),BR(ims,j),ISFFLX,DX,     &
@@ -258,7 +258,7 @@ CONTAINS
                      ZNT,UST,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH,FM,FH,&
                      XLAND,HFX,QFX,TSK,                            &
                      U10,V10,TH2,T2,Q2,&
-                     waveHS,waveML,waveMASK, &
+                     waveHS,waveLP,waveMASK, &
                      FLHC,FLQC,QGH,              &
                      QSFC,LH,GZ1OZ0,WSPD,BR,ISFFLX,DX,             &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
@@ -324,7 +324,7 @@ CONTAINS
 
       REAL,     DIMENSION( ims:ime )                             , &
                 INTENT(OUT)     ::                        U10,V10, &
-                                         waveHS, waveML, waveMASK, &
+                                         waveHS, waveLP, waveMASK, &
                                                 TH2,T2,Q2,QSFC,LH
 
                                     
@@ -389,7 +389,7 @@ CONTAINS
 !     REAL    :: psih_stable_full,psim_stable_full,psih_unstable_full,psim_unstable_full
       REAL    :: zl2,zl10,z0t
       REAL,     DIMENSION( its:ite )        ::         pq,pq2,pq10
-      REAL    :: waveML0
+      REAL    :: waveLP0
 
 
 !-------------------------------------------------------------------
@@ -1007,9 +1007,9 @@ CONTAINS
                 ZNT(I)=MIN(ZNT(I),2.85e-3)
                 ZNT(I)=MAX(ZNT(I),1.27e-7)
             ELSEIF ( ISFTCFLX.EQ.7 ) THEN
-                waveML0=MAX(waveML(I),0.0083)
+                waveLP0=MAX(waveLP(I),0.0083)
                 if (waveMASK(I) .gt. 0.5) then
-                  ZNT(I) = 1200.*waveHS(I)*(waveHS(I)/waveML0)**4.5+0.11*1.5E-5/UST(I)
+                  ZNT(I) = 1200.*waveHS(I)*(waveHS(I)/waveLP0)**4.5+0.11*1.5E-5/UST(I)
                 else
                   ZW  = MIN((UST(I)/1.06)**(0.3),1.0)
                   ZN1 = 0.011*UST(I)*UST(I)/G + OZO
