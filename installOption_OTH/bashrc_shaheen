@@ -15,8 +15,10 @@ module load grib2
 
 # Update the following directories from line 4 to 13
 export SKRIPS_DIR=/home/x_sunr/scripps_kaust_model/
+export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
 export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
+export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
 # NETCDF and MPI options
 export NETCDF=$NETCDF_DIR
@@ -30,6 +32,14 @@ export MPI_LIB=/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/l
 export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
 
+# For WW3
+export PATH=$WW3_DIR/model/bin:${PATH}
+export PATH=$WW3_DIR/model/exe:${PATH}
+export WWATCH3_ENV=$WW3_DIR/wwatch3.env
+export WWATCH3_NETCDF=NC4
+export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.6.3.2/bin/nc-config'
+
+
 export ESMF_OS=Unicos
 export ESMF_COMM=mpi
 export ESMF_NETCDF=split
@@ -39,7 +49,6 @@ export ESMF_BOPT=g
 export ESMF_ABI=64
 export ESMF_COMPILER=intel
 export ESMF_SITE=default
-export ESMF_DIR=$SKRIPS_DIR/esmf/
 export ESMF_LIB=$ESMF_DIR/lib/lib$ESMF_BOPT/$ESMF_OS.$ESMF_COMPILER.$ESMF_ABI.$ESMF_COMM.default/
 export ESMFMKFILE=$ESMF_LIB/esmf.mk
 
