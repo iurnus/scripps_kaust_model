@@ -19,27 +19,29 @@
 # 
 
 # Set compile options (need to be updated for other machines)
-if ($ESMF_COMPILER == Unicos) then
+if ($ESMF_OS == Unicos) then
   set comp      = ftn
   set cccommand = cc
-else
+  set compopts = (-DWORDLENGTH=4 -DALLOW_USE_MPI -DALWAYS_USE_MPI -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT -DHAVE_FLUSH -g -convert big_endian -assume byterecl)
+else if ($ESMF_OS == Linux) then
   set comp      = mpif77
   set cccommand = mpicc
+
+  if ($ESMF_COMPILER == intel) then
+    set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
+  else if ($ESMF_COMPILER == pgi) then
+    set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+  endif
 endif
 
-if ($ESMF_COMPILER == intel) then
-  set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
-else if ($ESMF_COMPILER == pgi) then
-  set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
-endif
 
 set compopts_num = ( $compopts )
-if ($ESMF_COMPILER == Unicos) then
+if ($ESMF_OS == Unicos) then
   set compinc  = (-I/$MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
   set complibs = (-L/$MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
 else
-  set complibs     = ($SKRIPS_NETCDF_LIB  -lnetcdff -lnetcdf)
   set compinc      = ($SKRIPS_NETCDF_INCLUDE )
+  set complibs     = ($SKRIPS_NETCDF_LIB  -lnetcdff -lnetcdf)
 endif
 
 set ccopts    = "-c"
