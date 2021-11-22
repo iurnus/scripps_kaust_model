@@ -1,5 +1,5 @@
 #!/bin/sh
-#SBATCH -p debug
+#SBATCH -p compute
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=16
 #SBATCH --account=csg102

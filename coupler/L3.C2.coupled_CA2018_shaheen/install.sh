@@ -4,7 +4,20 @@ echo "ESMF location? : " ${ESMF_DIR}
 echo "WRF413 (with OA coupling) location? : " ${WRF_DIR}
 echo "MITgcm (source code) location? : " ${MITGCM_DIR}
 
-export MITGCM_OPT=mitgcm_optfile
+read -e -p "Using Intel compiler? (Y/N) :" -i "Y" intelFlag
+if [ $intelFlag == 'Y' ]; then
+  if [ $ESMF_OS == 'Linux' ]; then
+    echo "Using Intel compiler"
+    export MITGCM_OPT=mitgcm_optfile.ifort
+  elif [ $ESMF_OS == 'Unicos' ]; then
+    echo "Using Intel compiler for Cray"
+    export MITGCM_OPT=mitgcm_optfile.cray
+  fi
+else 
+  echo "Using PGI compiler"
+  export MITGCM_OPT=mitgcm_optfile.pgi
+fi
+echo "The option file is: $MITGCM_OPT"
 
 read -e -p "Continue? (Y/N) :" -i "Y" continueFlag
 if [ $continueFlag == 'Y' ]; then
