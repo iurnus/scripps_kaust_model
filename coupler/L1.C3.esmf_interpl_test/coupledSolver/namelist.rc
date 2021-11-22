@@ -1,0 +1,10 @@
+###############################################
+####  esmApp Run-Time Configuration File  #####
+###############################################
+# Attributes for debug
+debugLevel: 1
+# interpolationOption: 'nearest'
+# interpolationOption: 'conserve'
+interpolationOption: 'bilinear'
+# interpolationOption: 'conserve2nd'
+# interpolationOption: 'patch'

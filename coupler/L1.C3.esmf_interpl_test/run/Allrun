@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "cleaning the current folder"
+./Allclean
+
+echo "copying the NUOPC--WRF code..."
+ln -sf ../coupledSolver/esmf_application .
+ln -sf ../coupledSolver/namelist.rc .
+
+echo "running the NUOPC--WRF code..."
+mpirun -np 5 esmf_application
