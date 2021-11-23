@@ -1069,7 +1069,7 @@ module mod_esmf_ocn
   call ESMF_StateGet(exportState, "SST", field_sst, rc=rc)
   call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
   call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
-  call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
+  call ESMF_StateGet(importState, "T2", field_sst_input, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
@@ -1117,6 +1117,7 @@ module mod_esmf_ocn
         else
           !! if land, use initial SST and zero current
           ptr_sst(iG,jG) = ptr_sst_input(iG,jG)
+          PRINT *, 'ig sst: ', iG, jG, ptr_sst(iG,jG)
           ptr_uoce(iG,jG) = 0.d0
           ptr_voce(iG,jG) = 0.d0
         end if

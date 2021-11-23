@@ -56,6 +56,7 @@
                         WAVENP, WAVEXLOW, WAVEYLOW, &
                         WAVEXHIGH, WAVEYHIGH, WAVESNX, WAVESNY)
         USE W3GDATMD, ONLY: NSEA, NX, NY, MAPSF, MAPFS, MAPSTA, MAPST2
+        USE W3GDATMD, ONLY: XGRD, YGRD
         USE W3ADATMD, ONLY: HS, WLM, FP0, USSX, USSY, LAMULT, LASL
         USE W3ADATMD, ONLY: CHARN
         USE W3ADATMD, ONLY: TUSX, TUSY
@@ -64,6 +65,7 @@
         USE W3ODATMD, ONLY: UNDEF, NDSE, NDST, NDSO, NAPROC, IAPROC
         USE CONSTANTS, ONLY: DWAT    ! gravity, density of water
         INTEGER :: MYCOMM
+        INTEGER :: MAPSTAI1,MAPSTAI2
         INTEGER :: LOCALPET
         INTEGER :: I, J, WAVENP
         INTEGER :: I_LOCAL, I_GLOBAL
@@ -226,6 +228,39 @@
             WN_ESMF(I,J) = WN_XYGRID(I,J)
             WAVESTOKESX_ESMF(I,J) = STOKESX_XYGRID(I,J)
             WAVESTOKESY_ESMF(I,J) = STOKESY_XYGRID(I,J)
+            PRINT *, "WAVESTOKESY_ESMF is: ", I, J, WAVESTOKESY_ESMF(I,J)
+
+            ! MODIFY STOKES VELOCITY
+            IF (I .EQ. 1) THEN
+              WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
+            ELSE
+              MAPSTAI1 = MAPSTA(J,I-1)
+              MAPSTAI2 = MAPSTA(J,I+1)
+              IF ((MAPSTAI1 .EQ. 0) and (MAPSTAI2 .EQ. 0)) THEN
+                WAVESTOKESX_ESMF(I,J) = STOKESX_XYGRID(I,J)
+              ELSEIF (MAPSTAI1 .EQ. 0) THEN
+                WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
+              ELSE
+                WAVESTOKESX_ESMF(I,J) = 0.5*(STOKESX_XYGRID(I-1,J) + STOKESX_XYGRID(I,J)) 
+              ENDIF
+            ENDIF
+
+            IF (J .EQ. 1) THEN
+              WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
+            ELSE
+              MAPSTAI1 = MAPSTA(J-1,I)
+              MAPSTAI2 = MAPSTA(J+1,I)
+              IF ((MAPSTAI1 .EQ. 0) and (MAPSTAI2 .EQ. 0)) THEN
+                WAVESTOKESY_ESMF(I,J) = STOKESY_XYGRID(I,J)
+              ELSEIF (MAPSTAI1 .EQ. 0) THEN
+                WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
+              ELSE
+                WAVESTOKESY_ESMF(I,J) = 0.5*(STOKESY_XYGRID(I,J-1) + STOKESY_XYGRID(I,J)) 
+              ENDIF
+            ENDIF
+
+            PRINT *, "WAVESTOKESY_ESMF is: ", I, J, WAVESTOKESY_ESMF(I,J)
+
             WAVELANGMUIR_ESMF(I,J) = LANGM_XYGRID(I,J)
             WAVELASL_ESMF(I,J) = LASL_XYGRID(I,J)
             WAVEFP_ESMF(I,J) = FP_XYGRID(I,J)

@@ -1,13 +1,14 @@
 ## Remove HGT from output
--:h:5:HGT
+-:h:5:HGT,LANDMASK
 ## Variables sent to MITgcm
++:h:5:OCNMASK
 +:h:5:SST_INPUT,XLAT,XLONG,Q2,T2,U10,V10,QFX,RAINCV,RAINSHV,RAINNCV
 +:h:5:SWUPB,SWDNB,LWUPB,LWDNB,HFX,LH
 ## Variables read from MITgcm
 +:i:5:SST,UOCE,VOCE
 ############################################
 ## Need these variables at initial condition
-+:h:0:SST_INPUT,UOCE,VOCE,QFX
-+:i:0:SST_INPUT,LH,HFX,SWUPB,SWDNB,LWUPB,LWDNB
++:h:0:OCNMASK,SST_INPUT,UOCE,VOCE,QFX
++:i:0:OCNMASK,SST_INPUT,LH,HFX,SWUPB,SWDNB,LWUPB,LWDNB
 ## Read reanalysis SST (or climatology) every time step
 +:i:4:SST_INPUT

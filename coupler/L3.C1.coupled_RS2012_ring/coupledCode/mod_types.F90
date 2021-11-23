@@ -97,7 +97,7 @@
 
       integer :: nList = 21
       character(ESMF_MAXSTR), dimension(1:21) :: nuopc_entryNameList=&
-                   (/'LAND_MASK_VALUE','XLAT_VALUE','XLONG_VALUE',&
+                   (/'OCEAN_MASK_VALUE','XLAT_VALUE','XLONG_VALUE',&
                      'LATENT_HEAT','SENSIBLE_HEAT',&
                      'SHORTWAVE_UP_FLUX','SHORTWAVE_DOWN_FLUX',&
                      'LONGWAVE_UP_FLUX','LONGWAVE_DOWN_FLUX',&
@@ -109,7 +109,7 @@
                      'ACTIVE_SEA_SURFACE_TEMPERATURE',&
                      'OCEAN_SURFACE_U','OCEAN_SURFACE_V'/)
       character(ESMF_MAXSTR), dimension(1:21) :: wrf_nameList=&
-                   (/'LANDMASK','XLAT','XLONG',&
+                   (/'OCNMASK','XLAT','XLONG',&
                      'LH','HFX','SWUPB','SWDNB','LWUPB','LWDNB',&
                      'U10','V10','T2','Q2',&
                      'QFX','RAINCV','RAINSHV','RAINNCV',&

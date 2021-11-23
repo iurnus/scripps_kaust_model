@@ -382,7 +382,6 @@
       CHARACTER(LEN=256) :: ofile
       type(ESMF_Grid) , pointer :: esmfgrid
       type(ESMF_Grid) :: getgrid
-      type(ESMF_Field) :: esmffield
       integer :: iLoop_atm = 1
       integer :: n,m
 
@@ -401,8 +400,11 @@
       TYPE(ESMF_StateIntent_Flag) :: stateintent
       TYPE(ESMF_Time) :: currTime
       TYPE(ESMF_TimeInterval) :: timeStep
+      type(ESMF_Field) :: field_ocnmask, field_sst, field_sstin
       real(ESMF_KIND_R4), pointer :: ptrX(:,:), ptrY(:,:)
-      real(ESMF_KIND_R4), pointer :: ptr_esmffield(:,:)
+      real(ESMF_KIND_R4), pointer :: ptr_sst(:,:)
+      real(ESMF_KIND_R4), pointer :: ptr_sstin(:,:)
+      real(ESMF_KIND_R4), pointer :: ptr_ocnmask(:,:)
       INTEGER :: ids, ide, jds, jde, kds, kde
       INTEGER :: ims, ime, jms, jme, kms, kme
       INTEGER :: ips, ipe, jps, jpe, kps, kpe
@@ -449,6 +451,31 @@
       !! CALL wrf_timetoa ( head_grid%stop_subtime, timeStr )
       !! PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
       !!          TRIM(timeStr)
+      call ESMF_StateGet(importState, itemName="SST", field=field_sst, rc=rc)
+      call ESMF_StateGet(exportState, itemName="SST_INPUT", field=field_sstin, rc=rc)
+      call ESMF_StateGet(exportState, itemName="OCNMASK", field=field_ocnmask, rc=rc)
+      call ESMF_FieldGet(field_sst, localDE=0, farrayPtr=ptr_sst, rc=rc)
+      call ESMF_FieldGet(field_sstin, localDE=0, farrayPtr=ptr_sstin, rc=rc)
+      call ESMF_FieldGet(field_ocnmask, localDE=0, farrayPtr=ptr_ocnmask, rc=rc)
+        
+      do nJ = jps,MIN(jde-1,jpe)
+        do nI = ips,MIN(ide-1,ipe)
+          if (ptr_ocnmask(nI,nJ) .gt. 0.5) then
+            PRINT *, nI, nJ, ptr_ocnmask(nI,nJ), ptr_sstin(nI,nJ)
+            ptr_sst(nI,nJ) = ptr_sstin(nI,nJ)
+          endif
+        end do
+      end do
+
+      if (associated(ptr_sst)) then
+        nullify(ptr_sst)
+      end if
+      if (associated(ptr_sstin)) then
+        nullify(ptr_sstin)
+      end if
+      if (associated(ptr_ocnmask)) then
+        nullify(ptr_ocnmask)
+      end if
 
       call wrf_run();
 

@@ -26,9 +26,9 @@ state    real   waveTAUIY        ij     misc        1         -     i01rh  "WAVE
 state    real   waveTAUOX        ij     misc        1         -     i01rh  "WAVETAUOX"  "WAVE-OCEAN MOMENTUM FLUX, x-component" "m2 s-2"
 state    real   waveTAUOY        ij     misc        1         -     i01rh  "WAVETAUOY"  "WAVE-OCEAN MOMENTUM FLUX, y-component" "m2 s-2"
 state    real   waveNUMBER       ij     misc        1         -     i01rh  "WAVENUMBER"  "WAVE NUMBER" ""
-state    real   waveMASK         ij     misc        1         -     i01rh  "WAVEMASK"  "WAVE MASK (1=wave on; 0=wave off)" ""
 state    real   waveFP           ij     misc        1         -     i01rh  "WAVEFP"  "WAVE PEAK FREQ" "1/s"
 state    real   waveCHA          ij     misc        1         -     i01rh  "WAVECHA"  "CHANOCK COEFFICIENT" ""
+state    real   ocnMASK         ij     misc        1         -     i01rh  "OCNMASK"  "OCEAN MASK (1=ocean/wave on; 0=ocean/wave off)" ""
 state    real   ocnMLD           ij     misc        1         -     i01rh  "OCNMLD"  "Mixed Layer Depth in Ocean Model" "m"
 rconfig   integer use_coare35                namelist,physics      1            0         h     "use_coare35"    "switch to control coare algorithm in mynn"   ""
 

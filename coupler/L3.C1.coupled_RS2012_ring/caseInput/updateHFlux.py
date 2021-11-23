@@ -1,4 +1,4 @@
-#!/home/rus043/anaconda2/bin/python
+#!/home/rus043/miniconda3/bin/python
 import sys, os, os.path
 import matplotlib.pyplot as plt
 from netCDF4 import Dataset

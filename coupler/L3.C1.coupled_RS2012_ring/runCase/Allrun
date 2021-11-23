@@ -13,6 +13,6 @@ mpirun -np 4 ./wrf.exe
 python updateHFlux.py
 
 cp namelist.input.run namelist.input
-cp ../coupledCode/esmf_application .
+ln -sf ../coupledCode/esmf_application .
 echo "running coupled MITgcm--WRF simulation.."
 mpirun -np 4 ./esmf_application &> log.esmf 
