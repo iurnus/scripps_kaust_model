@@ -27,17 +27,17 @@ else
   exit
 fi
 
-# build the MITGCM as an executable
-mkdir build_mit code_mit
-cp utils/* build_mit/ # copy the scripts to install MITGCM
-cp mitCode/* code_mit/ # copy the scripts to install MITGCM
-cp mitSettingRS/* code_mit/ # copy the scripts to install MITGCM
-rm code_mit/exf_get* # remove the exf_get file so that MITGCM read the file input
-rm code_mit/main.F # remove the main file
-cd build_mit
-sed -i s/code/code_mit/g makescript_fwd.sh
-./makescript_fwd.sh # install MITGCM, generate *.f files
-cd ..
+# # build the MITGCM as an executable
+# mkdir build_mit code_mit
+# cp utils/* build_mit/ # copy the scripts to install MITGCM
+# cp mitCode/* code_mit/ # copy the scripts to install MITGCM
+# cp mitSettingRS/* code_mit/ # copy the scripts to install MITGCM
+# rm code_mit/exf_get* # remove the exf_get file so that MITGCM read the file input
+# rm code_mit/main.F # remove the main file
+# cd build_mit
+# sed -i s/code/code_mit/g makescript_fwd.sh
+# ./makescript_fwd.sh # install MITGCM, generate *.f files
+# cd ..
 
 # build the MITGCM as a library
 mkdir build code

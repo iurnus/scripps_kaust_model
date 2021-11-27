@@ -14,7 +14,7 @@ module load cray-parallel-netcdf
 module load grib2
 
 # Update the following directories from line 4 to 13
-export SKRIPS_DIR=/home/x_sunr/scripps_kaust_model/
+export SKRIPS_DIR=/project/k1325/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
 export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
