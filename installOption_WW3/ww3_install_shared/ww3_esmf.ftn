@@ -228,38 +228,6 @@
             WN_ESMF(I,J) = WN_XYGRID(I,J)
             WAVESTOKESX_ESMF(I,J) = STOKESX_XYGRID(I,J)
             WAVESTOKESY_ESMF(I,J) = STOKESY_XYGRID(I,J)
-            PRINT *, "WAVESTOKESY_ESMF is: ", I, J, WAVESTOKESY_ESMF(I,J)
-
-            ! MODIFY STOKES VELOCITY
-            IF (I .EQ. 1) THEN
-              WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
-            ELSE
-              MAPSTAI1 = MAPSTA(J,I-1)
-              MAPSTAI2 = MAPSTA(J,I+1)
-              IF ((MAPSTAI1 .EQ. 0) and (MAPSTAI2 .EQ. 0)) THEN
-                WAVESTOKESX_ESMF(I,J) = STOKESX_XYGRID(I,J)
-              ELSEIF (MAPSTAI1 .EQ. 0) THEN
-                WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
-              ELSE
-                WAVESTOKESX_ESMF(I,J) = 0.5*(STOKESX_XYGRID(I-1,J) + STOKESX_XYGRID(I,J)) 
-              ENDIF
-            ENDIF
-
-            IF (J .EQ. 1) THEN
-              WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
-            ELSE
-              MAPSTAI1 = MAPSTA(J-1,I)
-              MAPSTAI2 = MAPSTA(J+1,I)
-              IF ((MAPSTAI1 .EQ. 0) and (MAPSTAI2 .EQ. 0)) THEN
-                WAVESTOKESY_ESMF(I,J) = STOKESY_XYGRID(I,J)
-              ELSEIF (MAPSTAI1 .EQ. 0) THEN
-                WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
-              ELSE
-                WAVESTOKESY_ESMF(I,J) = 0.5*(STOKESY_XYGRID(I,J-1) + STOKESY_XYGRID(I,J)) 
-              ENDIF
-            ENDIF
-
-            PRINT *, "WAVESTOKESY_ESMF is: ", I, J, WAVESTOKESY_ESMF(I,J)
 
             WAVELANGMUIR_ESMF(I,J) = LANGM_XYGRID(I,J)
             WAVELASL_ESMF(I,J) = LASL_XYGRID(I,J)
@@ -276,7 +244,9 @@
               LP_ESMF(I,J) = 0.d0
               WN_ESMF(I,J) = 0.d0
               WAVESTOKESX_ESMF(I,J) = 0.d0
-              WAVESTOKESY_ESMF(I,J) = 0.d0
+              WAVESTOKESX_ESMF(I,J) = 0.d0
+              STOKESX_XYGRID(I,J) = 0.d0
+              STOKESY_XYGRID(I,J) = 0.d0
               WAVELANGMUIR_ESMF(I,J) = 1.d0
               WAVELASL_ESMF(I,J) = 0.d0
               WAVEFP_ESMF(I,J) = 0.d0
@@ -286,6 +256,47 @@
               WAVETAUOX_ESMF(I,J) = 0.d0
               WAVETAUOY_ESMF(I,J) = 0.d0
             END IF
+
+          ENDDO
+        ENDDO
+
+        DO I = 1, NX
+          DO J = 1, NY
+
+            PRINT *, "WAVESTOKESY_ESMF before: ", I, J, WAVESTOKESY_ESMF(I,J)
+
+            ! MODIFY STOKES VELOCITY
+            IF (I .EQ. 1) THEN
+              WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
+            ELSE
+              MAPSTAI1 = MAPSTA(J,I-1)
+              MAPSTAI2 = MAPSTA(J,I+1)
+              IF ((MAPSTAI1 .EQ. 0) .and. (MAPSTAI2 .EQ. 0)) THEN
+                WAVESTOKESX_ESMF(I,J) = STOKESX_XYGRID(I,J)
+              ELSEIF (MAPSTAI1 .EQ. 0) THEN
+                WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
+              ELSE
+                WAVESTOKESX_ESMF(I,J) = 0.5*(STOKESX_XYGRID(I-1,J) + STOKESX_XYGRID(I,J)) 
+              ENDIF
+            ENDIF
+
+            IF (J .EQ. 1) THEN
+              WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
+            ELSE
+              MAPSTAI1 = MAPSTA(J-1,I)
+              MAPSTAI2 = MAPSTA(J+1,I)
+              IF ((MAPSTAI1 .EQ. 0) .and. (MAPSTAI2 .EQ. 0)) THEN
+                WAVESTOKESY_ESMF(I,J) = STOKESY_XYGRID(I,J)
+              ELSEIF (MAPSTAI1 .EQ. 0) THEN
+                WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
+              ELSE
+                WAVESTOKESY_ESMF(I,J) = 0.5*(STOKESY_XYGRID(I,J-1) + STOKESY_XYGRID(I,J)) 
+              ENDIF
+            ENDIF
+
+            PRINT *, "WAVESTOKESY_ESMF after: ", I, J, WAVESTOKESY_ESMF(I,J)
+
+
           ENDDO
         ENDDO
         
