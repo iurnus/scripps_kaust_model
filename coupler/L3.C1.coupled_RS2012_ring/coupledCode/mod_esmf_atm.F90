@@ -461,7 +461,6 @@
       do nJ = jps,MIN(jde-1,jpe)
         do nI = ips,MIN(ide-1,ipe)
           if (ptr_ocnmask(nI,nJ) .gt. 0.5) then
-            PRINT *, nI, nJ, ptr_ocnmask(nI,nJ), ptr_sstin(nI,nJ)
             ptr_sst(nI,nJ) = ptr_sstin(nI,nJ)
           endif
         end do
