@@ -7,6 +7,7 @@ WW3_DIR1=${SKRIPS_DIR}/installOption_WW3/ww3_install_shaheen/
 ln -sf ${WW3_DIR1}/comp ./bin/comp
 ln -sf ${WW3_DIR1}/link ./bin/link
 ln -sf ${WW3_DIR1}/w3profsmd.ftn ./ftn/
+
 ln -sf ${WW3_DIR0}/switch ./bin/switch
 ln -sf ${WW3_DIR0}/ww3_esmf.ftn ./ftn/
 ln -sf ${WW3_DIR0}/w3adatmd.ftn ./ftn/
