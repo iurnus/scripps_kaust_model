@@ -263,11 +263,13 @@
         DO I = 1, NX
           DO J = 1, NY
 
-            PRINT *, "WAVESTOKESY_ESMF before: ", I, J, WAVESTOKESY_ESMF(I,J)
+            ! PRINT *, "WAVESTOKESY_ESMF before: ", I, J, WAVESTOKESY_ESMF(I,J)
 
             ! MODIFY STOKES VELOCITY
             IF (I .EQ. 1) THEN
               WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I+1,J)
+            ELSEIF (I .EQ. NX) THEN
+              WAVESTOKESX_ESMF(I,J) = 1.5*STOKESX_XYGRID(I,J) - 0.5*STOKESX_XYGRID(I-1,J)
             ELSE
               MAPSTAI1 = MAPSTA(J,I-1)
               MAPSTAI2 = MAPSTA(J,I+1)
@@ -282,6 +284,8 @@
 
             IF (J .EQ. 1) THEN
               WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J+1)
+            ELSEIF (J .EQ. NY) THEN
+              WAVESTOKESY_ESMF(I,J) = 1.5*STOKESY_XYGRID(I,J) - 0.5*STOKESY_XYGRID(I,J-1)
             ELSE
               MAPSTAI1 = MAPSTA(J-1,I)
               MAPSTAI2 = MAPSTA(J+1,I)
@@ -294,7 +298,7 @@
               ENDIF
             ENDIF
 
-            PRINT *, "WAVESTOKESY_ESMF after: ", I, J, WAVESTOKESY_ESMF(I,J)
+            ! PRINT *, "WAVESTOKESY_ESMF after: ", I, J, WAVESTOKESY_ESMF(I,J)
 
 
           ENDDO
