@@ -11,3 +11,6 @@
 +:i:0:OCNMASK,SST_INPUT,LH,HFX,SWUPB,SWDNB,LWUPB,LWDNB
 ## Read reanalysis SST (or climatology) every time step
 +:i:4:SST_INPUT
+############################################
+## Need these variables to validate fresh water flux
++:h:0:QFX,RAINCV,RAINSHV,RAINNCV

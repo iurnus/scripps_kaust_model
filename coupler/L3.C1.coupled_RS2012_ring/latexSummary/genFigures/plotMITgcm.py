@@ -11,7 +11,7 @@ import MITgcmutils
 
 p = [];
 
-for iStep in [1,2,3]:
+for iStep in [1,2,3,10,60]:
   mitgcm_pickup_file = '../../runCase/pickup.'+str(iStep).zfill(10)
   mitgcm_pickup_results = MITgcmutils.rdmds(mitgcm_pickup_file)
   mitgcm_diag_file = '../../runCase/diag2dKPP.'+str(iStep).zfill(10)
@@ -34,27 +34,33 @@ for iStep in [1,2,3]:
   mitgcm_uoce = mitgcm_pickup_results[0,:,:]
   mitgcm_voce = mitgcm_pickup_results[40,:,:]
   mitgcm_current = (mitgcm_uoce**2+mitgcm_voce**2)**0.5
+  mitgcm_precip = mitgcm_diag_results[13,:,:]
+  mitgcm_evap = mitgcm_diag_results[14,:,:]
   
   parallels = np.arange(12.,28.1,4.)
   meridians = np.arange(30.,50.1,4.)
   
   fieldString = ['LH','SH','GSW','GLW','T2','SST','Q2',\
-                 'current','wind']
+                 'current','wind','precip','evap']
   # plot the lh/sh out of ocean; 
   # plot downward long/short wave radiation
   fieldName = [-mitgcm_lh,-mitgcm_sh,-mitgcm_swnet,\
                -mitgcm_lwnet,mitgcm_t2,mitgcm_sst,\
-               mitgcm_q2,mitgcm_current,mitgcm_wind]
+               mitgcm_q2,mitgcm_current,mitgcm_wind,\
+               mitgcm_precip,mitgcm_evap]
   clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001.01,200),\
                np.arange(-205,205.01,10),np.arange(20,50.01,1),np.arange(24,32.01,0.1),\
-               np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1)]
+               np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
+               np.arange(0,1.001e-7,0.02e-7),np.arange(0,1.001e-7,0.02e-7)]
   cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
               cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
-              cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed]
+              cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
+              cmocean.cm.speed,cmocean.cm.speed]
   tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
               np.arange(-200,201,100),np.arange(20,50.01,5),np.arange(24,32.01,1),\
-              np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4)]
-  nFigures = 9
+              np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
+              np.arange(0,1.001e-7,0.2e-7),np.arange(0,1.001e-7,0.2e-7)]
+  nFigures = 11
   
   print "plot mitgcm..."
   ## for i in range(128):

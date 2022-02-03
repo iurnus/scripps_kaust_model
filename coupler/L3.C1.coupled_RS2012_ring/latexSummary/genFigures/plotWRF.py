@@ -32,29 +32,34 @@ wrf_output_wind = (wrf_output_uwnd**2+wrf_output_vwnd**2)**0.5
 wrf_output_uoce = wrf_output_results.variables['UOCE'][:];
 wrf_output_voce = wrf_output_results.variables['VOCE'][:];
 wrf_output_current = (wrf_output_uoce**2+wrf_output_voce**2)**0.5
+wrf_output_precip =( wrf_output_results.variables['RAINCV'][:]\
+                    +wrf_output_results.variables['RAINNCV'][:]\
+                    +wrf_output_results.variables['RAINSHV'][:])/60.0/1000.0;
+wrf_output_evap = wrf_output_results.variables['QFX'][:]/1000.0;
 wrf_lon = wrf_output_results.variables['XLONG'][:];
 wrf_lat = wrf_output_results.variables['XLAT'][:];
 parallels = np.arange(12.,28.1,4.)
 meridians = np.arange(30.,50.1,4.)
 
 fieldString = ['LH','SH','GSW','GLW','T2','SST','Q2',\
-               'current','wind','waveheight','wavelength']
+               'current','wind','precip','evap']
 fieldName = [wrf_output_lh,wrf_output_sh,wrf_output_gsw,\
              wrf_output_glw,wrf_output_t2,wrf_output_sst,\
-             wrf_output_q2,wrf_output_current,wrf_output_wind]
+             wrf_output_q2,wrf_output_current,wrf_output_wind,\
+             wrf_output_precip,wrf_output_evap]
 clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001.01,200),\
              np.arange(-205,205.01,10),np.arange(20,50.01,1),np.arange(24,32.01,0.1),\
              np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
-             np.arange(0,2.005,0.02),np.arange(0,40.1,1)]
+             np.arange(0,1.001e-7,0.02e-7),np.arange(0,1.001e-7,0.02e-7)]
 cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
             cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
             cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
-            cmocean.cm.deep,cmocean.cm.deep]
+            cmocean.cm.speed,cmocean.cm.speed]
 tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
             np.arange(-200,201,100),np.arange(20,50.01,5),np.arange(24,32.01,1),\
             np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
-            np.arange(0.00001,2.001,0.4),np.arange(0,40.1,10)]
-nFigures = 9
+            np.arange(0,1.001e-7,0.2e-7),np.arange(0,1.001e-7,0.2e-7)]
+nFigures = 11
   
 print "plot WRF..."
   

@@ -14,7 +14,7 @@
 # diag_mnc     = .FALSE.,
 # do not specify levels => all levels are selected
   frequency(1) = 60.0,
-  fields(1:14,1) = 'KPPviscA',
+  fields(1:15,1) = 'KPPviscA',
                    'KPPdiffS',
                    'MXLDEPTH',
                    'EXFhs   ',
@@ -28,6 +28,7 @@
                    'EXFatemp',
                    'EXFaqh  ',
                    'EXFpreci',
+                   'EXFevap',
   filename(1) = 'diag2dKPP',
  &
 
