@@ -19,6 +19,5 @@ module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
 module load craype-hugepages4M
-module load grib2
 
 srun -n 32 --hint=nomultithread --ntasks-per-node=16 ./real.exe

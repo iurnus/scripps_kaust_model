@@ -37,8 +37,8 @@ endif
 
 set compopts_num = ( $compopts )
 if ($ESMF_OS == Unicos) then
-  set compinc  = (-I/$MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
-  set complibs = (-L/$MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
+  set compinc  = (-I/$SKRIPS_MPI_INC -I$SKRIPS_NETCDF_INCLUDE)
+  set complibs = (-L/$SKRIPS_MPI_LIB -I$SKRIPS_NETCDF_LIB -lnetcdf -lnetcdff -lpnetcdf)
 else
   set compinc      = ($SKRIPS_NETCDF_INCLUDE )
   set complibs     = ($SKRIPS_NETCDF_LIB  -lnetcdff -lnetcdf)

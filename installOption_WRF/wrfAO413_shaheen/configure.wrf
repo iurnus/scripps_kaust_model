@@ -203,7 +203,7 @@ CFLAGS          =    $(CFLAGS_LOCAL) -DDM_PARALLEL  \
 FCFLAGS         =    $(FCOPTIM) $(FCBASEOPTS)
 ESMF_LIB_FLAGS  =    
 # ESMF 5 -- these are defined in esmf.mk, included above
- ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/lib/ -lwrfio_esmf 
+ ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L${SKRIPS_MPI_LIB} -lwrfio_esmf 
 ESMF_IO_LIB_EXT =    $(ESMF_IO_LIB)
 INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                      $(ESMF_MOD_INC) $(ESMF_LIB_FLAGS) \
@@ -231,18 +231,22 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      $(ESMF_LIB)/libesmf.a -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib -lnetcdff -lnetcdf  -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf -L/opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0/lib -lpnetcdf   
+                      $(ESMF_LIB)/libesmf.a \
+                      -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf \
+                      -L$(WRF_SRC_ROOT_DIR)/external/io_pnetcdf -lwrfio_pnf \
+                      -L/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/lib -lnetcdff -lnetcdf  \
+                      -L/opt/cray/pe/parallel-netcdf/1.12.1.4/INTEL/19.1/lib -lpnetcdf   
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO) $(NETCDF4_DEP_LIB)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 
 ENVCOMPDEFS     =    
 WRF_CHEM	=	0 
 CPPFLAGS        =    $(ARCHFLAGS) $(ENVCOMPDEFS) -I$(LIBINCLUDE) $(TRADFLAG) 
-NETCDFPATH      =    /opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0
+NETCDFPATH      =    /opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1
 HDF5PATH        =    
 WRFPLUSPATH     =    
 RTTOVPATH       =    
-PNETCDFPATH     =    /opt/cray/pe/parallel-netcdf/1.11.1.1/INTEL/19.0
+PNETCDFPATH     =    /opt/cray/pe/parallel-netcdf/1.12.1.4/INTEL/19.1
 
 bundled:  io_only 
 external: io_only $(WRF_SRC_ROOT_DIR)/external/RSL_LITE/librsl_lite.a gen_comms_rsllite module_dm_rsllite $(ESMF_TARGET)

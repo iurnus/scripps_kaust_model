@@ -227,7 +227,7 @@ CFLAGS          =    $(CFLAGS_LOCAL) -DDM_PARALLEL  \
 FCFLAGS         =    $(FCOPTIM) $(FCBASEOPTS)
 ESMF_LIB_FLAGS  =    
 # ESMF 5 -- these are defined in esmf.mk, included above
- ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L$(MPI_LIB) -lwrfio_esmf 
+ ESMF_IO_LIB     =    $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKLIBS) -L$(WRF_SRC_ROOT_DIR)/external/io_esmf -L$(SKRIPS_MPI_LIB) -lwrfio_esmf 
 ESMF_IO_LIB_EXT =    $(ESMF_IO_LIB)
 INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                      $(ESMF_MOD_INC) $(ESMF_LIB_FLAGS) \

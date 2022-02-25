@@ -26,7 +26,7 @@ cp patches/SIZE.h code/ # update from patch
 cd build
 ./makescript_fwd.sio.ring # install MITGCM, generate *.f files
 
-cp ${MPI_INC}/mpif* . 
+cp ${SKRIPS_MPI_INC}/mpif* . 
 ./mkmod.sh ocn # install MITGCM as a library, generate *.mod files
 cd ..
 

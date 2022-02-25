@@ -19,9 +19,8 @@ module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
 module load craype-hugepages4M
-module load grib2
 
-module load python/2.7.14
+module load python/2.7.18
 
 ./updateLowinp.py
 cp namelist.input.set namelist.input

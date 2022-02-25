@@ -11,7 +11,7 @@ module load craype-hugepages4M
 module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
-module load grib2
+# module load grib2
 
 # Update the following directories from line 4 to 13
 export SKRIPS_DIR=/project/k1325/scripps_kaust_model/
@@ -23,12 +23,12 @@ export WW3_DIR=$SKRIPS_DIR/ww3_607/
 # NETCDF and MPI options
 export NETCDF=$NETCDF_DIR
 export PNETCDF=$PARALLEL_NETCDF_DIR
-export ESMF_NETCDF_INCLUDE="/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/include/, -I/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/include"
-export ESMF_NETCDF_LIBPATH="/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib/, -L/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/lib"
-export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.6.3.2/INTEL/19.0/lib/, -Wl,-rpath,/opt/cray/pe/parallel-netcdf/1.11.1.1/intel/19.0/lib/"
-export MPI_DIR=/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/
-export MPI_INC=/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/include/
-export MPI_LIB=/opt/intel/compilers_and_libraries_2019.5.281/linux/mpi/intel64/lib/
+export ESMF_NETCDF_INCLUDE="/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/include/, -I/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/include"
+export ESMF_NETCDF_LIBPATH="/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/lib/, -L/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/lib"
+export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/lib/, -Wl,-rpath,/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/lib/"
+export SKRIPS_MPI_DIR=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/
+export SKRIPS_MPI_INC=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/include
+export SKRIPS_MPI_LIB=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/lib
 export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
 
@@ -37,7 +37,7 @@ export PATH=$WW3_DIR/model/bin:${PATH}
 export PATH=$WW3_DIR/model/exe:${PATH}
 export WWATCH3_ENV=$WW3_DIR/wwatch3.env
 export WWATCH3_NETCDF=NC4
-export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.6.3.2/bin/nc-config'
+export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.7.4.4/bin/nc-config'
 
 
 export ESMF_OS=Unicos
