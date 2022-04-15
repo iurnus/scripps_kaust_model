@@ -808,7 +808,7 @@ C     executable code below.
 C     No declarations necessary
 #  else
       Real*8 timenow
-      external timenow
+      !! external timenow
 #  endif /* HAVE_CLOC */
 # endif
 CEOP
@@ -820,7 +820,8 @@ CCE107 Fixed for AIX and UNICOS
       ACTUAL = ETIME_(TARRAY)
       userTime      = TARRAY(1)
       systemTime    = TARRAY(2)
-      wallClockTime = timenow()
+      !! wallClockTime = timenow()
+      wallClockTime = TARRAY(2)
 # elif (defined (TARGET_T3E) || defined (TARGET_CRAY_VECTOR))
       userTime      = SECOND()
       systemTime    = 0.
@@ -845,7 +846,8 @@ CCE107 Fixed for AIX and UNICOS
 #  elif (defined (ALLOW_USE_MPI) && defined (USE_MPI_WTIME))
       wallClockTime = MPI_Wtime()
 #  else
-      wallClockTime = timenow()
+      !! wallClockTime = timenow()
+      wallClockTime = tarray(2)
 #  endif
 # endif
 #endif
