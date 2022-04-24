@@ -765,6 +765,10 @@ CONTAINS
                 CALL Taylor_Yelland_dghq(ZNT(i),UST(i),WSPD(i),waveHS(i),waveFP(i),ocnMASK(i))
              ELSEIF ( ISFTCFLX .EQ. 9 ) THEN
                 CALL Taylor_Yelland_oost(ZNT(i),UST(i),WSPD(i),waveLP(i),waveFP(i),ocnMASK(i))
+             ELSEIF ( ISFTCFLX .EQ. 98 ) THEN
+                CALL Taylor_Yelland_min(ZNT(i),UST(i),WSPD(i),waveLP(i),waveFP(i),ocnMASK(i))
+             ELSEIF ( ISFTCFLX .EQ. 99 ) THEN
+                CALL Taylor_Yelland_max(ZNT(i),UST(i),WSPD(i),waveLP(i),waveFP(i),ocnMASK(i))
              ENDIF
           ELSE
              !DEFAULT TO COARE 3.0/3.5
@@ -810,7 +814,8 @@ CONTAINS
              ELSEIF ( ISFTCFLX .EQ. 2 ) THEN
                 CALL garratt_1992(z_t(i),z_q(i),ZNTstoch(i),restar,XLAND(I))
              ELSEIF ( ISFTCFLX .EQ. 3 .OR. ISFTCFLX .EQ. 6 .OR. ISFTCFLX .EQ. 7 .OR. &
-                      ISFTCFLX .EQ. 8 .OR. ISFTCFLX .EQ. 9 ) THEN
+                      ISFTCFLX .EQ. 8 .OR. ISFTCFLX .EQ. 9 .OR. ISFTCFLX .EQ. 98 .OR. &
+                      ISFTCFLX .EQ. 99) THEN
                 IF (COARE_OPT .EQ. 3.0) THEN
                    CALL fairall_etal_2003(z_t(i),z_q(i),restar,UST(i),visc)
                 ELSE
@@ -1549,6 +1554,44 @@ END SUBROUTINE SFCLAY1D_mynn
 
    END SUBROUTINE Taylor_Yelland_wave
 !--------------------------------------------------------------------
+   SUBROUTINE Taylor_Yelland_min(Z_0,ustar,wsp10,waveHS,waveLP,ocnMASK)
+
+     !This formulation for roughness length was designed account for
+     !wave steepness.
+     
+       IMPLICIT NONE
+       REAL, INTENT(IN)  :: ustar,wsp10
+       REAL, INTENT(OUT) :: Z_0
+       REAL, parameter  :: g=9.81, pi=3.14159265
+       REAL :: hs, Tp, Lp
+       REAL :: waveHS, waveLP, ocnMASK
+       REAL :: Z_0_wave
+
+       Z_0 = 1.27e-7
+
+       return
+
+   END SUBROUTINE Taylor_Yelland_min
+!--------------------------------------------------------------------
+   SUBROUTINE Taylor_Yelland_max(Z_0,ustar,wsp10,waveHS,waveLP,ocnMASK)
+
+     !This formulation for roughness length was designed account for
+     !wave steepness.
+     
+       IMPLICIT NONE
+       REAL, INTENT(IN)  :: ustar,wsp10
+       REAL, INTENT(OUT) :: Z_0
+       REAL, parameter  :: g=9.81, pi=3.14159265
+       REAL :: hs, Tp, Lp
+       REAL :: waveHS, waveLP, ocnMASK
+       REAL :: Z_0_wave
+
+       Z_0 = 2.85e-3
+
+       return
+
+   END SUBROUTINE Taylor_Yelland_max
+!--------------------------------------------------------------------
    SUBROUTINE Taylor_Yelland_dghq(Z_0,ustar,wsp10,waveHS,waveFP,ocnMASK)
 
      !This formulation for roughness length was designed account for
@@ -1616,34 +1659,6 @@ END SUBROUTINE SFCLAY1D_mynn
        return
 
    END SUBROUTINE Taylor_Yelland_oost
-!--------------------------------------------------------------------
-   SUBROUTINE Taylor_Yelland_max(Z_0)
-
-     !This formulation for roughness length was designed account for
-     !wave steepness.
-     
-       IMPLICIT NONE
-       REAL, INTENT(OUT) :: Z_0
-
-       Z_0 = 2.85e-3
-
-       return
-
-   END SUBROUTINE Taylor_Yelland_max
-!--------------------------------------------------------------------
-   SUBROUTINE Taylor_Yelland_min(Z_0)
-
-     !This formulation for roughness length was designed account for
-     !wave steepness.
-     
-       IMPLICIT NONE
-       REAL, INTENT(OUT) :: Z_0
-
-       Z_0 = 1.27e-7
-
-       return
-
-   END SUBROUTINE Taylor_Yelland_min
 !--------------------------------------------------------------------
    SUBROUTINE charnock_1955(Z_0,ustar,wsp10,visc,zu)
  

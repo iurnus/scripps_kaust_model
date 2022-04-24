@@ -17,9 +17,9 @@ export NETCDF=/opt/netcdf/4.6.1/intel/intelmpi/
 export NETCDF_DIR=/opt/netcdf/4.6.1/intel/intelmpi/
 export NETCDF_INC=/opt/netcdf/4.6.1/intel/intelmpi/include/
 export NETCDF_LIB=/opt/netcdf/4.6.1/intel/intelmpi/lib/
-export MPI_DIR=$MPIHOME
-export MPI_INC=$MPIHOME/include/
-export MPI_LIB=$MPIHOME/lib/
+export SKRIPS_MPI_DIR=$MPIHOME
+export SKRIPS_MPI_INC=$MPIHOME/include/
+export SKRIPS_MPI_LIB=$MPIHOME/lib/
 
 # For WW3
 export WWATCH3_NETCDF=NC4
@@ -45,7 +45,7 @@ export ESMFMKFILE=$ESMF_LIB/esmf.mk
 export SKRIPS_NETCDF_INCLUDE=-I`nc-config --includedir`
 export SKRIPS_NETCDF_LIB=-L`nc-config --libdir`
 export LD_LIBRARY_PATH=$NETCDF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-export LD_LIBRARY_PATH=$MPI_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=$SKRIPS_MPI_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=$ESMF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 echo "SKRIPS_DIR is: $SKRIPS_DIR"

@@ -14,9 +14,9 @@ export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_1
 export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH=/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/:${PATH}   
-export MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
-export MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include/
-export MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
+export SKRIPS_MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
+export SKRIPS_MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include/
+export SKRIPS_MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
 
 # For WW3
 export PATH=$WW3_DIR/model/bin:${PATH}
