@@ -530,6 +530,7 @@ BENCH_START(surf_driver_tim)
      ! added by Rui for wave coupling
      &        ,waveHS=grid%waveHS, waveLP=grid%waveLP, ocnMASK=grid%ocnMASK         &
      &        ,waveSTOKESX=grid%waveSTOKESX, waveSTOKESY=grid%waveSTOKESY           &
+     &        ,waveSTOKESXH=grid%waveSTOKESXH, waveSTOKESYH=grid%waveSTOKESYH       &
      &        ,waveLANGMUIR=grid%waveLANGMUIR, waveLASL=grid%waveLASL               &
      &        ,waveTAUIX=grid%waveTAUIX, waveTAUIY=grid%waveTAUIY                   &
      &        ,waveTAUOX=grid%waveTAUOX, waveTAUOY=grid%waveTAUOY                   &

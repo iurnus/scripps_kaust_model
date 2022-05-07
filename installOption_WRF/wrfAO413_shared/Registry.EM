@@ -19,6 +19,8 @@ state    real   waveHS           ij     misc        1         -     i01rh  "WAVE
 state    real   waveLP           ij     misc        1         -     i01rh  "WAVELP"  "PEAK WAVE LENGTH" "m"
 state    real   waveSTOKESX      ij     misc        1         -     i01rh  "WAVESTOKESX"  "WAVE STOKES VELOCITY X" "m/s"
 state    real   waveSTOKESY      ij     misc        1         -     i01rh  "WAVESTOKESY"  "WAVE STOKES VELOCITY Y" "m/s"
+state    real   waveSTOKESXH     ij     misc        1         -     i01rh  "WAVESTOKESXH"  "AVERAGED WAVE STOKES VELOCITY X" "m/s"
+state    real   waveSTOKESYH     ij     misc        1         -     i01rh  "WAVESTOKESYH"  "AVERAGED WAVE STOKES VELOCITY Y" "m/s"
 state    real   waveLANGMUIR     ij     misc        1         -     i01rh  "WAVELANGMUIR"  "WAVE INDUCED LANGMUIR transport" "1"
 state    real   waveLASL         ij     misc        1         -     i01rh  "WAVELASL"  "WAVE LASL factor" "1"
 state    real   waveTAUIX        ij     misc        1         -     i01rh  "WAVETAUIX"  "WAVE SUPPORTED STRESS, x-component" "m2 s-2"

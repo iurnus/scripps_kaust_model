@@ -32,7 +32,8 @@ CONTAINS
      &          ,tyr,tyra,tdly,tlag,lagday,nyear,nday,tmn_update,yr   &
      &          ,t_phy,u10,udrunoff,ust,uz0                           &
      &          ,u_frame,u_phy,v10,vegfra,uoce,voce                   &
-     &          ,waveHS,waveLP,ocnMASK,waveSTOKESX,waveSTOKESY       & 
+     &          ,waveHS,waveLP,ocnMASK,waveSTOKESX,waveSTOKESY        & 
+     &          ,waveSTOKESXH,waveSTOKESYH                            & 
      &          ,waveLANGMUIR,waveLASL,waveTAUIX,waveTAUIY            &
      &          ,waveTAUOX,waveTAUOY,waveNUMBER,ocnMLD                &
      &          ,waveFP,waveCHA,use_coare35                           &
@@ -828,6 +829,8 @@ CONTAINS
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   OCNMASK
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVESTOKESX
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVESTOKESY
+   REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVESTOKESXH
+   REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVESTOKESYH
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVENUMBER
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVELANGMUIR
    REAL, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)::   WAVETAUIX

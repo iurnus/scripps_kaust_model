@@ -80,6 +80,7 @@ SUBROUTINE ext_esmf_read_field ( DataHandle , DateStr , VarName , Field , FieldT
 if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'VOCE' &
      .or. TRIM(VarNAME) == 'WAVEHS' .or. TRIM(VarNAME) == 'WAVELP' .or. TRIM(VarNAME) == 'OCNMASK' &
      .or. TRIM(VarNAME) == 'WAVEFP' .or. TRIM(VarNAME) == 'WAVECHA' &
+     .or. TRIM(VarNAME) == 'WAVESTOKESXH' .or. TRIM(VarNAME) == 'WAVESTOKESYH' &
      .or. TRIM(VarNAME) == 'WAVESTOKESX' .or. TRIM(VarNAME) == 'WAVESTOKESY' .or. TRIM(VarNAME) == 'WAVELASL' &
      .or. TRIM(VarNAME) == 'WAVETAUIX' .or. TRIM(VarNAME) == 'WAVETAUIY' &
      .or. TRIM(VarNAME) == 'WAVETAUOX' .or. TRIM(VarNAME) == 'WAVETAUOY' .or. TRIM(VarNAME) == 'WAVENUMBER' &
