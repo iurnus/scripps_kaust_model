@@ -96,7 +96,7 @@ GPFS            =
 CURL            =
 HDF5            = -lhdf5 -lhdf5_hl
 ZLIB            = -lz
-DEP_LIB_PATH    = -L/scratch/rolls/netcdf-roll/BUILD/sdsc-netcdf-fortran_intel_intelmpi-4.4.4/../..//cache/netcdf/intel/intelmpi/lib -L/opt/hdf5/1.10.3/intel/intelmpi/lib
+DEP_LIB_PATH    = -L/state/partition1/git/netcdf-roll/BUILD/sdsc-netcdf-fortran_intel_intelmpi-4.4.4/../..//cache/netcdf/intel/intelmpi/lib -L/opt/hdf5/1.10.3/intel/intelmpi/lib
 NETCDF4_DEP_LIB = $(DEP_LIB_PATH) $(HDF5) $(ZLIB) $(GPFS) $(CURL)
 
 # NETCDF4INCLUDEGOESHERE
