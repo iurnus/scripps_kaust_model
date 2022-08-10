@@ -1621,8 +1621,15 @@
           IF ( FLOLOC( 3, 1).AND.(IK.GE.E3DF(2,1).AND.IK.LE.E3DF(3,1)))   &
             EF(JSEA,IK)  = EBD(IK,JSEA) * TPI
 !
+          
           USSX(JSEA)  = USSX(JSEA) + ABX(JSEA)*USSCO
           USSY(JSEA)  = USSY(JSEA) + ABY(JSEA)*USSCO
+          ! Surface Stokes Drift, QL, 150525
+          ETUSSX(JSEA)  = ETUSSX(JSEA) + ABX(JSEA)*USSCO
+          ETUSSY(JSEA)  = ETUSSY(JSEA) + ABY(JSEA)*USSCO
+          ! Depth averaged Stokes Drift, QL, 150525
+          ETUSSXH(JSEA)  = ETUSSXH(JSEA) + ABX(JSEA)*USSCO_2
+          ETUSSYH(JSEA)  = ETUSSYH(JSEA) + ABY(JSEA)*USSCO_2
 !
 ! Fills the 3D Stokes drift spectrum array
 !  ! The US3D Stokes drift specrum array is now calculated in a
@@ -2008,8 +2015,7 @@
               USSYH(JSEA) = ETUSSYH(JSEA)
               LANGMT(JSEA) = SQRT ( UST(ISEA) * ASF(ISEA)        &
                        * SQRT ( DAIR / DWAT)                   &
-                       / SQRT ( USSX(JSEA)**2 + USSY(JSEA)**2 + 1E-5 ) &
-                       + 1E-10)
+                       / SQRT ( USSX(JSEA)**2 + USSY(JSEA)**2))
               ! Calculating Langmuir Number for misaligned wind and waves
               ! see Van Roekel et al., 2012
               ! take z1 = 4 * HS
@@ -2020,26 +2026,22 @@
               !! ! ALPHALS: angle between wind and LC direction, Surface
               !! ! Stokes drift
 
-              HS_i = max(HS(JSEA),1E-5)
-              ALPHALS(JSEA) = ATAN( SIN(SWW) / max(( LANGMT(JSEA)**2  &
-                  ! /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
-                  ! /0.4*LOG(MAX(ABS(HML_i/4./HS_i),1.0+1E-5))+COS(SWW)),1E-5))
-                  /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0+1E-5))+COS(SWW)),1E-5))
+              HS_i = HS(JSEA)
+              ALPHALS(JSEA) = ATAN( SIN(SWW) / ( LANGMT(JSEA)**2  &
+                  /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
               LAPROJ(JSEA) = LANGMT(JSEA) & 
                   * SQRT(ABS(COS(ALPHALS(JSEA))) &
-                  / MAX(ABS(COS(SWW-ALPHALS(JSEA))), 1E-10))
+                  / ABS(COS(SWW-ALPHALS(JSEA))))
               ! Stokes depth
               SWW = ATAN2(USSYH(JSEA),USSXH(JSEA)) - UD(ISEA)
               ! ALPHAL: angle between wind and LC direction
               ALPHAL(JSEA) = ATAN(SIN(SWW) / (LANGMT(JSEA)**2  &
-                ! /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
-                ! /0.4*LOG(MAX(ABS(HML_i/4./HS_i),1.0+1E-5))+COS(SWW)))
-                /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0+1E-5))+COS(SWW)))
+                /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
               LASL(JSEA) = SQRT(UST(ISEA)*ASF(ISEA)         &
                 * SQRT(DAIR/DWAT) &
-                / SQRT(USSXH(JSEA)**2+USSYH(JSEA)**2 + 1E-5))
+                / SQRT(USSXH(JSEA)**2+USSYH(JSEA)**2))
               LASLPJ(JSEA) = LASL(JSEA) * SQRT(ABS(COS(ALPHAL(JSEA))) &
-                / (ABS(COS(SWW-ALPHAL(JSEA))) + 1E-5))
+                / (ABS(COS(SWW-ALPHAL(JSEA)))))
               ! QL, 160530, LAMULT
               LAMULT(JSEA) = MIN(5.0, ABS(COS(ALPHAL(JSEA))) * &
                SQRT(1.0+(1.5*LASLPJ(JSEA))**(-2)+(5.4*LASLPJ(JSEA))**(-4)))
