@@ -48,8 +48,8 @@
 
       SUBROUTINE GET_HS(MYCOMM, LOCALPET, HS_ESMF, LP_ESMF, WN_ESMF, &
                         WAVEMASK_ESMF, WAVESTOKESX_ESMF, &
-                        WAVESTOKESXH_ESMF, &
-                        WAVESTOKESY_ESMF, WAVESTOKESYH_ESMF,  &
+                        WAVESTOKESY_ESMF, &
+                        WAVESTOKESXH_ESMF, WAVESTOKESYH_ESMF,  &
                         WAVELANGMUIR_ESMF, &
                         WAVELASL_ESMF, &
                         WAVEFP_ESMF, WAVECHA_ESMF, &
@@ -265,9 +265,9 @@
               LP_ESMF(I,J) = 0.d0
               WN_ESMF(I,J) = 0.d0
               WAVESTOKESX_ESMF(I,J) = 0.d0
-              WAVESTOKESX_ESMF(I,J) = 0.d0
+              WAVESTOKESY_ESMF(I,J) = 0.d0
               WAVESTOKESXH_ESMF(I,J) = 0.d0
-              WAVESTOKESXH_ESMF(I,J) = 0.d0
+              WAVESTOKESYH_ESMF(I,J) = 0.d0
               STOKESX_XYGRID(I,J) = 0.d0
               STOKESY_XYGRID(I,J) = 0.d0
               WAVELANGMUIR_ESMF(I,J) = 1.d0
