@@ -1300,7 +1300,7 @@
       ! QL, 150525, ETUSSX, ETUSSY, ETUSCX, ETUSCY, ETUSSXH, ETUSSYH
       !             tmp variables for surface and SL averaged SD
       REAL                       SWW, HSL, HML_i, HS_i
-      REAL                       USSCO_2
+      REAL                       USSCO_2, WN_LOCAL
       INTEGER                    DEBUG_i
       REAL                       ETUSSX(NSEAL), ETUSSY(NSEAL), &
                                  ! ETUSCX(NSEAL), ETUSCY(NSEAL), &
@@ -1607,7 +1607,7 @@
                 GRAV*WN(IK,ISEA) * EBD(IK,JSEA) / (SINH(2.*KD))
           ELSE ! deep water limit, QL, 150525 ! Surface Stokes Drift
             USSCO=FACTOR*SIG(IK)*2.*WN(IK,ISEA)
-            USSCO_2=FACTOR*SIG(IK)*2.*(1.-EXP(-2.*WN(IK,ISEA)*HSL))/HSL
+            USSCO_2=FACTOR*SIG(IK)*(1.-EXP(-2.*WN(IK,ISEA)*HSL))/HSL
             END IF
 !
           ABXX(JSEA)   = MAX ( 0. , ABXX(JSEA) ) * FACTOR
@@ -1932,15 +1932,16 @@
         SYY(JSEA) = SYY(JSEA) + FTE * ABYY(JSEA) / CG(NK,ISEA)
         SXY(JSEA) = SXY(JSEA) + FTE * ABXY(JSEA) / CG(NK,ISEA)
         !! !! ! QL, 150525, tail for SD
-        ETUSSX(JSEA)  = ETUSSX(JSEA) + 2*GRAV*ETUSCX(JSEA)/SIG(NK)
-        ETUSSY(JSEA)  = ETUSSY(JSEA) + 2*GRAV*ETUSCY(JSEA)/SIG(NK)
-        !! ! tail for depth integrated SD
-        ETUSSXH(JSEA)  = ETUSSXH(JSEA) + 2*GRAV*ETUSCX(JSEA)/SIG(NK)   &
-          *(1.-(1.-4.*HSL*WN(NK,ISEA))*EXP(-2.*WN(NK,ISEA)*HSL))       &
-          /6./WN(NK,ISEA)/HSL
-        ETUSSYH(JSEA)  = ETUSSYH(JSEA) + 2*GRAV*ETUSCY(JSEA)/SIG(NK)   &
-          *(1.-(1.-4.*HSL*WN(NK,ISEA))*EXP(-2.*WN(NK,ISEA)*HSL))       &
-          /6./WN(NK,ISEA)/HSL
+        ! Tail for surface stokes drift is commented out: very sensitive to tail power
+        !! ETUSSX(JSEA)  = ETUSSX(JSEA) + 2*GRAV*ETUSCX(JSEA)/SIG(NK)
+        !! ETUSSY(JSEA)  = ETUSSY(JSEA) + 2*GRAV*ETUSCY(JSEA)/SIG(NK)
+        !! !! ! tail for depth integrated SD
+        !! ETUSSXH(JSEA)  = ETUSSXH(JSEA) + 2*GRAV*ETUSCX(JSEA)/SIG(NK)   &
+        !!   *(1.-(1.-4.*HSL*WN(NK,ISEA))*EXP(-2.*WN(NK,ISEA)*HSL))       &
+        !!   /6./WN(NK,ISEA)/HSL
+        !! ETUSSYH(JSEA)  = ETUSSYH(JSEA) + 2*GRAV*ETUSCY(JSEA)/SIG(NK)   &
+        !!   *(1.-(1.-4.*HSL*WN(NK,ISEA))*EXP(-2.*WN(NK,ISEA)*HSL))       &
+        !!   /6./WN(NK,ISEA)/HSL
 !
 ! Tail for surface stokes drift is commented out: very sensitive to tail power
 !
@@ -2011,8 +2012,18 @@
             IF (ETUSSX(JSEA) .NE. 0. .OR. ETUSSY(JSEA) .NE. 0.) THEN
               USSX(JSEA) = ETUSSX(JSEA)
               USSY(JSEA) = ETUSSY(JSEA)
-              USSXH(JSEA) = ETUSSXH(JSEA)
-              USSYH(JSEA) = ETUSSYH(JSEA)
+              ! ! turn off old equation to calculate ussxh and ussyh
+              ! USSXH(JSEA) = ETUSSXH(JSEA)
+              ! USSYH(JSEA) = ETUSSYH(JSEA)
+
+              ! new approach to calculate ussxh and ussyh
+              WN_LOCAL = SQRT(USSX(JSEA)**2 + USSY(JSEA)**2) &
+                        /2.0/(SQRT(TUSX(JSEA)**2 +TUSY(JSEA)**2))
+              USSXH(JSEA) = USSX(JSEA)/2.0/WN_LOCAL &
+                          *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
+              USSYH(JSEA) = USSY(JSEA)/2.0/WN_LOCAL &
+                          *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
+
               LANGMT(JSEA) = SQRT ( UST(ISEA) * ASF(ISEA)        &
                        * SQRT ( DAIR / DWAT)                   &
                        / SQRT ( USSX(JSEA)**2 + USSY(JSEA)**2))
