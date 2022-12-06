@@ -1,6 +1,8 @@
 The SKRIPS is under continous development. 
 
+<!---
 The most recent stable version is v1.2. It is available here: [download v1.2](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.2)
+-->
 
 The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases)
 
