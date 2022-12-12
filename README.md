@@ -6,7 +6,7 @@ The most recent stable version is v1.2. It is available here: [download v1.2](ht
 
 The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases)
 
-To insall the code, please refer to [code documentation](https://skrips.readthedocs.io/en/v1.2/).
+To insall the code, please refer to [code documentation](https://skrips.readthedocs.io/en/latest/).
 
 To build the WRF model or the coupled model, please refer to [other documentation](https://github.com/iurnus/coupled_model_other_docs).
 
