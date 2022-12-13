@@ -21,7 +21,7 @@ It is a regional coupled atmosphere-ocean model that includes the following comp
 * Wave Solver: [WaveWatch III](https://github.com/NOAA-EMC/WW3/archive/refs/tags/6.07.1.zip) (version 6.07.1)
 * Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
 
-The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/v1.2/). 
+The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/latest/). 
 There are several tutorial cases for testing the coupled model.
 
 Users can also extend this solver using some pre-requisite knowledge of the underlying method and programming techniques.
