@@ -5,6 +5,7 @@ export SKRIPS_DIR=$HOME/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
 export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
+export PWRF_DIR=$SKRIPS_DIR/PWRFV413_AO/
 export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
 # NETCDF and MPI
