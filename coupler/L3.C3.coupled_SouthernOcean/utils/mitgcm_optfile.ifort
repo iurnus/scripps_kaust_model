@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Build options for PGI compiler with openmpi on ring 
+#
+
+FC=mpif90
+CC=mpicc
+F90C=mpif90
+
+DEFINES='-DALLOW_USE_MPI -DALWAYS_USE_MPI -DWORDLENGTH=4'
+CPP='/lib/cpp  -traditional -P'
+EXTENDED_SRC_FLAG='-132'
+OMPFLAG='-openmp'
+CFLAGS='-fPIC'
+LDADD='-shared-intel'
+
+INCLUDES="-I/$SKRIPS_MPI_INC $SKRIPS_NETCDF_INCLUDE"
+LIBS="-L/$SKRIPS_MPI_LIB $SKRIPS_NETCDF_LIB"
+
+NOOPTFLAGS='-O0 -fPIC'
+
+FFLAGS="-fPIC -convert big_endian -assume byterecl -align"
+
+FOPTIM='-O2'
+FOPTIM="$FOPTIM -ip -fp-model precise -traceback -ftz"
+
