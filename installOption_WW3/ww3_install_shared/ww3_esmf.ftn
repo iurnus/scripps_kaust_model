@@ -371,7 +371,7 @@
             VWINDLOCAL(I,J) = 0d0
             UCURRLOCAL(I,J) = 0d0
             VCURRLOCAL(I,J) = 0d0
-            OCNMLDLOCAL(I,J) = 5.
+            OCNMLDLOCAL(I,J) = 0d0
           ENDDO
         ENDDO
 
@@ -409,8 +409,8 @@
             CXN(I,J) = UCURR0(I,J)
             CYN(I,J) = VCURR0(I,J)
             !! TODO:: add the ocn mld to ww3 
-            !! TODO:: set minimum hml = 5.0 m
-            HML(I,J) = max(OCNMLD(I,J),5.0)
+            !! TODO:: set minimum hml = 10.0 m
+            HML(I,J) = max(OCNMLD(I,J),10.0)
             
           ENDDO
         ENDDO

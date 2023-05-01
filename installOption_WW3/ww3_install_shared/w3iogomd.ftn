@@ -1962,6 +1962,7 @@
         CALL INIT_GET_ISEA(ISEA, JSEA)
         IX     = MAPSF(ISEA,1)
         IY     = MAPSF(ISEA,2)
+        HSL    = HML(IX,IY)/5.     ! depth over which SD is averaged
         IF ( MAPSTA(IY,IX) .GT. 0 ) THEN
 !/O9            IF ( ET(JSEA) .GE. 0. ) THEN
             HS (JSEA) = 4. * SQRT ( ET(JSEA) )
@@ -2012,21 +2013,21 @@
             IF (ETUSSX(JSEA) .NE. 0. .OR. ETUSSY(JSEA) .NE. 0.) THEN
               USSX(JSEA) = ETUSSX(JSEA)
               USSY(JSEA) = ETUSSY(JSEA)
-              ! ! turn off old equation to calculate ussxh and ussyh
-              ! USSXH(JSEA) = ETUSSXH(JSEA)
-              ! USSYH(JSEA) = ETUSSYH(JSEA)
+              ! turn off old equation to calculate ussxh and ussyh
+              USSXH(JSEA) = ETUSSXH(JSEA)
+              USSYH(JSEA) = ETUSSYH(JSEA)
 
-              ! new approach to calculate ussxh and ussyh
-              WN_LOCAL = SQRT(USSX(JSEA)**2 + USSY(JSEA)**2) &
-                        /2.0/(SQRT(TUSX(JSEA)**2 +TUSY(JSEA)**2))
-              USSXH(JSEA) = USSX(JSEA)/2.0/WN_LOCAL &
-                          *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
-              USSYH(JSEA) = USSY(JSEA)/2.0/WN_LOCAL &
-                          *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
+              !! ! new approach to calculate ussxh and ussyh
+              !! WN_LOCAL = SQRT(USSX(JSEA)**2 + USSY(JSEA)**2) &
+              !!           /2.0/(SQRT(TUSX(JSEA)**2 +TUSY(JSEA)**2 + 1E-20))
+              !! USSXH(JSEA) = USSX(JSEA)/2.0/WN_LOCAL &
+              !!             *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
+              !! USSYH(JSEA) = USSY(JSEA)/2.0/WN_LOCAL &
+              !!             *(1.-EXP(-2.*WN_LOCAL*HSL))/HSL
 
               LANGMT(JSEA) = SQRT ( UST(ISEA) * ASF(ISEA)        &
                        * SQRT ( DAIR / DWAT)                   &
-                       / SQRT ( USSX(JSEA)**2 + USSY(JSEA)**2))
+                       / SQRT ( USSX(JSEA)**2 + USSY(JSEA)**2 + 1E-20))
               ! Calculating Langmuir Number for misaligned wind and waves
               ! see Van Roekel et al., 2012
               ! take z1 = 4 * HS
@@ -2039,7 +2040,7 @@
 
               HS_i = HS(JSEA)
               ALPHALS(JSEA) = ATAN( SIN(SWW) / ( LANGMT(JSEA)**2  &
-                  /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
+                  /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0+1E-2))+COS(SWW)))
               LAPROJ(JSEA) = LANGMT(JSEA) & 
                   * SQRT(ABS(COS(ALPHALS(JSEA))) &
                   / ABS(COS(SWW-ALPHALS(JSEA))))
@@ -2047,10 +2048,10 @@
               SWW = ATAN2(USSYH(JSEA),USSXH(JSEA)) - UD(ISEA)
               ! ALPHAL: angle between wind and LC direction
               ALPHAL(JSEA) = ATAN(SIN(SWW) / (LANGMT(JSEA)**2  &
-                /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0))+COS(SWW)))
+                /0.4*LOG(MAX(ABS(HML(IX,IY)/4./HS_i),1.0+1E-2))+COS(SWW)))
               LASL(JSEA) = SQRT(UST(ISEA)*ASF(ISEA)         &
                 * SQRT(DAIR/DWAT) &
-                / SQRT(USSXH(JSEA)**2+USSYH(JSEA)**2))
+                / SQRT(USSXH(JSEA)**2+USSYH(JSEA)**2 + 1E-20))
               LASLPJ(JSEA) = LASL(JSEA) * SQRT(ABS(COS(ALPHAL(JSEA))) &
                 / (ABS(COS(SWW-ALPHAL(JSEA)))))
               ! QL, 160530, LAMULT
