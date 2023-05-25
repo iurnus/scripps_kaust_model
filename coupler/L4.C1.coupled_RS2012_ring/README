@@ -1,0 +1,7 @@
+This is the debug case for coupled ocean-wave-atmosphere simulations
+
+To download the entire test case, use:
+wget ftp://sioftp.ucsd.edu/CW3E_DataShare/RSun_SKRIPS/L4.C1.coupled_RS2012_ring.sav.zip
+
+To generate the case generator, use:
+wget ftp://sioftp.ucsd.edu/CW3E_DataShare/RSun_SKRIPS/generate_as_wave.zip
