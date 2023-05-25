@@ -3,7 +3,8 @@ cd ${WW3_DIR}
 
 ./model/bin/w3_setup model
 
-./model/bin/ww3_from_ftp.sh
+# FTP is still working, but no longer support WW3 6.07 version
+# ./model/bin/ww3_from_ftp.sh
 
 ./model/bin/w3_setup ./model -c Intel -s Ifremer1
 
