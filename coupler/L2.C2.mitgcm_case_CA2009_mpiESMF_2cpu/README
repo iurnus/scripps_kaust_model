@@ -1,10 +1,8 @@
-ESMF-MITgcm interface implementation test & MPI test
+ESMF-MITgcm interface & MPI test
 
-This folder contains an ESMF-MITgcm coupled test case. The case aims to test
-the implementation of ESMF-MITgcm interface. In this test, the ESMF driver will
-drive MITgcm. The MITgcm solver is divided into "init", "run", "finalize"
-parts. The ESMF-atmosphere interface is also implemented, but the functions do
-not drive "real" atmosphere model. 
+This case aims to test the implementation of ESMF-MITgcm interface. In this
+test, ESMF drives MITgcm for its "init", "run", "finalize". The ESMF-atmosphere
+interface is also implemented but not used.
 
 This test use 2 CPUs to test the MPI implementations.
 
@@ -30,16 +28,4 @@ Folders:
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm path is defined as '/home/rus043/scripps_kaust_model_github/MITgcm_c67m' in install.sh
-The MPI_HOME path is defined as '/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include' in install.sh
-
-The ESMF should be installed to run this case. The variable ESMFMKFILE should
-be defined:
-
-  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
-
-where ESMF_DIR should be the location that ESMF is installed.
-
-This is not an indepedent test. MUST have L2C1 test case.
-The L2C1_DIR path is defined as '../L2.C1.mitgcm_case_CA2009_mpiESMF_1cpu/' in install.sh
-
+Must have MITgcm, ESMF, and MPI. 

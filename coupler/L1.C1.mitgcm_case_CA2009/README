@@ -22,4 +22,4 @@ Folders:
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm source file should be in '../../MITgcm_c67m/' to run this case.
+The MITgcm source file should be available to install and run this case.
