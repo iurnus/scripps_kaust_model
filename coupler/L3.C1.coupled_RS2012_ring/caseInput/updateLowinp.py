@@ -62,7 +62,7 @@ wrf_results.variables['SST_INPUT'][0,:,:] = ssti_write;
 wrf_results.variables['TSK'][0,:,:] = tsk_write;
 wrf_results.variables['UOCE'][0,:,:] = uoce_write;
 wrf_results.variables['VOCE'][0,:,:] = voce_write;
-wrf_results.variables['OCNMASK'][0,:,:] = ocnmask_write;
+# wrf_results.variables['OCNMASK'][0,:,:] = ocnmask_write;
 
 wrf_results.close()
 print("mitgcm sst is: ", np.mean(ini_sst_))

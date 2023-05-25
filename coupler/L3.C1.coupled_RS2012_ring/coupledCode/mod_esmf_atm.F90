@@ -452,15 +452,15 @@
       !! PRINT *, 'wrf_component_run: head_grid%stop_subtime ', &
       !!          TRIM(timeStr)
       call ESMF_StateGet(importState, itemName="SST", field=field_sst, rc=rc)
+      call ESMF_StateGet(importState, itemName="OCNMASK", field=field_ocnmask, rc=rc)
       call ESMF_StateGet(exportState, itemName="SST_INPUT", field=field_sstin, rc=rc)
-      call ESMF_StateGet(exportState, itemName="OCNMASK", field=field_ocnmask, rc=rc)
       call ESMF_FieldGet(field_sst, localDE=0, farrayPtr=ptr_sst, rc=rc)
       call ESMF_FieldGet(field_sstin, localDE=0, farrayPtr=ptr_sstin, rc=rc)
       call ESMF_FieldGet(field_ocnmask, localDE=0, farrayPtr=ptr_ocnmask, rc=rc)
         
       do nJ = jps,MIN(jde-1,jpe)
         do nI = ips,MIN(ide-1,ipe)
-          if (ptr_ocnmask(nI,nJ) .gt. 0.5) then
+          if (ptr_ocnmask(nI,nJ) .lt. 0.5) then
             ptr_sst(nI,nJ) = ptr_sstin(nI,nJ)
           endif
         end do

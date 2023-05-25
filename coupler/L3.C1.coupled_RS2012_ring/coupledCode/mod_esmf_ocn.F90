@@ -1005,6 +1005,7 @@ module mod_esmf_ocn
   real(ESMF_KIND_R8), pointer :: ptr_uoce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_voce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_ocnmask(:,:)
   integer(ESMF_KIND_I4), pointer :: ptr_mask(:,:)
 !
   type(ESMF_VM) :: vm
@@ -1013,6 +1014,7 @@ module mod_esmf_ocn
   type(ESMF_Field) :: field_uoce
   type(ESMF_Field) :: field_voce
   type(ESMF_Field) :: field_sst_input
+  type(ESMF_Field) :: field_ocnmask
   type(ESMF_State) :: importState, exportState
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: theta_ESMF
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: uoce_ESMF
@@ -1069,6 +1071,7 @@ module mod_esmf_ocn
   call ESMF_StateGet(exportState, "SST", field_sst, rc=rc)
   call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
   call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
+  call ESMF_StateGet(exportState, "OCNMASK", field_ocnmask, rc=rc)
   call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
@@ -1089,6 +1092,7 @@ module mod_esmf_ocn
     call ESMF_FieldGet(field_sst, localDE=j, farrayPtr=ptr_sst, rc=rc)
     call ESMF_FieldGet(field_uoce, localDE=j, farrayPtr=ptr_uoce, rc=rc)
     call ESMF_FieldGet(field_voce, localDE=j, farrayPtr=ptr_voce, rc=rc)
+    call ESMF_FieldGet(field_ocnmask, localDE=j, farrayPtr=ptr_ocnmask, rc=rc)
     call ESMF_FieldGet(field_sst_input, localDE=j,                    &
                        farrayPtr=ptr_sst_input, rc=rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
@@ -1114,11 +1118,13 @@ module mod_esmf_ocn
           ptr_sst(iG,jG) = theta_ESMF(ii,jj,1,1,1) + 273.15
           ptr_uoce(iG,jG) = uoce_ESMF(ii,jj,1,1,1)
           ptr_voce(iG,jG) = voce_ESMF(ii,jj,1,1,1)
+          ptr_ocnmask(iG,jG) = 1.d0
         else
           !! if land, use initial SST and zero current
           ptr_sst(iG,jG) = ptr_sst_input(iG,jG)
           ptr_uoce(iG,jG) = 0.d0
           ptr_voce(iG,jG) = 0.d0
+          ptr_ocnmask(iG,jG) = 0.d0
         end if
       end do
     end do
@@ -1141,6 +1147,9 @@ module mod_esmf_ocn
     end if
     if (associated(ptr_mask)) then
       nullify(ptr_mask)
+    end if
+    if (associated(ptr_ocnmask)) then
+      nullify(ptr_ocnmask)
     end if
 !
   end do

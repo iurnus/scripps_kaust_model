@@ -47,15 +47,5 @@ latexSummary: Generate the report automatically.
 ####################
 WARNING!!!WARNING!!!
 ####################
-The MITgcm path is defined as '${HOME}/scripps_kaust_model_github/MITgcm_c67m' in install.sh
-The MPI_HOME path is defined as '/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include' in install.sh
-
-The ESMF should be installed to run this case. The variable ESMFMKFILE should
-be defined:
-
-  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
-
-where ESMF_DIR should be the location that ESMF is installed.
-
-Make sure MATLAB is installed.
-Make sure NCL is installed.
+This is a debug case. It will output almost everything at every time step.
+Please refer to other cases for production run.
