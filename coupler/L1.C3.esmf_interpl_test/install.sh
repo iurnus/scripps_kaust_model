@@ -6,5 +6,6 @@ cd coupledSolver
 ./Allmake.sh
 cd ..
 
+# run the test coupler
 cd run
 ./Allrun

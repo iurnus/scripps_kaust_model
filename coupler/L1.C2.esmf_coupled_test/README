@@ -21,9 +21,4 @@ Folders:
 ####################
 WARNING!!!WARNING!!!
 ####################
-The ESMF should be installed to run this case. The variable ESMFMKFILE should
-be defined:
-
-  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
-
-where ESMF_DIR should be the location that ESMF is installed.
+ESMF must be installed to run this case.

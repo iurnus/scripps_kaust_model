@@ -1,8 +1,8 @@
-ESMF driver implementation test
+ESMF interpolation test
 
-This folder contains an ESMF test case. The case aims to test the
-implementation of ESMF driver. In this test, a prototype ESMF driver will run,
-but the driver is not driving "real" ocean/atmosphere models.
+This folder contains an ESMF test case. The case aims to test the interpolation
+of ESMF. In this test, a prototype ESMF driver will run, but the driver is not
+driving "real" ocean/atmosphere models.
 
 
 To install and run this case::
@@ -21,9 +21,4 @@ Folders:
 ####################
 WARNING!!!WARNING!!!
 ####################
-The ESMF should be installed to run this case. The variable ESMFMKFILE should
-be defined:
-
-  export ESMFMKFILE=$ESMF_DIR/lib/libg/Linux.pgi.64.openmpi.default/esmf.mk
-
-where ESMF_DIR should be the location that ESMF is installed.
+ESMF must be installed to run this case.
