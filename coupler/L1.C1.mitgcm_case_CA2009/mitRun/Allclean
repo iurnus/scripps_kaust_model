@@ -1,7 +1,9 @@
 #!/bin/bash
 
-rm -rf *.*
-rm -rf *data prepare_run esmf_application *list
+# rm -rf *.*
+rm -rf *.bin
+rm -rf data* job* STD* run-off*
+rm -rf *data *meta prepare_run esmf_application *list
 rm -rf log
 rm -rf mnc_test_*
 rm -rf *DATA
