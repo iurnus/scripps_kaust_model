@@ -1,0 +1,178 @@
+--- ../../../MITgcm_c67m/pkg/mom_fluxform/mom_fluxform.F	2019-10-16 11:45:39.000000000 -0700
++++ mom_fluxform.F	2021-11-01 23:23:13.178132637 -0700
+@@ -64,6 +64,7 @@
+ # include "tamc_keys.h"
+ # include "MOM_FLUXFORM.h"
+ #endif
++#include "WAVE_INPUT.h"
+ 
+ C !INPUT PARAMETERS: ===================================================
+ C  bi,bj                :: current tile indices
+@@ -105,6 +106,9 @@
+ C  mT                   :: Metric terms
+ C  fZon                 :: zonal fluxes
+ C  fMer                 :: meridional fluxes
++C  cFs                  :: Stokes-Coriolis
++C  fZons                :: zonal Stokes-Advection
++C  fMers                :: meridional Stokes-Advection
+ C  fVrUp,fVrDw          :: vertical viscous fluxes at interface k & k+1
+       INTEGER i,j
+ #ifdef ALLOW_AUTODIFF_TAMC
+@@ -116,6 +120,9 @@
+       _RL mT(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL fZon(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL fMer(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL cFs(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL fZons(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL fMers(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL fVrUp(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL fVrDw(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+ C     afFacMom     :: Tracer parameters for turning terms on and off.
+@@ -136,6 +143,10 @@
+       _RL  vTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL  uFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL  vFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL  uStokes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL  vStokes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL  uSTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
++      _RL  vSTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL  rTransU(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL  rTransV(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+       _RL       KE(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+@@ -203,6 +214,9 @@
+         mT(i,j)   = 0.
+         fZon(i,j) = 0.
+         fMer(i,j) = 0.
++        cFs(i,j)   = 0.
++        fZons(i,j) = 0.
++        fMers(i,j) = 0.
+         fVrUp(i,j)= 0.
+         fVrDw(i,j)= 0.
+         rTransU(i,j)= 0.
+@@ -291,10 +305,18 @@
+ #endif /* NONLIN_FRSURF */
+ 
+ C     Make local copies of horizontal flow field
++      ! PRINT *, 'adding stokes in mon_fluxform... ', stokesCoriolis
+       DO j=1-OLy,sNy+OLy
+        DO i=1-OLx,sNx+OLx
+         uFld(i,j) = uVel(i,j,k,bi,bj)
+         vFld(i,j) = vVel(i,j,k,bi,bj)
++        IF ( stokesCoriolis .eq. 1) THEN 
++         uStokes(i,j) = wave_stokes3dx(i,j,k,bi,bj)
++         vStokes(i,j) = wave_stokes3dy(i,j,k,bi,bj)
++        ELSE
++         uStokes(i,j) = 0.0d0
++         vStokes(i,j) = 0.0d0
++        ENDIF
+        ENDDO
+       ENDDO
+ 
+@@ -304,6 +326,8 @@
+        DO i=1-OLx,sNx+OLx
+         uTrans(i,j) = uFld(i,j)*xA(i,j)*rhoFacC(k)
+         vTrans(i,j) = vFld(i,j)*yA(i,j)*rhoFacC(k)
++        uSTrans(i,j) = uStokes(i,j)*xA(i,j)*rhoFacC(k)
++        vSTrans(i,j) = vStokes(i,j)*yA(i,j)*rhoFacC(k)
+        ENDDO
+       ENDDO
+ 
+@@ -439,10 +463,12 @@
+ C--   Zonal flux (fZon is at east face of "u" cell)
+ C     Mean flow component of zonal flux -> fZon
+         CALL MOM_U_ADV_UU( bi,bj,k,uTrans,uFld,fZon,myThid )
++        CALL MOM_U_ADV_UU( bi,bj,k,uSTrans,uFld,fZons,myThid )
+ 
+ C--   Meridional flux (fMer is at south face of "u" cell)
+ C     Mean flow component of meridional flux -> fMer
+         CALL MOM_U_ADV_VU( bi,bj,k,vTrans,uFld,fMer,myThid )
++        CALL MOM_U_ADV_VU( bi,bj,k,vSTrans,uFld,fMers,myThid )
+ 
+ C--   Vertical flux (fVer is at upper face of "u" cell)
+ C     Mean flow component of vertical flux (at k+1) -> fVer
+@@ -464,6 +490,8 @@
+ #endif
+      &     *( ( fZon(i,j  )  - fZon(i-1,j)  )*uDudxFac
+      &       +( fMer(i,j+1)  - fMer(i,  j)  )*vDudyFac
++     &       +( fZons(i,j  ) - fZons(i-1,j) )*uDudxFac
++     &       +( fMers(i,j+1) - fMers(i,  j) )*vDudyFac
+      &       +( fVerUkp(i,j) - fVerUkm(i,j) )*rkSign*rVelDudrFac
+      &     )
+          ENDDO
+@@ -473,6 +501,8 @@
+         IF ( useDiagnostics ) THEN
+           CALL DIAGNOSTICS_FILL( fZon,  'ADVx_Um ',k,1,2,bi,bj,myThid)
+           CALL DIAGNOSTICS_FILL( fMer,  'ADVy_Um ',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL( fZons, 'ADVx_Ums',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL( fMers, 'ADVy_Ums',k,1,2,bi,bj,myThid)
+           CALL DIAGNOSTICS_FILL(fVerUkm,'ADVrE_Um',k,1,2,bi,bj,myThid)
+         ENDIF
+ #endif
+@@ -687,10 +717,12 @@
+ C---  Calculate mean fluxes (advection)   between cells for meridional flow.
+ C     Mean flow component of zonal flux -> fZon
+         CALL MOM_V_ADV_UV( bi,bj,k,uTrans,vFld,fZon,myThid )
++        CALL MOM_V_ADV_UV( bi,bj,k,uSTrans,vFld,fZons,myThid )
+ 
+ C--   Meridional flux (fMer is at north face of "v" cell)
+ C     Mean flow component of meridional flux -> fMer
+         CALL MOM_V_ADV_VV( bi,bj,k,vTrans,vFld,fMer,myThid )
++        CALL MOM_V_ADV_VV( bi,bj,k,vSTrans,vFld,fMers,myThid )
+ 
+ C--   Vertical flux (fVer is at upper face of "v" cell)
+ C     Mean flow component of vertical flux (at k+1) -> fVerV
+@@ -711,6 +743,8 @@
+ #endif
+      &     *( ( fZon(i+1,j)  - fZon(i,j  )  )*uDvdxFac
+      &       +( fMer(i,  j)  - fMer(i,j-1)  )*vDvdyFac
++     &       +( fZons(i+1,j) - fZons(i,j  ) )*uDvdxFac
++     &       +( fMers(i,  j) - fMers(i,j-1) )*vDvdyFac
+      &       +( fVerVkp(i,j) - fVerVkm(i,j) )*rkSign*rVelDvdrFac
+      &     )
+          ENDDO
+@@ -720,6 +754,8 @@
+         IF ( useDiagnostics ) THEN
+           CALL DIAGNOSTICS_FILL( fZon,  'ADVx_Vm ',k,1,2,bi,bj,myThid)
+           CALL DIAGNOSTICS_FILL( fMer,  'ADVy_Vm ',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL( fZons, 'ADVx_Vms',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL( fMers, 'ADVy_Vms',k,1,2,bi,bj,myThid)
+           CALL DIAGNOSTICS_FILL(fVerVkm,'ADVrE_Vm',k,1,2,bi,bj,myThid)
+         ENDIF
+ #endif
+@@ -921,24 +957,30 @@
+ C--   Coriolis term (call to CD_CODE_SCHEME has been moved to timestep.F)
+       IF (.NOT.useCDscheme) THEN
+         CALL MOM_U_CORIOLIS( bi,bj,k,vFld,cf,myThid )
++        CALL MOM_U_CORIOLIS( bi,bj,k,vStokes,cfs,myThid )
+         DO j=jMin,jMax
+          DO i=iMin,iMax
+-          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj)+fuFac*cf(i,j)
++          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj)+fuFac*cf(i,j)+fuFac*cfs(i,j)
+          ENDDO
+         ENDDO
+ #ifdef ALLOW_DIAGNOSTICS
+-        IF ( useDiagnostics )
+-     &    CALL DIAGNOSTICS_FILL(cf,'Um_Cori ',k,1,2,bi,bj,myThid)
++        IF ( useDiagnostics ) THEN
++          CALL DIAGNOSTICS_FILL(cf, 'Um_Cori ',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL(cfs,'Um_Coris',k,1,2,bi,bj,myThid)
++        ENDIF
+ #endif
+         CALL MOM_V_CORIOLIS( bi,bj,k,uFld,cf,myThid )
++        CALL MOM_V_CORIOLIS( bi,bj,k,uStokes,cfs,myThid )
+         DO j=jMin,jMax
+          DO i=iMin,iMax
+-          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj)+fvFac*cf(i,j)
++          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj)+fvFac*cf(i,j)+fvFac*cfs(i,j)
+          ENDDO
+         ENDDO
+ #ifdef ALLOW_DIAGNOSTICS
+-        IF ( useDiagnostics )
+-     &    CALL DIAGNOSTICS_FILL(cf,'Vm_Cori ',k,1,2,bi,bj,myThid)
++        IF ( useDiagnostics ) THEN
++          CALL DIAGNOSTICS_FILL(cf, 'Vm_Cori ',k,1,2,bi,bj,myThid)
++          CALL DIAGNOSTICS_FILL(cfs,'Vm_Coris',k,1,2,bi,bj,myThid)
++        ENDIF
+ #endif
+       ENDIF
+ 

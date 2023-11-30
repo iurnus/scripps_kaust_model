@@ -21,3 +21,9 @@ UCAR be liable for any damages, whatsoever, whether direct,
 indirect, consequential or special, that arise out of or in
 connection with the access, use or performance of WRF, including
 infringement actions.
+
+------------------------
+After adding the patches, the WRF is able to be coupled with 
+MITgcm and WW3. ESMF will choose the input/output from the coupler.
+However, the PWRF version only works for MITgcm and it is available
+from ../installOption_seaice

@@ -7,21 +7,17 @@ from netCDF4 import Dataset
 import numpy as np
 import MITgcmutils
 
-# iStep = 0
-
 p = [];
-wrf_output = '../../runCase/wrfout_d01_2012-06-01_00:00:00'
-# wrf_output = '../../runWRFtest/wrfout_d01_2012-06-01_00:00:00'
+wrf_output = '../runCase/wrfout_d01_2012-06-01_00:00:00'
 
 wrf_output_results = Dataset(wrf_output,'r',format='NETCDF4');
 wrf_output_lh = wrf_output_results.variables['LH'][:];
 wrf_output_sh = wrf_output_results.variables['HFX'][:];
-# wrf_output_gsw = wrf_output_results.variables['GSW'][:];
 wrf_output_swupb = wrf_output_results.variables['SWUPB'][:];
 wrf_output_swdnb = wrf_output_results.variables['SWDNB'][:];
-wrf_output_gsw = - wrf_output_swupb + wrf_output_swdnb
 wrf_output_lwupb = wrf_output_results.variables['LWUPB'][:];
 wrf_output_lwdnb = wrf_output_results.variables['LWDNB'][:];
+wrf_output_gsw = - wrf_output_swupb + wrf_output_swdnb
 wrf_output_glw = - wrf_output_lwupb + wrf_output_lwdnb
 wrf_output_t2 = wrf_output_results.variables['T2'][:] - 273.15;
 wrf_output_sst = wrf_output_results.variables['SST'][:] - 273.15;
@@ -32,39 +28,38 @@ wrf_output_wind = (wrf_output_uwnd**2+wrf_output_vwnd**2)**0.5
 wrf_output_uoce = wrf_output_results.variables['UOCE'][:];
 wrf_output_voce = wrf_output_results.variables['VOCE'][:];
 wrf_output_current = (wrf_output_uoce**2+wrf_output_voce**2)**0.5
-wrf_output_precip =( wrf_output_results.variables['RAINCV'][:]\
-                    +wrf_output_results.variables['RAINNCV'][:]\
-                    +wrf_output_results.variables['RAINSHV'][:])/60.0/1000.0;
-wrf_output_evap = wrf_output_results.variables['QFX'][:]/1000.0;
 wrf_lon = wrf_output_results.variables['XLONG'][:];
 wrf_lat = wrf_output_results.variables['XLAT'][:];
+wrf_output_hs = wrf_output_results.variables['WAVEHS'][:];
+wrf_output_ml = wrf_output_results.variables['WAVEML'][:];
+wrf_output_mld= wrf_output_results.variables['OCNMLD'][:];
+wrf_output_lmc= wrf_output_results.variables['WAVELANGMUIR'][:];
 parallels = np.arange(12.,28.1,4.)
 meridians = np.arange(30.,50.1,4.)
 
 fieldString = ['LH','SH','GSW','GLW','T2','SST','Q2',\
-               'current','wind','precip','evap']
+               'current','wind','waveheight','wavelength','mld','lmc']
 fieldName = [wrf_output_lh,wrf_output_sh,wrf_output_gsw,\
              wrf_output_glw,wrf_output_t2,wrf_output_sst,\
              wrf_output_q2,wrf_output_current,wrf_output_wind,\
-             wrf_output_precip,wrf_output_evap]
+             wrf_output_hs,wrf_output_ml,wrf_output_mld,wrf_output_lmc]
 clevsList = [np.arange(-205,205.01,10),np.arange(-20.5,20.51,1),np.arange(0,2001.01,200),\
-             np.arange(-205,205.01,10),np.arange(20,50.01,1),np.arange(24,32.01,0.1),\
+             np.arange(-205,205.01,10),np.arange(20,50.01,1),np.arange(20,50.01,1),\
              np.arange(0,0.02001,0.0005),np.arange(0,2.01,0.1),np.arange(0,20.01,1),\
-             np.arange(0,1.001e-10,0.02e-10),np.arange(0,1.001e-7,0.02e-7)]
+             np.arange(0,2.005,0.02),np.arange(0,40.1,1),np.arange(0,100.1,2),np.arange(0.8,1.21,0.01)]
 cmapList = [cmocean.cm.balance,cmocean.cm.balance,cmocean.cm.thermal,\
             cmocean.cm.balance,cmocean.cm.thermal,cmocean.cm.thermal,\
             cmocean.cm.turbid,cmocean.cm.speed,cmocean.cm.speed,\
-            cmocean.cm.speed,cmocean.cm.speed]
+            cmocean.cm.deep,cmocean.cm.deep,cmocean.cm.deep,cmocean.cm.balance]
 tickList = [np.arange(-200,201,100),np.arange(-20,20.01,10),np.arange(0,2001.01,500),\
-            np.arange(-200,201,100),np.arange(20,50.01,5),np.arange(24,32.01,1),\
+            np.arange(-200,201,100),np.arange(20,50.01,5),np.arange(20,50.01,5),\
             np.arange(0,0.02001,0.002),np.arange(0,2.01,0.4),np.arange(0,20.01,4),\
-            np.arange(0,1.001e-10,0.2e-10),np.arange(0,1.001e-7,0.2e-7)]
-nFigures = 11
+            np.arange(0.00001,2.001,0.4),np.arange(0,40.1,10),np.arange(0,100.1,20),np.arange(0.8,1.21,0.1)]
+nFigures = 13
   
-print "plot WRF..."
-  
-for iStep in [0,1,2,3,10,60]:
-  print " plot step: " + str(iStep)
+    
+for iStep in [0,1,2,10]:
+  print "plot WRF step " + str(iStep).zfill(2)
   for i in range(nFigures):
     print "  plot " + fieldString[i] + ' field'
     fig = plt.figure()
@@ -101,7 +96,9 @@ for iStep in [0,1,2,3,10,60]:
     f.subplots_adjust(top=0.95)
     f.subplots_adjust(bottom=0.10)
     
+    print np.mean(fieldName[i][iStep,:,:])
+    
     plt.gcf().set_size_inches(6.4, 4.0)
-    fileName = 'wrf_' + fieldString[i] + '_' + str(iStep).zfill(4) + '.png'
+    fileName = 'wrf_' + fieldString[i] + '_' + str(iStep).zfill(2) + '.png'
     plt.savefig(fileName);
     plt.close('all')
