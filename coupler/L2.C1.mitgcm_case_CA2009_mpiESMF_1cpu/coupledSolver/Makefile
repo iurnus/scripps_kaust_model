@@ -23,6 +23,7 @@ $(error Environment variable ESMFMKFILE was not set.)
 endif
 
 include $(ESMFMKFILE)
+MIT_FFLAGS =  -fconvert=big-endian -fimplicit-none -fallow-argument-mismatch -fallow-invalid-boz -mcmodel=medium
 
 ################################################################################
 ################################################################################
@@ -30,22 +31,22 @@ include $(ESMFMKFILE)
 .SUFFIXES: .f90 .F90 .c .C
 
 %.o : %.f90
-	$(ESMF_F90COMPILER) -byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse -c $(ESMF_F90COMPILEOPTS) $(ESMF_F90COMPILEPATHS) $(WRF_INC) $(ESMF_F90COMPILEFREENOCPP) $< -I${PWD} -L${PWD} $(WRF_LIB) -lmitgcm_org_ocn -lmitgcmrtl
+	$(ESMF_F90COMPILER) -c $(ESMF_F90COMPILEOPTS) $(ESMF_F90COMPILEPATHS) $(WRF_INC) ${MIT_FFLAGS} $(ESMF_F90COMPILEFREENOCPP) $< -I${PWD} -L${PWD} $(WRF_LIB) -lmitgcm_org_ocn -lmitgcmrtl
 
 %.o : %.F90
-	$(ESMF_F90COMPILER) -byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse -c $(ESMF_F90COMPILEOPTS) $(ESMF_F90COMPILEPATHS) $(WRF_INC) $(ESMF_F90COMPILEFREECPP) $(ESMF_F90COMPILECPPFLAGS) $< -I${PWD} -L${PWD} $(WRF_LIB) -lmitgcm_org_ocn -lmitgcmrtl
+	$(ESMF_F90COMPILER) -c $(ESMF_F90COMPILEOPTS) $(ESMF_F90COMPILEPATHS) $(WRF_INC) ${MIT_FFLAGS} $(ESMF_F90COMPILEFREECPP) $(ESMF_F90COMPILECPPFLAGS) $< -I${PWD} -L${PWD} $(WRF_LIB) -lmitgcm_org_ocn -lmitgcmrtl
 
 % : %.c
-	$(ESMF_CXXCOMPILER) -byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse -c $(ESMF_CXXCOMPILEOPTS) $(ESMF_CXXCOMPILEPATHSLOCAL) $(ESMF_CXXCOMPILEPATHS) $(ESMF_CXXCOMPILECPPFLAGS) $<
+	$(ESMF_CXXCOMPILER) -c $(ESMF_CXXCOMPILEOPTS) $(ESMF_CXXCOMPILEPATHSLOCAL) $(ESMF_CXXCOMPILEPATHS) $(ESMF_CXXCOMPILECPPFLAGS) $<
 
 % : %.C
-	$(ESMF_CXXCOMPILER) -byteswapio -r8 -Mnodclchk -Mextend -fast -fastsse -c $(ESMF_CXXCOMPILEOPTS) $(ESMF_CXXCOMPILEPATHSLOCAL) $(ESMF_CXXCOMPILEPATHS) $(ESMF_CXXCOMPILECPPFLAGS) $<
+	$(ESMF_CXXCOMPILER) -c $(ESMF_CXXCOMPILEOPTS) $(ESMF_CXXCOMPILEPATHSLOCAL) $(ESMF_CXXCOMPILEPATHS) $(ESMF_CXXCOMPILECPPFLAGS) $<
 
 
 
 # -----------------------------------------------------------------------------
 esmf_application: mod_config.o mod_types.o mod_esmf_ocn.o mod_esmf_atm.o mod_esmf_cpl.o mod_esmf_esm.o mitgcm_wrf.o libmitgcm_org_ocn.a libmitgcmrtl.a
-	$(ESMF_F90LINKER) $(ESMF_F90LINKOPTS) $(ESMF_F90LINKPATHS) $(ESMF_F90LINKRPATHS) $(WRF_INC) -L${PWD} -o $@ $^ $(ESMF_F90ESMFLINKLIBS) $(WRF_LIB) setrlstk.o sigreg.o -lmitgcm_org_ocn -lmitgcmrtl
+	$(ESMF_F90LINKER) $(ESMF_F90LINKOPTS) $(ESMF_F90LINKPATHS) $(ESMF_F90LINKRPATHS) $(WRF_INC) ${MIT_FFLAGS} -L${PWD} -o $@ $^ $(ESMF_F90ESMFLINKLIBS) $(WRF_LIB) setrlstk.o sigreg.o -lmitgcm_org_ocn -lmitgcmrtl
 
 # module dependencies:
 mod_esmf_esm.o: mod_esmf_ocn.o mod_esmf_atm.o mod_types.o 

@@ -4,13 +4,15 @@
 echo "building MITgcm..."
 echo "WARNING:: NEED MITGCM SOURCE FILE in $MITGCM_DIR"
 
-read -e -p "Using PGI compiler? (Y/N) :" -i "Y" pgiFlag
-if [ $pgiFlag == 'Y' ]; then
-  echo "Using PGI compiler"
-  export MITGCM_OPT=mitgcm_optfile.pgi
+export MITGCM_COMPILER=$ESMF_COMPILER
+read -e -p "Using default ESMF compiler $MITGCM_COMPILER? (Y/N): " -i "Y" defaultFlag
+# read -e -p "Using PGI compiler? (Y/N) :" -i "Y" pgiFlag
+if [ $defaultFlag == 'Y' ]; then
+  echo "Using $MITGCM_COMPILER compiler"
+  export MITGCM_OPT=mitgcm_optfile.$MITGCM_COMPILER
 else 
-  echo "Using default intel compiler"
-  export MITGCM_OPT=mitgcm_optfile.ifort
+  read -e -p "Which compiler do you want to use? (ifort/pgi/gfortran): " -i "pgi" CUSTOM_COMPILER
+  export MITGCM_OPT=mitgcm_optfile.$CUSTOM_COMPILER
 fi
 
 echo "The option file is: $MITGCM_OPT"

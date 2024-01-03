@@ -26,6 +26,8 @@ if ($ESMF_COMPILER == intel) then
   set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
 else if ($ESMF_COMPILER == pgi) then
   set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+else if ($ESMF_COMPILER == gfortran) then
+  set compopts     = (-fconvert=big-endian -fimplicit-none -fallow-argument-mismatch -fallow-invalid-boz)
 endif
 
 set compopts_num = ( $compopts )
