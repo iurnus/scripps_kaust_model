@@ -24,7 +24,7 @@
  useRealFreshWaterFlux = .FALSE.,
  useCDscheme = .FALSE.,
  globalFiles       = .FALSE.,
- useSingleCpuIO    = .FALSE.,
+ useSingleCpuIO    = .TRUE.,
  vectorInvariantMomentum = .TRUE.,
  staggerTimeStep = .TRUE.,
  multiDimAdvection = .FALSE.,
@@ -70,7 +70,8 @@
  delX   =  64*0.25,
  delZ   =  10.4104,  61.8650,  121.3249,  185.2441,  248.8393,  307.4212,
          357.6730,  398.2042,  429.2974,  452.2432,  468.6951,  480.2482,
-         488.2430,  493.7195,  497.4445,  499.1269,&
+         488.2430,  493.7195,  497.4445,  499.1269,
+ &
 # Input datasets
  &PARM05
  bathyFile = 'bathymetry_v0.bin',
@@ -78,4 +79,4 @@
  vVelInitFile  = 'hycom_V_ccs_mit_wrf_01Jan2009.bin',
  hydrogThetaFile = 'hycom_T_ccs_mit_wrf_01Jan2009.bin',
  hydrogSaltFile = 'hycom_S_ccs_mit_wrf_01Jan2009.bin',
-&
+ &
