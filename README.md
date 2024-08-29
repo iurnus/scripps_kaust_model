@@ -29,11 +29,11 @@ Now all the components are available from GitHub:
 The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/latest/). We also attached several [tutorial cases](https://github.com/iurnus/scripps_kaust_model/tree/master/coupler) for testing the coupled model.
 
 In this repository, we have:
-* coupler/ - *all coupler source code and examples*
-* esmf\_test/ - *ESMF test cases*
-* license\_statements/ - *license statements of the model components*
+* coupler - *all coupler source code and examples*
+* esmf\_test - *ESMF test cases*
+* license\_statements - *license statements of the model components*
 * README.md - *readme file*
-* scripts/ - *scripts to install the model*
+* scripts - *scripts to install the model*
 
 ********************************************************************************************
 
