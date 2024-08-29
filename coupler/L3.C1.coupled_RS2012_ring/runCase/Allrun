@@ -6,13 +6,13 @@ cp $WRF_DIR/main/wrf.exe .
 cp ../runCase.init/wrfbdy_d01 . 
 cp ../runCase.init/wrfinput_d01 .
 cp ../runCase.init/wrflowinp_d01 .
-python updateLowinp.py
-
-cp namelist.input.set namelist.input
-mpirun -np 4 ./wrf.exe
-python updateHFlux.py
-
+# python updateLowinp.py
+# 
+# cp namelist.input.set namelist.input
+# mpirun -np 4 ./wrf.exe
+# python updateHFlux.py
+# 
 cp namelist.input.run namelist.input
 ln -sf ../coupledCode/esmf_application .
-echo "running coupled MITgcm--WRF simulation.."
+# echo "running coupled MITgcm--WRF simulation.."
 mpirun -np 4 ./esmf_application &> log.esmf 

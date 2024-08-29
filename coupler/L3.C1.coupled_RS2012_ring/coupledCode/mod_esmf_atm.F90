@@ -178,7 +178,7 @@
         entryNameNUOPC = trim(nuopc_entryNameList(iEntry));
         entryNameWRF = trim(wrf_nameList(iEntry));
         exportEntry = ATMtoOCN(iEntry);
-        if (exportEntry == .True.) then
+        if (exportEntry .eqv. .True.) then
           Call NUOPC_Advertise(exportState, &
             StandardName=entryNameNUOPC, name=entryNameWRF, rc=rc)
         else

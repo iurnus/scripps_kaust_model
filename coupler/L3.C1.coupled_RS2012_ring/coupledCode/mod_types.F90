@@ -97,30 +97,42 @@
 
       integer :: nList = 21
       character(ESMF_MAXSTR), dimension(1:21) :: nuopc_entryNameList=&
-                   (/'XLAT_VALUE','XLONG_VALUE',&
-                     'LATENT_HEAT','SENSIBLE_HEAT',&
-                     'SHORTWAVE_UP_FLUX','SHORTWAVE_DOWN_FLUX',&
-                     'LONGWAVE_UP_FLUX','LONGWAVE_DOWN_FLUX',&
-                     'U_VELOCITY_AT_10M','V_VELOCITY_AT_10M',&
-                     'TEMPERATURE_AT_2M','SPECIFIC_HUMIDITY_AT_2M',&
-                     'SURFACE_EVAPORATION','PRECIP_CONVECTIVE',&
-                     'PRECIP_SH_CONVECTIVE','PRECIP_NON_CONVECTIVE',&
+                   (/'                        XLAT_VALUE',&
+                     '                       XLONG_VALUE',&
+                     '                       LATENT_HEAT',&
+                     '                     SENSIBLE_HEAT',&
+                     '                 SHORTWAVE_UP_FLUX',&
+                     '               SHORTWAVE_DOWN_FLUX',&
+                     '                  LONGWAVE_UP_FLUX',&
+                     '                LONGWAVE_DOWN_FLUX',&
+                     '                 U_VELOCITY_AT_10M',&
+                     '                 V_VELOCITY_AT_10M',&
+                     '                 TEMPERATURE_AT_2M',&
+                     '           SPECIFIC_HUMIDITY_AT_2M',&
+                     '               SURFACE_EVAPORATION',&
+                     '                 PRECIP_CONVECTIVE',&
+                     '              PRECIP_SH_CONVECTIVE',&
+                     '             PRECIP_NON_CONVECTIVE',&
                      'REANALYSIS_SEA_SURFACE_TEMPERATURE',&
-                     'OCEAN_MASK_VALUE',&
-                     'ACTIVE_SEA_SURFACE_TEMPERATURE',&
-                     'OCEAN_SURFACE_U','OCEAN_SURFACE_V'/)
+                     '                  OCEAN_MASK_VALUE',&
+                     '    ACTIVE_SEA_SURFACE_TEMPERATURE',&
+                     '                   OCEAN_SURFACE_U',&
+                     '                   OCEAN_SURFACE_V'/)
       character(ESMF_MAXSTR), dimension(1:21) :: wrf_nameList=&
-                   (/'XLAT','XLONG',&
-                     'LH','HFX','SWUPB','SWDNB','LWUPB','LWDNB',&
+                   [character(len=9) :: 'XLAT','XLONG',&
+                     'LH','HFX',&
+                     'SWUPB','SWDNB','LWUPB','LWDNB',&
                      'U10','V10','T2','Q2',&
-                     'QFX','RAINCV','RAINSHV','RAINNCV','SST_INPUT',&
-                     'OCNMASK','SST','UOCE','VOCE'/)
+                     'QFX','RAINCV','RAINSHV','RAINNCV',&
+                     'SST_INPUT',&
+                     'OCNMASK','SST','UOCE','VOCE']
       character(ESMF_MAXSTR), dimension(1:21) :: nuopc_entryUnitList=&
-                   (/'1','1',&
-                     'w/m^2','w/m^2','w/m^2','w/m^2','w/m^2','w/m^2',&
-                     'm/s','m/s','degree','kg/kg',&
-                     'kg/m2','mm','mm','mm','degree',&
-                     '1','degree','m/s','m/s'/)
+                   (/'     1','     1',&
+                     ' w/m^2',' w/m^2',' w/m^2',' w/m^2',&
+                     ' w/m^2',' w/m^2',&
+                     '   m/s','   m/s','degree',' kg/kg',&
+                     ' kg/m2','    mm','    mm','    mm','degree',&
+                     '     1','degree','   m/s','   m/s'/)
       logical, dimension(1:21) :: OCNtoATM=&
                    (/.False.,.False.,.False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,.False.,.False.,&

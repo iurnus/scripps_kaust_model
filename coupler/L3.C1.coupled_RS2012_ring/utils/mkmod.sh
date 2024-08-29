@@ -31,6 +31,8 @@ else if ($ESMF_OS == Linux) then
     set compopts     = (-fPIC -convert big_endian -assume byterecl -align -O2 -ip -fp-model precise -traceback -ftz)
   else if ($ESMF_COMPILER == pgi) then
     set compopts     = (-byteswapio -r8 -Mnodclchk -Mextend)
+  else if ($ESMF_COMPILER == gfortran) then
+    set compopts     = (-fconvert=big-endian -fimplicit-none -fallow-argument-mismatch -fallow-invalid-boz)
   endif
 endif
 
@@ -97,7 +99,6 @@ cat <<EOF > ${mpref_l}_mod.Ftmp
       PUBLIC MIT_RUN
       PUBLIC MIT_GETCLOCK
       PUBLIC GET_DOMAIN_SIZE
-      PUBLIC GET_PARAMETERS
       PUBLIC GET_GRID_PARAMETERS
       PUBLIC GET_FIELD_PARAMETERS
       PUBLIC GET_THETA

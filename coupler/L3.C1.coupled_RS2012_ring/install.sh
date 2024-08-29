@@ -4,18 +4,14 @@ echo "ESMF location? : " ${ESMF_DIR}
 echo "WRF413 (with OA coupling) location? : " ${WRF_DIR}
 echo "MITgcm (source code) location? : " ${MITGCM_DIR}
 
-read -e -p "Using Intel compiler? (Y/N) :" -i "N" intelFlag
-if [ $intelFlag == 'Y' ]; then
-  if [ $ESMF_OS == 'Linux' ]; then
-    echo "Using Intel compiler"
-    export MITGCM_OPT=mitgcm_optfile.ifort
-  elif [ $ESMF_OS == 'Unicos' ]; then
-    echo "Using Intel compiler for Cray"
-    export MITGCM_OPT=mitgcm_optfile.cray
-  fi
+export MITGCM_COMPILER=$ESMF_COMPILER
+read -e -p "Using default ESMF compiler $MITGCM_COMPILER? (Y/N): " -i "Y" defaultFlag
+if [ $defaultFlag == 'Y' ]; then
+  echo "Using $MITGCM_COMPILER compiler"
+  export MITGCM_OPT=mitgcm_optfile.$MITGCM_COMPILER
 else 
-  echo "Using PGI compiler"
-  export MITGCM_OPT=mitgcm_optfile.pgi
+  read -e -p "Which compiler do you want to use? (ifort/pgi/gfortran): " -i "pgi" CUSTOM_COMPILER
+  export MITGCM_OPT=mitgcm_optfile.$CUSTOM_COMPILER
 fi
 echo "The option file is: $MITGCM_OPT"
 

@@ -113,7 +113,7 @@ module mod_esmf_ocn
     entryNameNUOPC = trim(nuopc_entryNameList(iEntry));
     entryNameWRF = trim(wrf_nameList(iEntry));
     exportEntry = OCNtoATM(iEntry);
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       Call NUOPC_Advertise(exportState, &
         StandardName=entryNameNUOPC, name=entryNameWRF, rc=rc)
     else
@@ -635,7 +635,7 @@ module mod_esmf_ocn
     entryNameWRF = trim(wrf_nameList(iEntry));
     exportEntry = OCNtoATM(iEntry);
 
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       field_tmp = ESMF_FieldCreate(gridOut, arraySpec,&
                  staggerloc=staggerLoc,                &
                  indexflag=ESMF_INDEX_GLOBAL,          &
@@ -665,7 +665,7 @@ module mod_esmf_ocn
       end if
     end do
 
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       call NUOPC_Realize(exportState, field=field_tmp, rc=rc) 
     else
       call NUOPC_Realize(importState, field=field_tmp, rc=rc) 
