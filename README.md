@@ -1,39 +1,41 @@
-The SKRIPS is under continous development. The current stable version is [v2.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v2.0).
-
-<!---
-The most recent stable version is v1.2. It is available here: [download v1.2](https://github.com/iurnus/scripps_kaust_model/releases/tag/v1.2)
--->
-
-The older versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases).
+The SKRIPS is under continuous development. The current stable version is [v2.0](https://github.com/iurnus/scripps_kaust_model/releases/tag/v2.0).
 
 To insall and run the code, please refer to [code documentation](https://skrips.readthedocs.io/en/latest/).
 
 To build the WRF model or the coupled model, please refer to [other documentation](https://github.com/iurnus/coupled_model_other_docs).
 
+The previous versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases).
+
 ********************************************************************************************
 
+**Recent changes**
+
+We have updated WRF, MITgcm, and ESMF to the recent versions. Because WW3 is not archived for many years, we are still using the 6.07.1 version.
+
+The coupled model has now implemented with DART for some data assimilation experiments.  
+
+********************************************************************************************
+
+
 This is the repository for the Scripps-KAUST Regional Integrated Prediction System (SKRIPS). 
-It is a regional coupled atmosphere-ocean model that includes the following components:
+It is a regional coupled atmosphere-ocean model that includes WRF, MITgcm, WaveWatch III, and ESMF coupler.
 
-* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.1.3) (version 4.1.3)
-* Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint67m) (version c67m)
+Now all the components are available from GitHub:
+* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.5.1) (version 4.5.1)
+* Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint68r) (version c68r)
 * Wave Solver: [WaveWatch III](https://github.com/NOAA-EMC/WW3/archive/refs/tags/6.07.1.zip) (version 6.07.1)
-* Driver (coupler): [ESMF](https://www.earthsystemcog.org/projects/esmf/download_800) (version 8.0.0)
+* Driver (coupler): [ESMF](https://github.com/esmf-org/esmf/releases/tag/v8.6.0) (version 8.6.0)
 
-The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/latest/). 
-There are several tutorial cases for testing the coupled model.
-
-Users can also extend this solver using some pre-requisite knowledge of the underlying method and programming techniques.
+The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/latest/). We also attached several [tutorial cases](https://github.com/iurnus/scripps_kaust_model/tree/master/coupler) for testing the coupled model.
 
 In this repository, we have:
-
-* coupler/ - *all coupler source code and examples*
-* esmf\_test\_application/ - *ESMF test cases*
-* installOption\_OTH/ - *scripts to install other code*
-* installOption\_WRF/ - *scripts to install WRF*
-* installOption\_WW3/ - *scripts to install WW3*
-* license\_statements/ - *license statements of the model components*
+* coupler - *all coupler source code and examples*
+* esmf\_test - *ESMF test cases*
+* license\_statements - *license statements of the model components*
 * README.md - *readme file*
+* scripts - *scripts to install the model*
+
+********************************************************************************************
 
 **Reference**
 
@@ -48,3 +50,5 @@ Malyarenko, A., Gossart, A., Sun, R., and Krapp, M.: Conservation of heat and ma
 Cerovečki, I., Sun, R., Bromwich, D.H., Zou, X., Mazloff, M.R. and Wang, S.H., 2022. Impact of downward longwave radiative deficits on Antarctic sea-ice extent predictability during the sea ice growth period. Environmental Research Letters, 17(8), p.084008.
 
 Sun, R., Subramanian, A. C., Cornuelle, B. D., Mazloff, M. R., Miller, A. J., Ralph, F. M., Seo, H., and Hoteit, I.: The role of air–sea interactions in atmospheric rivers: Case studies using the SKRIPS regional coupled model, Journal of Geophysical Research: Atmospheres, 126(6), e2020JD032885, [https://doi.org/10.1029/2020JD032885](https://doi.org/10.1029/2020JD032885), 2021.
+
+Sun, R., Sanikommu, S., Subramanian, A.C., Mazloff, M.R., Cornuelle, B.D., Gopalakrishnan, G., Miller, A.J. and Hoteit, I., 2024. Enhanced regional ocean ensemble data assimilation through atmospheric coupling in the SKRIPS model. Ocean Modelling, p.102424.
