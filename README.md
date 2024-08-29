@@ -10,7 +10,7 @@ The previous versions are available here: [older versions](https://github.com/iu
 
 Recent changes:
 
-We have updated WRF, MITgcm, and ESMF to the recent versions. Since WW3 still does not have a newer archived version, we are still using the 6.07.1 version.
+We have updated WRF, MITgcm, and ESMF to the recent versions. Because WW3 is not archived for many years, we are still using the 6.07.1 version.
 
 The coupled model has now implemented with DART for some data assimilation experiments.  
 
