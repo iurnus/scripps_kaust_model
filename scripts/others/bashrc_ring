@@ -1,0 +1,69 @@
+echo "Setting up the bashrc for SKRIPS model..."
+
+# Location of the modules
+export SKRIPS_DIR=$HOME/scripps_kaust_model/
+export ESMF_DIR=$SKRIPS_DIR/esmf/
+export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
+export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
+export PWRF_DIR=$SKRIPS_DIR/PWRFV413_AO/
+export WW3_DIR=$SKRIPS_DIR/ww3_607/
+
+# NETCDF and MPI
+export NETCDF=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/
+export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/usr/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export PATH=/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/:${PATH}   
+export SKRIPS_MPI_DIR=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/
+export SKRIPS_MPI_INC=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/include/
+export SKRIPS_MPI_LIB=/project_shared/Libraries/openmpi-2.1.1_pgi_fortran_17.5-0/lib/
+export PATH=${SKRIPS_MPI_DIR}/bin:${PATH}   
+export PROJ_LIB=/home/rus043/anaconda2/share/proj/
+
+# For WW3
+export PATH=$WW3_DIR/model/bin:${PATH}
+export PATH=$WW3_DIR/model/exe:${PATH}
+export WWATCH3_ENV=$WW3_DIR/wwatch3.env
+export WWATCH3_NETCDF=NC4
+export NETCDF_CONFIG='/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/bin/nc-config'
+export NETCDF_CONFIG_C='/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/bin/ncxx4-config'
+export NETCDF_CONFIG_F='/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/bin/nf-config'
+
+# For ESMF
+export ESMF_OS=Linux
+export ESMF_COMM=openmpi
+export ESMF_NETCDF=split
+export ESMF_OPENMP=OFF
+export ESMF_LAPACK=internal
+export ESMF_BOPT=g
+export ESMF_ABI=64
+export ESMF_COMPILER=pgi
+export ESMF_SITE=default
+
+export ESMF_LIB=$ESMF_DIR/lib/lib$ESMF_BOPT/$ESMF_OS.$ESMF_COMPILER.$ESMF_ABI.$ESMF_COMM.default/
+export ESMF_MOD=$ESMF_DIR/mod/mod$ESMF_BOPT/$ESMF_OS.$ESMF_COMPILER.$ESMF_ABI.$ESMF_COMM.default/
+export ESMFMKFILE=$ESMF_LIB/esmf.mk
+export ESMF_TESTEXHAUSTIVE=ON
+export ESMF_TESTMPMD=OFF
+export ESMF_TESTHARNESS_ARRAY=RUN_ESMF_TestHarnessArray_default
+export ESMF_TESTHARNESS_FIELD=RUN_ESMF_TestHarnessField_default
+export ESMF_TESTWITHTHREADS=OFF
+export ESMF_NETCDF_INCLUDE="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/include -I/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/include"
+export ESMF_NETCDF_LIBPATH="/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -L/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
+export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/project_shared/Libraries/netcdf-fortran-4.4.4_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-4.4.1.1_pgi_fortran_17.5-0/lib -Wl,-rpath,/project_shared/Libraries/netcdf-cxx4-4.3.0_pgi_fortran_17.5-0/lib"
+export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
+export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
+
+## OTHERS
+export LD_LIBRARY_PATH=$ESMF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+
+# Add JASPER path for WPS
+export JASPERINC=/home/rus043/wrf/build_wrf/grib2/include/
+export JASPERLIB=/home/rus043/wrf/build_wrf/grib2/lib/
+
+# NCL
+alias ncl_add="export PATH='/home/rus043/anaconda2/bin:$PATH' && source activate ncl_stable"
+alias ncl_remove="source deactivate && PATH=`echo $PATH | sed -e 's/\/home\/rus043\/anaconda2\/bin://'`"
+
+echo "SKRIPS_DIR is: $SKRIPS_DIR"
