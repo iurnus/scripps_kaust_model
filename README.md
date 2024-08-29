@@ -5,7 +5,17 @@ To insall and run the code, please refer to [code documentation](https://skrips.
 To build the WRF model or the coupled model, please refer to [other documentation](https://github.com/iurnus/coupled_model_other_docs).
 
 The previous versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases).
+
 ********************************************************************************************
+
+Recent changes:
+
+We have updated WRF, MITgcm, and ESMF to the recent versions. Since WW3 still does not have a newer archived version, we are still using the 6.07.1 version.
+
+The coupled model has now implemented with DART for some data assimilation experiments.  
+
+********************************************************************************************
+
 
 This is the repository for the Scripps-KAUST Regional Integrated Prediction System (SKRIPS). 
 It is a regional coupled atmosphere-ocean model that includes WRF, MITgcm, WaveWatch III, and ESMF coupler.
