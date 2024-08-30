@@ -6,10 +6,14 @@ cd ${WW3_DIR}
 # FTP is still working, but no longer support WW3 6.07 version
 # ./model/bin/ww3_from_ftp.sh
 
-# ./model/bin/w3_setup ./model -c Intel -s Ifremer1
-./model/bin/w3_setup ./model -c Intel
+# ./model/bin/w3_setup ./model -c Portland -s Ifremer1
+./model/bin/w3_setup ./model -c Gnu
 
-WW3_DIR0=${SKRIPS_DIR}/installOption_WW3/ww3_install_shared/
+WW3_DIR0=${SKRIPS_DIR}/scripts/ww3/ww3_install_shared/
+WW3_DIR1=${SKRIPS_DIR}/scripts/ww3/ww3_install_kala/
+
+ln -sf ${WW3_DIR1}/comp.Gnu ./model/bin/comp
+ln -sf ${WW3_DIR1}/link.Gnu ./model/bin/link
 
 ln -sf ${WW3_DIR0}/switch ./model/bin/switch
 ln -sf ${WW3_DIR0}/ww3_esmf.ftn ./model/ftn/

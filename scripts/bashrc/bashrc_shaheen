@@ -63,3 +63,5 @@ export LD_LIBRARY_PATH=$ESMF_LIB/${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 export TZ='/usr/share/zoneinfo/US/Pacific'
+
+echo "SKRIPS_DIR is: $SKRIPS_DIR"

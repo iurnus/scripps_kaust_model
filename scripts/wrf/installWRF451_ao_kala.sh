@@ -1,8 +1,8 @@
 echo "installing WRF"
 echo "WRF DIR is: ${WRF_DIR}"
 cd ${WRF_DIR}
-WRF_UPDATE_DIR0=${SKRIPS_DIR}/installOption_WRF/wrfAO451_shared/
-WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO451_kala/
+WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO451_shared/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO451_kala/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
