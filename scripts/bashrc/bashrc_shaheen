@@ -11,7 +11,7 @@ module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
 module load gcc/10.3.0
-# module load cray-mpich
+module load cray-mpich
 # module load grib2
 
 # Update the following directories from line 4 to 13
@@ -20,8 +20,8 @@ module load gcc/10.3.0
 export SKRIPS_DIR=/project/k10036/x_sunr/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c68r/
-export WRF_DIR=$SKRIPS_DIR/WRFV451_AO/
-export PWRF_DIR=$SKRIPS_DIR/PWRFV451_AO/
+export WRF_DIR=$SKRIPS_DIR/WRFV452_AO/
+export PWRF_DIR=$SKRIPS_DIR/PWRFV452_AO/
 export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
 # # NETCDF and MPI options
@@ -34,9 +34,9 @@ export NETCDF_classic=1
 export ESMF_NETCDF_INCLUDE="`nc-config --includedir`"
 export ESMF_NETCDF_LIBPATH="`nc-config --libdir`"
 export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,`nc-config --libdir`"
-export SKRIPS_MPI_DIR=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/
-export SKRIPS_MPI_INC=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/include
-export SKRIPS_MPI_LIB=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/lib
+export SKRIPS_MPI_DIR=$MPICH_DIR/
+export SKRIPS_MPI_INC=$MPICH_DIR/include
+export SKRIPS_MPI_LIB=$MPICH_DIR/lib
 export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
 
