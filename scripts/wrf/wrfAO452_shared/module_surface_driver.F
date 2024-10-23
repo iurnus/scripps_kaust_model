@@ -27,11 +27,13 @@ CONTAINS
      &          ,tyr,tyra,tdly,tlag,lagday,nyear,nday,tmn_update,yr   &
      &          ,t_phy,u10,udrunoff,ust,uz0                           &
      &          ,u_frame,u_phy,v10,vegfra,u10e,v10e,uoce,voce         &
+     ! Add by Rui for wave coupling
      &          ,waveHS,waveLP,ocnMASK,waveSTOKESX,waveSTOKESY        &
      &          ,waveSTOKESXH,waveSTOKESYH                            &
      &          ,waveLANGMUIR,waveLASL,waveTAUIX,waveTAUIY            &
      &          ,waveTAUOX,waveTAUOY,waveNUMBER,ocnMLD                &
      &          ,waveFP,waveCHA,use_coare35                           &
+     ! finished
      &          ,vz0,v_frame,v_phy,warm_rain,wspd,xice,xland,z,znt    &
      &          ,max_edom,cplmask                                     &
      &          ,zs                                                   & 

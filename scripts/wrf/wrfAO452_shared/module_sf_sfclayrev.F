@@ -17,6 +17,7 @@ CONTAINS
                      FM,FH,                                        &
                      XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
                      U10,V10,TH2,T2,Q2,                            &
+                     ! added by Rui for wave coupling
                      waveHS,waveLP,ocnMASK,use_coare35,           &
                      GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
                      SVP1,SVP2,SVP3,SVPT0,EP1,EP2,                 &
@@ -1022,6 +1023,8 @@ CONTAINS
                 ZNT(I)=(1.0-ZW) * ZN1 + ZW * ZN2
                 ZNT(I)=MIN(ZNT(I),2.85e-3)
                 ZNT(I)=MAX(ZNT(I),1.27e-7)
+            ! added by Rui for wave coupling
+            ! for MM5 sfc layer option
             ELSEIF ( ISFTCFLX.EQ.7 ) THEN
                 waveLP0=MAX(waveLP(I),0.0083)
                 if (ocnMASK(I) .gt. 0.5) then

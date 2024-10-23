@@ -2584,6 +2584,7 @@ CONTAINS
 
         Is_alarm_tstep = .TRUE.
 
+        !! RUI: This is not used in ESMF anymore (?)
         !! IF ( ASSOCIATED( alarm%alarmint ) ) THEN
         !!   IF ( alarm%alarmint%Enabled ) THEN
         !!     IF ( alarm%alarmint%RingIntervalSet ) THEN

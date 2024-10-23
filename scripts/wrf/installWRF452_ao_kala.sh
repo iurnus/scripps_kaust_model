@@ -1,8 +1,16 @@
 echo "installing WRF"
 echo "WRF DIR is: ${WRF_DIR}"
+read -e -p "Continue with this WRF DIR? (Y/N): " -i "Y" defaultFlag
+if [ $defaultFlag == 'Y' ]; then
+  echo "continue"
+else 
+  echo "stop"
+  exit
+fi
+
 cd ${WRF_DIR}
-WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO451_shared/
-WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO451_kala/
+WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO452_shared/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO452_kala/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf

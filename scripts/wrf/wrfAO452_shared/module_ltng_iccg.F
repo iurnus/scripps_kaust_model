@@ -276,6 +276,7 @@
 ! Inputs
  REAL,                                    INTENT(IN   ) :: iccg_prescribed_num, iccg_prescribed_den
  REAL, DIMENSION( ims:ime, jms:jme, 12 ), INTENT(IN   ) :: iccg_in_num, iccg_in_den
+ ! RUI: remove INTENT(IN) for compile ESMF--WRF
  TYPE(WRFU_Time)                                        :: current_time  ! For use of IC:CG input
 
 ! Order dependent args for domain, mem, and tile dims

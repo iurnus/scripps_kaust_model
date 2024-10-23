@@ -117,6 +117,7 @@ CONTAINS
               ZNT,UST,PBLH,MAVAIL,ZOL,MOL,REGIME,PSIM,PSIH, &
               XLAND,HFX,QFX,LH,TSK,FLHC,FLQC,QGH,QSFC,RMOL, &
               U10,V10,TH2,T2,Q2,SNOWH,                      &
+              ! Added by Rui for ESMF--WRF
               waveHS,waveLP,ocnMASK,                        & 
               waveFP,waveCHA,use_coare35,                   &
               GZ1OZ0,WSPD,BR,ISFFLX,DX,                     &
@@ -229,6 +230,7 @@ CONTAINS
       REAL,     INTENT(IN)   ::        CP,G,ROVCP,R,XLV,DX
 !NAMELIST OPTIONS:
       INTEGER,  INTENT(IN)   ::        ISFFLX
+      ! Added by Rui to activate coare 3.5 in WRF
       INTEGER,  INTENT(IN)   ::        use_coare35
       INTEGER,  OPTIONAL,  INTENT(IN)   ::     ISFTCFLX, IZ0TLND
       INTEGER,  OPTIONAL,  INTENT(IN)   ::     spp_pbl
@@ -666,6 +668,8 @@ CONTAINS
                 !COARE 3.5
                 CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
              ENDIF
+          ! added by Rui for wave coupling
+          ! for MYNN sfc layer option
           ELSEIF ( ISFTCFLX .EQ. 6 ) THEN
              ELSEIF ( ISFTCFLX .EQ. 6 ) THEN
                 CALL charnock_1955_wave(ZNT(i),UST(i),WSPD(i),waveCHA(i),ocnMASK(i),visc,ZA(I))
@@ -723,6 +727,8 @@ CONTAINS
              ENDIF
           ELSEIF ( ISFTCFLX .EQ. 2 ) THEN
              CALL garratt_1992(z_t(i),z_q(i),ZNTstoch(i),restar,XLAND(I))
+          ! added by Rui for wave coupling
+          ! for MYNN sfc layer option
           ELSEIF ( ISFTCFLX .EQ. 3 .OR. ISFTCFLX .EQ. 6 .OR. ISFTCFLX .EQ. 7 .OR. &
                    ISFTCFLX .EQ. 8 .OR. ISFTCFLX .EQ. 9 .OR. ISFTCFLX .EQ. 98 .OR.  &
                    ISFTCFLX .EQ. 99) THEN

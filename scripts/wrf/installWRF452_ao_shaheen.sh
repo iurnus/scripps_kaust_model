@@ -1,16 +1,24 @@
 echo "installing WRF"
 echo "WRF DIR is: ${WRF_DIR}"
+read -e -p "Continue with this WRF DIR? (Y/N): " -i "Y" defaultFlag
+if [ $defaultFlag == 'Y' ]; then
+  echo "continue"
+else 
+  echo "stop"
+  exit
+fi
+
 cd ${WRF_DIR}
-WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO451_shared/
-WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO451_expanse/
+WRF_UPDATE_DIR0=${SKRIPS_DIR}/installOption_WRF/wrfAO452_shared/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/installOption_WRF/wrfAO452_shaheen/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
 
-# WRF configure=15, then nesting=1
-echo "choosing 15th option to compile WRF"
+# WRF configure=50, then nesting=1
+echo "choosing 50th option to compile WRF"
 echo "nesting option is 1 (normal)"
-printf '15\n1\n' | ./configure &> log.configure
+printf '50\n1\n' | ./configure &> log.configure
 
 echo "copying other files to compile ESMF--WRF"
 ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
@@ -37,7 +45,7 @@ ln -sf ${WRF_UPDATE_DIR0}/module_first_rk_step_part1.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
 
-echo "compiling WRFv4.5.1"
+echo "compiling WRFv4.1.3"
 ./compile em_real &> log.em_real1
 
 echo "finished copying"

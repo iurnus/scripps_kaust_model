@@ -72,6 +72,7 @@ CONTAINS
     INTEGER, INTENT(IN)                       :: output_freq            ! interval type
     INTEGER, INTENT(IN)                       :: run_days
     INTEGER, DIMENSION(num_tiles), INTENT(IN) :: i_start, i_end, j_start, j_end
+    ! RUI: removed INTENT(INOUT) for compile WRF--ESMF
     TYPE(WRFU_Time)                           :: currentTime
     TYPE(WRFU_Alarm), INTENT(INOUT)           :: avgOutAlarm
     INTEGER, INTENT(INOUT)                    :: nsteps                 ! number of step accumulated

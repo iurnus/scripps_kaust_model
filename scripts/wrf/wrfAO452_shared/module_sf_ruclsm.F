@@ -386,6 +386,7 @@ CONTAINS
                                                          icerat, &
                                                           curat, &
                                                        INFILTRP
+   ! Added by Rui for fixing ZNT issues in simulations
    REAL      ::  ZNT_HOLD
    REAL      ::  cq,r61,r273,arp,brp,x,evs,eis
    REAL      ::  cropsm
