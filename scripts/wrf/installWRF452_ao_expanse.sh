@@ -45,7 +45,7 @@ ln -sf ${WRF_UPDATE_DIR0}/module_first_rk_step_part1.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
 
-echo "compiling WRFv4.5.1"
+echo "compiling WRFv4.5.2"
 ./compile em_real &> log.em_real1
 
 echo "finished copying"
