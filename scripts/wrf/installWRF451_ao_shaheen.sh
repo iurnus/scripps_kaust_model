@@ -9,8 +9,8 @@ else
 fi
 
 cd ${WRF_DIR}
-WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO452_shared/
-WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO452_shaheen/
+WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO451_shared/
+WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO451_shaheen/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
@@ -44,8 +44,11 @@ ln -sf ${WRF_UPDATE_DIR0}/module_domain.F frame/
 ln -sf ${WRF_UPDATE_DIR0}/module_first_rk_step_part1.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
+# two issues with this specific version for intel compiler
+ln -sf ${WRF_UPDATE_DIR1}/RSL_LITE/* external/RSL_LITE/
+ln -sf ${WRF_UPDATE_DIR1}/pack_utils.c external/frame
 
-echo "compiling WRFv4.5.2"
+echo "compiling WRFv4.5.1"
 ./compile em_real &> log.em_real1
 
 echo "finished copying"

@@ -5,30 +5,38 @@ module unload PrgEnv-gnu
 module unload PrgEnv-pgi
 
 module load PrgEnv-intel
-module load craype-haswell
 module load craype-hugepages4M
 
 module unload cray-hdf5-parallel
 module load cray-netcdf
 module load cray-parallel-netcdf
+module load gcc/10.3.0
+# module load cray-mpich
 # module load grib2
 
 # Update the following directories from line 4 to 13
-export SKRIPS_DIR=/project/k1325/scripps_kaust_model/
+
+# # Update the following directories from line 4 to 13
+export SKRIPS_DIR=/project/k10036/x_sunr/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
-export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c67m/
-export WRF_DIR=$SKRIPS_DIR/WRFV413_AO/
+export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c68r/
+export WRF_DIR=$SKRIPS_DIR/WRFV451_AO/
+export PWRF_DIR=$SKRIPS_DIR/PWRFV451_AO/
 export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
-# NETCDF and MPI options
-export NETCDF=$NETCDF_DIR
-export PNETCDF=$PARALLEL_NETCDF_DIR
-export ESMF_NETCDF_INCLUDE="/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/include/, -I/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/include"
-export ESMF_NETCDF_LIBPATH="/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/lib/, -L/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/lib"
-export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,/opt/cray/pe/netcdf/4.7.4.4/INTEL/19.1/lib/, -Wl,-rpath,/opt/cray/pe/parallel-netcdf/1.12.1.4/intel/19.1/lib/"
-export SKRIPS_MPI_DIR=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/
-export SKRIPS_MPI_INC=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/include
-export SKRIPS_MPI_LIB=/opt/cray/pe/mpt/7.7.18/gni/mpich-intel/16.0/lib
+# # NETCDF and MPI options
+export NETCDF=`nc-config --prefix`
+# export PNETCDF=`pnetcdf-config --prefix`
+export NETCDF_classic=1
+# export ESMF_NETCDF_INCLUDE="`nc-config --includedir`, -I`pnetcdf-config --includedir`"
+# export ESMF_NETCDF_LIBPATH="`nc-config --libdir`, -L`pnetcdf-config --libdir`"
+# export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,`nc-config --libdir`, -Wl,-rpath,`pnetcdf-config --libdir`"
+export ESMF_NETCDF_INCLUDE="`nc-config --includedir`"
+export ESMF_NETCDF_LIBPATH="`nc-config --libdir`"
+export ESMF_NETCDF_LIBPATH_PREFIX="-Wl,-rpath,`nc-config --libdir`"
+export SKRIPS_MPI_DIR=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/
+export SKRIPS_MPI_INC=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/include
+export SKRIPS_MPI_LIB=/opt/cray/pe/mpich/8.1.27/ofi/intel/2022.1/lib
 export SKRIPS_NETCDF_INCLUDE=-I$ESMF_NETCDF_INCLUDE
 export SKRIPS_NETCDF_LIB=-L$ESMF_NETCDF_LIBPATH
 
@@ -37,16 +45,16 @@ export PATH=$WW3_DIR/model/bin:${PATH}
 export PATH=$WW3_DIR/model/exe:${PATH}
 export WWATCH3_ENV=$WW3_DIR/wwatch3.env
 export WWATCH3_NETCDF=NC4
-export NETCDF_CONFIG='/opt/cray/pe/netcdf/4.7.4.4/bin/nc-config'
-
+export NETCDF_CONFIG=$NETCDF/bin/nc-config
 
 export ESMF_OS=Unicos
 export ESMF_COMM=mpi
-export ESMF_NETCDF=split
+export ESMF_NETCDF=nc-config
 export ESMF_OPENMP=OFF
 export ESMF_LAPACK=internal
 export ESMF_BOPT=g
 export ESMF_ABI=64
+# export ESMF_COMPILER=cray
 export ESMF_COMPILER=intel
 export ESMF_SITE=default
 export ESMF_LIB=$ESMF_DIR/lib/lib$ESMF_BOPT/$ESMF_OS.$ESMF_COMPILER.$ESMF_ABI.$ESMF_COMM.default/
