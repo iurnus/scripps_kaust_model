@@ -73,7 +73,7 @@
     REAL dx_compare , dy_compare , dum
     INTEGER :: num_land_cat_compare
     CHARACTER (LEN=256) :: MMINLU
-    # RUI: use this variable to avoid initialization error for auxinput5
+    ! RUI: use this variable to avoid initialization error for auxinput5
     INTEGER :: ISLAKE_tmp
 
     !  Local variables for vertical interpolation.
