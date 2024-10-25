@@ -24,6 +24,9 @@ export WRF_DIR=$SKRIPS_DIR/WRFV452_AO/
 export PWRF_DIR=$SKRIPS_DIR/PWRFV452_AO/
 export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
+# This value is 1 when installing WRF with ESMF
+export WRF_ESMF=1
+
 # # NETCDF and MPI options
 export NETCDF=`nc-config --prefix`
 # export PNETCDF=`pnetcdf-config --prefix`
