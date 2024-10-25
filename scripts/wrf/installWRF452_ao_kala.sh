@@ -9,19 +9,24 @@ else
 fi
 
 cd ${WRF_DIR}
+export WRF_ESMF=1
 WRF_UPDATE_DIR0=${SKRIPS_DIR}/scripts/wrf/wrfAO452_shared/
 WRF_UPDATE_DIR1=${SKRIPS_DIR}/scripts/wrf/wrfAO452_kala/
 
 echo "Deleting old configure file..."
 rm -rf configure.wrf
 
+ln -sf ${WRF_UPDATE_DIR0}/Config.pl arch/
+ln -sf ${WRF_UPDATE_DIR0}/preample arch/
+ln -sf ${WRF_UPDATE_DIR0}/postample arch/
+
 # WRF configure=34, then nesting=1
 echo "choosing 34th option to compile WRF"
 echo "nesting option is 1 (normal)"
-printf '54\n1\n' | ./configure &> log.configure
+printf '34\n1\n' | ./configure &> log.configure
 
 echo "copying other files to compile ESMF--WRF"
-ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
+# ln -sf ${WRF_UPDATE_DIR1}/configure.wrf configure.wrf
 ln -sf ${WRF_UPDATE_DIR0}/Makefile.wrf Makefile
 ln -sf ${WRF_UPDATE_DIR0}/Registry.EM Registry/
 
