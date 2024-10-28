@@ -1,0 +1,42 @@
+# Registry file, EM_CHEM
+
+#INCLUDES
+include registry.dimspec
+include registry.chem
+include registry.new3d_gca
+include registry.em_shared_collection
+
+state   real   landmask            ij    misc          1     -     i012rh0d=(interp_fcnm_imask)u=(copy_fcnm)   "LANDMASK"      "LAND MASK (1 FOR LAND, 0 FOR WATER)"  ""
+state   real   lakemask            ij    misc          1     -     i012rh0d=(interp_fcnm_imask)u=(copy_fcnm)   "LAKEMASK"      "LAKE MASK (1 FOR LAND, 0 FOR WATER)"  ""
+
+# Masked SST interpolation from the CG
+#state    real   SST              ij    misc        1         -     i0124rh0d=(interp_mask_field:lu_index,iswater)f=(p2c_mask:lu_index,tslb,num_soil_layers,iswater)   "SST"              "SEA SURFACE TEMPERATURE" "K"
+# Simple SST interpolation from the CG
+#state    real   SST              ij    misc        1         -     i0124rh0d=(interp_mask_field:lu_index,iswater)f=(p2c)   "SST"              "SEA SURFACE TEMPERATURE" "K"
+state    real   SST              ij     misc        1         -     i0124rh0d=(interp_mask_field:lu_index,iswater)   "SST"              "SEA SURFACE TEMPERATURE" "K"
+state    real   SST_INPUT        ij     misc        1         -     rh   "SST_INPUT"              "SEA SURFACE TEMPERATURE FROM WRFLOWINPUT FILE" "K"
+
+state    real   waveHS           ij     misc        1         -     i01rh  "WAVEHS"  "SIGNIFICANT WAVE HEIGHT" "m"
+state    real   waveLP           ij     misc        1         -     i01rh  "WAVELP"  "PEAK WAVE LENGTH" "m"
+state    real   waveSTOKESX      ij     misc        1         -     i01rh  "WAVESTOKESX"  "WAVE STOKES VELOCITY X" "m/s"
+state    real   waveSTOKESY      ij     misc        1         -     i01rh  "WAVESTOKESY"  "WAVE STOKES VELOCITY Y" "m/s"
+state    real   waveSTOKESXH     ij     misc        1         -     i01rh  "WAVESTOKESXH"  "AVERAGED WAVE STOKES VELOCITY X" "m/s"
+state    real   waveSTOKESYH     ij     misc        1         -     i01rh  "WAVESTOKESYH"  "AVERAGED WAVE STOKES VELOCITY Y" "m/s"
+state    real   waveLANGMUIR     ij     misc        1         -     i01rh  "WAVELANGMUIR"  "WAVE INDUCED LANGMUIR transport" "1"
+state    real   waveLASL         ij     misc        1         -     i01rh  "WAVELASL"  "WAVE LASL factor" "1"
+state    real   waveTAUIX        ij     misc        1         -     i01rh  "WAVETAUIX"  "WAVE SUPPORTED STRESS, x-component" "m2 s-2"
+state    real   waveTAUIY        ij     misc        1         -     i01rh  "WAVETAUIY"  "WAVE SUPPORTED STRESS, y-component" "m2 s-2"
+state    real   waveTAUOX        ij     misc        1         -     i01rh  "WAVETAUOX"  "WAVE-OCEAN MOMENTUM FLUX, x-component" "m2 s-2"
+state    real   waveTAUOY        ij     misc        1         -     i01rh  "WAVETAUOY"  "WAVE-OCEAN MOMENTUM FLUX, y-component" "m2 s-2"
+state    real   waveNUMBER       ij     misc        1         -     i01rh  "WAVENUMBER"  "WAVE NUMBER" ""
+state    real   waveFP           ij     misc        1         -     i01rh  "WAVEFP"  "WAVE PEAK FREQ" "1/s"
+state    real   waveCHA          ij     misc        1         -     i01rh  "WAVECHA"  "CHANOCK COEFFICIENT" ""
+state    real   ocnMASK         ij     misc        1         -     i01rh  "OCNMASK"  "OCEAN MASK (1=ocean/wave on; 0=ocean/wave off)" ""
+state    real   ocnMLD           ij     misc        1         -     i01rh  "OCNMLD"  "Mixed Layer Depth in Ocean Model" "m"
+rconfig   integer use_coare35                namelist,physics      1            0         h     "use_coare35"    "switch to control coare algorithm in mynn"   ""
+
+package   restofwrf      use_wps_input==0            -             -
+
+package   realonly       use_wps_input==1            -            state:u_gc,v_gc,t_gc,rh_gc,ght_gc,p_gc,xlat_gc,xlong_gc,ht_gc,tsk_gc,tavgsfc,tmn_gc,pslv_gc,sct_dom_gc,scb_dom_gc,greenfrac,albedo12m,lai12m,pd_gc,psfc_gc,intq_gc,pdhs,sh_gc,cl_gc,cf_gc,qv_gc,qr_gc,qc_gc,qs_gc,qi_gc,qg_gc,qh_gc,qni_gc,qnc_gc,icefrac_gc,prho_gc,pdrho_gc,qnr_gc,qns_gc,qng_gc,qnh_gc,soil_layers,soil_levels,st,sm,sw,soilt,soilm,sm000007,sm007028,sm028100,sm100255,st000007,st007028,st028100,st100255,sm000010,sm010040,sm040100,sm100200,sm010200,soilm000,soilm005,soilm020,soilm040,soilm160,soilm300,sw000010,sw010040,sw040100,sw100200,sw010200,soilw000,soilw005,soilw020,soilw040,soilw160,soilw300,st000010,st010040,st040100,st100200,st010200,soilt000,soilt005,soilt020,soilt040,soilt160,soilt300,fad0_urb2d,fad135_urb2d,fad45_urb2d,pad_urb2d,fad90_urb2d,rad_urb2d,car_urb2d,h2w_urb2d,svf_urb2d,z0s_urb2d,z0r_urb2d,z0m_urb2d,zds_urb2d,zdm_urb2d,zdr_urb2d,qntemp,qntemp2,hgtmaxw,pmaxw,tmaxw,umaxw,vmaxw,hgttrop,ptrop,ttrop,utrop,vtrop,urb_param
+
+package   tconly         use_wps_input==2            -             state:u_gc,v_gc,t_gc,rh_gc,ght_gc,p_gc,xlat_gc,xlong_gc,ht_gc,tsk_gc,tavgsfc,tmn_gc,pslv_gc,sct_dom_gc,scb_dom_gc,greenfrac,albedo12m,pd_gc,psfc_gc,intq_gc,pdhs,sh_gc,qv_gc,qr_gc,qc_gc,qs_gc,qi_gc,qg_gc,qh_gc,qni_gc,qnc_gc,qnr_gc,qns_gc,qng_gc,qnh_gc,icefrac_gc
