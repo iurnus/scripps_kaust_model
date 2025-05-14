@@ -28,6 +28,8 @@ program esmf_application
 !     Initialize ESMF framework
 !-----------------------------------------------------------------------
 !
+  !! Change ESMF_LOGKIND_NONE to ESMF_LOGKIND_MULTI 
+  !! to output the log files for each CPU
   call ESMF_Initialize(logkindflag=ESMF_LOGKIND_MULTI,              &
                        defaultCalkind=ESMF_CALKIND_GREGORIAN,       &
                        vm=vm, rc=rc)
