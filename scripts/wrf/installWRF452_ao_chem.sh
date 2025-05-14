@@ -49,7 +49,12 @@ ln -sf ${WRF_UPDATE_DIR0}/module_first_rk_step_part1.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
 ln -sf ${WRF_UPDATE_DIR1}/Registry.EM_CHEM Registry/
+ln -sf ${WRF_UPDATE_DIR1}/registry.chem Registry/
 ln -sf ${WRF_UPDATE_DIR1}/chemics_init.F chem/
+ln -sf ${WRF_UPDATE_DIR1}/chem_driver.F chem/
+ln -sf ${WRF_UPDATE_DIR1}/emissions_driver.F chem/
+ln -sf ${WRF_UPDATE_DIR1}/module_ghg_fluxes.F chem/
+ln -sf ${WRF_UPDATE_DIR1}/start_em.F dyn_em/
 
 echo "compiling WRFv4.5.2"
 ./compile em_real &> log.em_real1

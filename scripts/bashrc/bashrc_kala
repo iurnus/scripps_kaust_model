@@ -4,15 +4,19 @@ echo "Setting up the bashrc for SKRIPS model..."
 export SKRIPS_DIR=$HOME/scripps_kaust_model/
 export ESMF_DIR=$SKRIPS_DIR/esmf/
 export MITGCM_DIR=$SKRIPS_DIR/MITgcm_c68r/
+# export WRF_DIR=$SKRIPS_DIR/WRFV452_AO/
 export WRF_DIR=$SKRIPS_DIR/WRFV452_AO/
 export WRF_CHEM_DIR=$SKRIPS_DIR/WRFV452_chem_AO/
 export WPS_DIR=$SKRIPS_DIR/WPSV45/
 export PWRF_DIR=$SKRIPS_DIR/PWRFV452_AO/
 export WW3_DIR=$SKRIPS_DIR/ww3_607/
 
-export WRF_CHEM=0
 # This value is 1 when installing WRF with ESMF
+# Must use WRF_ESMF=1 for coupled simulations
 export WRF_ESMF=1
+# This value is 1 when installing WRF with WRF-chem
+# I set this to 0 because WRF-chem is still under development
+export WRF_CHEM=0
 
 # Other libraries
 export ZDIR=/home/rus043/libraries/zlib-1.3-build
@@ -73,6 +77,6 @@ export NETCDF_CONFIG=${NCDIR}/bin/nc-config
 export NETCDF_CONFIG_F=${NFDIR}/bin/nf-config
 
 # For DART
-export DART_DIR=/data/SO3/rus043/wrf_dart/DART-11.5.0/
+export DART_DIR=/home/rus043/DART-11.5.0/
 
 echo "SKRIPS_DIR is: $SKRIPS_DIR"

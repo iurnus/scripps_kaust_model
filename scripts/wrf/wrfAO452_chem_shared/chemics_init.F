@@ -1,6 +1,7 @@
 !WRF:MODEL_LAYER:INITIALIZATION
 !
-   subroutine chem_init (id,chem,emis_ant,scalar,dt,bioemdt,photdt,chemdt,stepbioe, &
+   subroutine chem_init (id,chem,emis_ant,scalar,dt,bioemdt,photdt,chemdt, &
+               apco2_oce,flux_co2,stepbioe, &
                stepphot,stepchem,stepfirepl,plumerisefire_frq,z_at_w,xlat,xlong,    &
                g,aerwrf,config_flags,grid,alt,t,p,CONVFAC,ttday,tcosz,julday,gmt,   &
                tauaer1,tauaer2,tauaer3,tauaer4,                      &
@@ -135,6 +136,9 @@
    REAL,  DIMENSION( ims:ime ,  jms:jme )         ,         &
           INTENT(INOUT   ) ::                                        &
                                ttday,tcosz,xlat,xlong
+   REAL,  DIMENSION( ims:ime ,  jms:jme )         ,         &
+          INTENT(INOUT   ) ::                                        &
+                               apco2_oce, flux_co2
    real, INTENT (IN) :: g
    integer, intent(out) :: stepbioe,stepphot,stepchem,stepfirepl
    TYPE (grid_config_rec_type) , INTENT (in) ::     config_flags
@@ -1633,9 +1637,21 @@ ghg_block: IF (config_flags%gas_ic_opt==GAS_IC_GHG) THEN
             chem(i,k,j,p_co2_ant)=380.   ! A user should subtract this from the output fields!
             chem(i,k,j,p_co2_tst)=380.   ! A user should subtract this from the output fields!
 
+
             if (p_co2_bbu>1) chem(i,k,j,p_co2_bbu)=380.  ! A user should subtract this from the output fields!
 
          enddo
+        enddo
+       enddo
+
+       ! For coupling with MITgcm
+       do j=jts,jte
+        do i=its,ite
+         ! convert unit from ppmv to atm for MITgcm BLING
+         apco2_oce(i,j)=380*1E-6   
+
+         ! set this to zero
+         flux_co2(i,j)=0.   
         enddo
        enddo
 
@@ -2035,8 +2051,16 @@ ENDIF ghg_block
                           S  = last_chem_time_second  )
     else
        call wrf_debug( 15, "Setting last_chem_time to model start time-dt" )
+       call wrf_message("DEBUG: checking time interval" )
+       call wrf_message("DEBUG: checking bio time interval")
+       call wrf_message("DEBUG: time interval before is: ")
+       WRITE(wrf_err_message,*)'DEBUG: time interval before is: ',dt
+       CALL wrf_debug( 0 , TRIM(wrf_err_message))
        ! RUI change to s_r8 for new version of ESMF
-       call WRFU_TimeIntervalSet(tmpTimeInterval, s_r8=real(dt,8))
+       ! call WRFU_TimeIntervalSet(tmpTimeInterval, s_r8=real(dt,8))
+       call WRFU_TimeIntervalSet(tmpTimeInterval, S=nint(dt))
+       WRITE(wrf_err_message,*)'DEBUG: time interval after is: ',nint(dt)
+       CALL wrf_debug( 0 , TRIM(wrf_err_message))
        last_chem_time(id) = domain_get_current_time(grid) - tmpTimeInterval
     end if
 

@@ -85,6 +85,7 @@ if (TRIM(VarNAME) == 'SST' .or. TRIM(VarNAME) == 'UOCE' .or. TRIM(VarNAME) == 'V
      .or. TRIM(VarNAME) == 'WAVETAUIX' .or. TRIM(VarNAME) == 'WAVETAUIY' &
      .or. TRIM(VarNAME) == 'WAVETAUOX' .or. TRIM(VarNAME) == 'WAVETAUOY' .or. TRIM(VarNAME) == 'WAVENUMBER' &
      .or. TRIM(VarNAME) == 'WAVELANGMUIR' .or. TRIM(VarNAME) == 'OCNMLD' &
+     .or. TRIM(VarNAME) == 'FLUX_CO2' &
      .or. TRIM(VarNAME) == 'SEAICE' .or. TRIM(VarNAME) == 'SITICE') THEN
   PRINT *, 'now processing wrf_input: ', TRIM(VarNAME)
 
