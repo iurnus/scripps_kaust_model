@@ -6,6 +6,12 @@
  &EXF_NML_01
  useExfYearlyFields = .TRUE., 
  useExfCheckRange   = .FALSE.,
+# NOTE: WRF output U10/V10 are relative wind.
+# In MITgcm we should set useRelativeWind=FALSE,
+# If we set useRelativeWind=TRUE, MITgcm will remove 
+# UOCE and VOCE from WRF relative winds.
+# Because useRelativeWind=FALSE is the default option.
+# It is OK to remove useRelativeWind in data.exf.
  useRelativeWind    = .FALSE.,
  exf_iprec          = 32,
  exf_yftype         = 'RL',
