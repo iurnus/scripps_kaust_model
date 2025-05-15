@@ -6,6 +6,7 @@
  &EXF_NML_01
  useExfYearlyFields = .TRUE., 
  useExfCheckRange   = .FALSE.,
+ useRelativeWind    = .FALSE.,
  exf_iprec          = 32,
  exf_yftype         = 'RL',
  &

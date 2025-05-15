@@ -23,3 +23,5 @@ rm -rf data.*
 rm -rf eedata *_data run-off* CAM* bathy*
 rm -rf *.m *.py
 rm -rf namelist.input
+rm -rf scratch1*
+rm -rf ESMF_L*
