@@ -181,7 +181,7 @@
         entryNameNUOPC = trim(nuopc_entryNameList(iEntry));
         entryNameWRF = trim(wrf_nameList(iEntry));
         exportEntry = fromATM(iEntry);
-        if (exportEntry == .True.) then
+        if (exportEntry .eqv. .True.) then
           Call NUOPC_Advertise(exportState, &
             StandardName=entryNameNUOPC, name=entryNameWRF, rc=rc)
         else
@@ -580,9 +580,6 @@
         stream = 0 
         ierr = 0
         
-        ! PRINT *, "in name is: ", config_flags%auxinput5_inname
-        ! PRINT *, "out name is: ", config_flags%auxhist5_outname
-   
         include "med_open_esmf_calls.inc"
    
       END SUBROUTINE wrf_state_populate

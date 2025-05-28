@@ -249,10 +249,10 @@
       type(ESMF_VM) :: vm
       real(ESMF_KIND_R4), pointer :: ptr_esmffield(:,:)
 
-        CALL get_ijk_from_grid( head_grid ,                   &
-                                ids, ide, jds, jde, kds, kde, &
-                                ims, ime, jms, jme, kms, kme, &
-                                ips, ipe, jps, jpe, kps, kpe  )
+      CALL get_ijk_from_grid( head_grid ,                   &
+                              ids, ide, jds, jde, kds, kde, &
+                              ims, ime, jms, jme, kms, kme, &
+                              ips, ipe, jps, jpe, kps, kpe  )
 
       
       rc = ESMF_SUCCESS

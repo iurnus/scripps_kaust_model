@@ -29,6 +29,11 @@ CEOI
 #ifdef ALLOW_MOM_COMMON
 # include "MOM_COMMON_OPTIONS.h"
 #endif
+#ifdef ALLOW_GGL90
+# include "GGL90_OPTIONS.h"
+#endif
+C- to switch back to (very) old accounting of geometry/Area factor
+#undef OLD_UV_GEOM
 
 CBOP
 C !ROUTINE: MOM_FLUXFORM
@@ -59,9 +64,13 @@ C     == Global variables ==
 #ifdef ALLOW_MOM_COMMON
 # include "MOM_VISC.h"
 #endif
+#if ( defined ALLOW_GGL90 && defined ALLOW_GGL90_LANGMUIR )
+# include "GGL90.h"
+#endif
 #ifdef ALLOW_AUTODIFF
-# include "tamc.h"
-# include "tamc_keys.h"
+# ifdef ALLOW_AUTODIFF_TAMC
+#  include "tamc.h"
+# endif
 # include "MOM_FLUXFORM.h"
 #endif
 #include "WAVE_INPUT.h"
@@ -102,7 +111,7 @@ C !LOCAL VARIABLES: ====================================================
 C  i,j                  :: loop indices
 C  vF                   :: viscous flux
 C  v4F                  :: bi-harmonic viscous flux
-C  cF                   :: Coriolis acceleration
+C  uCf,vCf              :: Coriolis acceleration
 C  mT                   :: Metric terms
 C  fZon                 :: zonal fluxes
 C  fMer                 :: meridional fluxes
@@ -112,15 +121,18 @@ C  fMers                :: meridional Stokes-Advection
 C  fVrUp,fVrDw          :: vertical viscous fluxes at interface k & k+1
       INTEGER i,j
 #ifdef ALLOW_AUTODIFF_TAMC
-      INTEGER imomkey
+C     kkey :: tape key (depends on level and tile indices)
+      INTEGER kkey
 #endif
-      _RL vF(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL  vF(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL v4F(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL cF(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL mT(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL uCf(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL vCf(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL  mT(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL fZon(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL fMer(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL cFs(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL uCfs(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL vCfs(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL fZons(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL fMers(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL fVrUp(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
@@ -137,18 +149,22 @@ C     uDudxFac, AhDudxFac, etc ... individual term parameters for switching term
       _RS    hFacZ(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RS   h0FacZ(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RS  r_hFacZ(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RS      xA(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RS      yA(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL  uTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL  vTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL  uFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
-      _RL  vFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RS       xA(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RS       yA(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL   uTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL   vTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL     uFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL     vFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  uStokes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  vStokes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  uSTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  vSTrans(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  rTransU(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  rTransV(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+#if ( defined ALLOW_GGL90 && defined ALLOW_GGL90_LANGMUIR )
+      _RL     uRes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      _RL     vRes(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+#endif
       _RL       KE(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL    cDrag(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL viscAh_D(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
@@ -160,7 +176,9 @@ C     uDudxFac, AhDudxFac, etc ... individual term parameters for switching term
       _RL   strain(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  tension(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL stretching(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+#ifdef ALLOW_LEITH_QG
       _RL  Nsquare(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+#endif
       _RL  uDudxFac
       _RL  AhDudxFac
       _RL  vDudyFac
@@ -189,20 +207,8 @@ CEOP
 #endif /* MOM_BOUNDARY_CONSERVE */
 
 #ifdef ALLOW_AUTODIFF_TAMC
-          act0 = k - 1
-          max0 = Nr
-          act1 = bi - myBxLo(myThid)
-          max1 = myBxHi(myThid) - myBxLo(myThid) + 1
-          act2 = bj - myByLo(myThid)
-          max2 = myByHi(myThid) - myByLo(myThid) + 1
-          act3 = myThid - 1
-          max3 = nTx*nTy
-          act4 = ikey_dynamics - 1
-          imomkey = (act0 + 1)
-     &                    + act1*max0
-     &                    + act2*max0*max1
-     &                    + act3*max0*max1*max2
-     &                    + act4*max0*max1*max2*max3
+      kkey = bi + (bj-1)*nSx + (ikey_dynamics-1)*nSx*nSy
+      kkey = k  + (kkey-1)*Nr
 #endif /* ALLOW_AUTODIFF_TAMC */
 
 C     Initialise intermediate terms
@@ -210,11 +216,13 @@ C     Initialise intermediate terms
        DO i=1-OLx,sNx+OLx
         vF(i,j)   = 0.
         v4F(i,j)  = 0.
-        cF(i,j)   = 0.
+        uCf(i,j)  = 0.
+        vCf(i,j)  = 0.
         mT(i,j)   = 0.
         fZon(i,j) = 0.
         fMer(i,j) = 0.
-        cFs(i,j)   = 0.
+        uCfs(i,j)   = 0.
+        vCfs(i,j)   = 0.
         fZons(i,j) = 0.
         fMers(i,j) = 0.
         fVrUp(i,j)= 0.
@@ -227,9 +235,15 @@ c       KE(i,j)     = 0.
         strain(i,j) = 0.
         tension(i,j)= 0.
         stretching(i,j) = 0.
-        Nsquare(i,j)    = 0.
+#ifdef ALLOW_LEITH_QG
+        Nsquare(i,j) = 0.
+#endif
         guDiss(i,j) = 0.
         gvDiss(i,j) = 0.
+#if ( defined ALLOW_GGL90 && defined ALLOW_GGL90_LANGMUIR )
+c       uRes(i,j)   = 0.
+c       vRes(i,j)   = 0.
+#endif
        ENDDO
       ENDDO
 
@@ -305,17 +319,16 @@ C     Calculate tracer cell face open areas
 #endif /* NONLIN_FRSURF */
 
 C     Make local copies of horizontal flow field
-      ! PRINT *, 'adding stokes in mon_fluxform... ', stokesCoriolis
       DO j=1-OLy,sNy+OLy
        DO i=1-OLx,sNx+OLx
         uFld(i,j) = uVel(i,j,k,bi,bj)
         vFld(i,j) = vVel(i,j,k,bi,bj)
-        IF ( stokesCoriolis .eq. 1) THEN 
-         uStokes(i,j) = wave_stokes3dx(i,j,k,bi,bj)
-         vStokes(i,j) = wave_stokes3dy(i,j,k,bi,bj)
+        IF ( stokesCoriolis .eq. 1) THEN
+          uStokes(i,j) = wave_stokes3dx(i,j,k,bi,bj)
+          vStokes(i,j) = wave_stokes3dy(i,j,k,bi,bj)
         ELSE
-         uStokes(i,j) = 0.0d0
-         vStokes(i,j) = 0.0d0
+          uStokes(i,j) = 0.0d0
+          vStokes(i,j) = 0.0d0
         ENDIF
        ENDDO
       ENDDO
@@ -347,7 +360,7 @@ C     anelastic: transports are scaled by rhoFacC (~ mass transport)
      I                          Nsquare, uFld,vFld,vort3,
      I                          myTime, myIter, myThid )
         ENDIF
-#endif
+#endif /* ALLOW_LEITH_QG */
         DO j=1-OLy,sNy+OLy
          DO i=1-OLx,sNx+OLx
            IF ( hFacZ(i,j).EQ.0. ) THEN
@@ -387,12 +400,9 @@ C-    Calculate vertical transports above U & V points (West & South face):
 #ifdef ALLOW_AUTODIFF_TAMC
 # ifdef NONLIN_FRSURF
 #  ifndef DISABLE_RSTAR_CODE
-CADJ STORE dwtransc(:,:,bi,bj) =
-CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
-CADJ STORE dwtransu(:,:,bi,bj) =
-CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
-CADJ STORE dwtransv(:,:,bi,bj) =
-CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
+CADJ STORE dwtransc(:,:,bi,bj) = comlev1_bibj_k, key=kkey, byte=isbyte
+CADJ STORE dwtransu(:,:,bi,bj) = comlev1_bibj_k, key=kkey, byte=isbyte
+CADJ STORE dwtransv(:,:,bi,bj) = comlev1_bibj_k, key=kkey, byte=isbyte
 #  endif
 # endif /* NONLIN_FRSURF */
 #endif /* ALLOW_AUTODIFF_TAMC */
@@ -622,10 +632,9 @@ C-     No-slip BCs impose a drag at walls...
          ENDDO
         ENDIF
 C-    No-slip BCs impose a drag at bottom
-        IF (bottomDragTerms) THEN
+        IF ( bottomDragTerms ) THEN
 #ifdef ALLOW_AUTODIFF_TAMC
-CADJ STORE KE(:,:) =
-CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
+CADJ STORE KE(:,:) = comlev1_bibj_k, key = kkey, byte = isbyte
 #endif
          CALL MOM_U_BOTDRAG_COEFF( bi, bj, k, .TRUE.,
      I                   uFld, vFld, kappaRU, KE,
@@ -649,14 +658,19 @@ CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
         ENDIF
 
 #ifdef ALLOW_SHELFICE
-        IF (useShelfIce) THEN
-         CALL SHELFICE_U_DRAG( bi, bj, k,
-     I              uFld, vFld, KE, kappaRU,
-     O              vF,
-     I              myThid )
+        IF ( useShelfIce .AND. selectImplicitDrag.EQ.0 ) THEN
+#ifdef ALLOW_AUTODIFF_TAMC
+CADJ STORE KE(:,:) = comlev1_bibj_k, key = kkey, byte = isbyte
+#endif
+         CALL SHELFICE_U_DRAG_COEFF( bi, bj, k, .TRUE.,
+     I                   uFld, vFld, kappaRU, KE,
+     O                   cDrag,
+     I                   myIter, myThid )
          DO j=jMin,jMax
           DO i=iMin,iMax
-           guDiss(i,j) = guDiss(i,j) + vF(i,j)
+            guDiss(i,j) = guDiss(i,j)
+     &                  - cDrag(i,j)*uFld(i,j)
+     &                  *_recip_hFacW(i,j,k,bi,bj)*recip_drF(k)
           ENDDO
          ENDDO
         ENDIF
@@ -874,10 +888,9 @@ C-     No-slip BCs impose a drag at walls...
          ENDDO
         ENDIF
 C-    No-slip BCs impose a drag at bottom
-        IF (bottomDragTerms) THEN
+        IF ( bottomDragTerms ) THEN
 #ifdef ALLOW_AUTODIFF_TAMC
-CADJ STORE KE(:,:) =
-CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
+CADJ STORE KE(:,:) = comlev1_bibj_k, key = kkey, byte = isbyte
 #endif
          CALL MOM_V_BOTDRAG_COEFF( bi, bj, k, .TRUE.,
      I                   uFld, vFld, kappaRV, KE,
@@ -901,14 +914,19 @@ CADJ &     comlev1_bibj_k, key = imomkey, byte = isbyte
         ENDIF
 
 #ifdef ALLOW_SHELFICE
-        IF (useShelfIce) THEN
-         CALL SHELFICE_V_DRAG( bi, bj, k,
-     I              uFld, vFld, KE, kappaRV,
-     O              vF,
-     I              myThid )
+        IF ( useShelfIce .AND. selectImplicitDrag.EQ.0 ) THEN
+#ifdef ALLOW_AUTODIFF_TAMC
+CADJ STORE KE(:,:) = comlev1_bibj_k, key = kkey, byte = isbyte
+#endif
+         CALL SHELFICE_V_DRAG_COEFF( bi, bj, k, .TRUE.,
+     I                   uFld, vFld, kappaRV, KE,
+     O                   cDrag,
+     I                   myIter, myThid )
          DO j=jMin,jMax
           DO i=iMin,iMax
-           gvDiss(i,j) = gvDiss(i,j) + vF(i,j)
+            gvDiss(i,j) = gvDiss(i,j)
+     &                  - cDrag(i,j)*vFld(i,j)
+     &                  *_recip_hFacS(i,j,k,bi,bj)*recip_drF(k)
           ENDDO
          ENDDO
         ENDIF
@@ -955,49 +973,55 @@ C      o Cylindrical grid metric terms
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
 C--   Coriolis term (call to CD_CODE_SCHEME has been moved to timestep.F)
-      IF (.NOT.useCDscheme) THEN
-        CALL MOM_U_CORIOLIS( bi,bj,k,vFld,cf,myThid )
-        CALL MOM_U_CORIOLIS( bi,bj,k,vStokes,cfs,myThid )
-        DO j=jMin,jMax
-         DO i=iMin,iMax
-          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj)+fuFac*cf(i,j)+fuFac*cfs(i,j)
-         ENDDO
-        ENDDO
-#ifdef ALLOW_DIAGNOSTICS
-        IF ( useDiagnostics ) THEN
-          CALL DIAGNOSTICS_FILL(cf, 'Um_Cori ',k,1,2,bi,bj,myThid)
-          CALL DIAGNOSTICS_FILL(cfs,'Um_Coris',k,1,2,bi,bj,myThid)
-        ENDIF
+      IF ( .NOT.useCDscheme ) THEN
+#if ( defined ALLOW_GGL90 && defined ALLOW_GGL90_LANGMUIR )
+       IF ( useLANGMUIR ) THEN
+        CALL GGL90_ADD_STOKESDRIFT(
+     O                 uRes, vRes,
+     I                 uFld, vFld, k, bi, bj, myThid )
+        CALL MOM_U_CORIOLIS( bi,bj,k,vRes,uCf,myThid )
+        CALL MOM_V_CORIOLIS( bi,bj,k,uRes,vCf,myThid )
+       ELSE
 #endif
-        CALL MOM_V_CORIOLIS( bi,bj,k,uFld,cf,myThid )
-        CALL MOM_V_CORIOLIS( bi,bj,k,uStokes,cfs,myThid )
+        CALL MOM_U_CORIOLIS( bi,bj,k,vFld,uCf,myThid )
+        CALL MOM_V_CORIOLIS( bi,bj,k,uFld,vCf,myThid )
+#if ( defined ALLOW_GGL90 && defined ALLOW_GGL90_LANGMUIR )
+       ENDIF
+#endif
+        CALL MOM_U_CORIOLIS( bi,bj,k,vStokes,uCfs,myThid )
+        CALL MOM_V_CORIOLIS( bi,bj,k,uStokes,vCfs,myThid )
         DO j=jMin,jMax
          DO i=iMin,iMax
-          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj)+fvFac*cf(i,j)+fvFac*cfs(i,j)
+          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj) + fuFac*uCf(i,j)
+     &                    + fuFac*uCfs(i,j)
+          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj) + fvFac*vCf(i,j)
+     &                    + fuFac*vCfs(i,j)
          ENDDO
         ENDDO
 #ifdef ALLOW_DIAGNOSTICS
         IF ( useDiagnostics ) THEN
-          CALL DIAGNOSTICS_FILL(cf, 'Vm_Cori ',k,1,2,bi,bj,myThid)
-          CALL DIAGNOSTICS_FILL(cfs,'Vm_Coris',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL( uCf,'Um_Cori ',k,1,2,bi,bj,myThid )
+          CALL DIAGNOSTICS_FILL( vCf,'Vm_Cori ',k,1,2,bi,bj,myThid )
+          CALL DIAGNOSTICS_FILL( uCfs,'Um_Coris',k,1,2,bi,bj,myThid )
+          CALL DIAGNOSTICS_FILL( vCfs,'Vm_Coris',k,1,2,bi,bj,myThid )
         ENDIF
 #endif
       ENDIF
 
 C--   3.D Coriolis term (horizontal momentum, Eastward component: -fprime*w)
       IF ( use3dCoriolis ) THEN
-        CALL MOM_U_CORIOLIS_NH( bi,bj,k,wVel,cf,myThid )
+        CALL MOM_U_CORIOLIS_NH( bi,bj,k,wVel,uCf,myThid )
         DO j=jMin,jMax
          DO i=iMin,iMax
-          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj)+fuFac*cf(i,j)
+          gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj) + fuFac*uCf(i,j)
          ENDDO
         ENDDO
        IF ( usingCurvilinearGrid ) THEN
 C-     presently, non zero angleSinC array only supported with Curvilinear-Grid
-        CALL MOM_V_CORIOLIS_NH( bi,bj,k,wVel,cf,myThid )
+        CALL MOM_V_CORIOLIS_NH( bi,bj,k,wVel,vCf,myThid )
         DO j=jMin,jMax
          DO i=iMin,iMax
-          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj)+fvFac*cf(i,j)
+          gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj) + fvFac*vCf(i,j)
          ENDDO
         ENDDO
        ENDIF
