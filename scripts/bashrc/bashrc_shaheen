@@ -5,13 +5,18 @@ module unload PrgEnv-gnu
 module unload PrgEnv-pgi
 
 module load PrgEnv-intel
+module load cpe/23.09
+# module load cpe/24.07
 module load craype-hugepages4M
+module load craype
 
-module unload cray-hdf5-parallel
-module load cray-netcdf
-module load cray-parallel-netcdf
-module load gcc/10.3.0
+module load cray-netcdf-hdf5parallel
+# module load cray-netcdf/4.9.0.7
+# module load cray-parallel-netcdf
+# module load gcc/10.3.0
+module load gcc
 module load cray-mpich
+module load cmake
 # module load grib2
 
 # Update the following directories from line 4 to 13
@@ -51,6 +56,7 @@ export WWATCH3_NETCDF=NC4
 export NETCDF_CONFIG=$NETCDF/bin/nc-config
 
 export ESMF_OS=Unicos
+# export ESMF_OS=Linux
 export ESMF_COMM=mpi
 export ESMF_NETCDF=nc-config
 export ESMF_OPENMP=OFF
