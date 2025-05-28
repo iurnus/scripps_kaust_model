@@ -111,7 +111,8 @@
 
       integer :: nList = 38
       character(ESMF_MAXSTR), dimension(1:38) :: nuopc_entryNameList=&
-                   (/'LAND_MASK_VALUE','XLAT_VALUE','XLONG_VALUE',&
+                   [character(len=50) :: 'LAND_MASK_VALUE',&
+                     'XLAT_VALUE','XLONG_VALUE',&
                      'LATENT_HEAT','SENSIBLE_HEAT',&
                      'SHORTWAVE_UP_FLUX','SHORTWAVE_DOWN_FLUX',&
                      'LONGWAVE_UP_FLUX','LONGWAVE_DOWN_FLUX',&
@@ -128,9 +129,10 @@
                      'WAVE_LANGMUIR_COEFF','WAVE_LASL',&
                      'WAVE_PEAK_FREQ','WAVE_CHA',&
                      'WAVE_TAUIX','WAVE_TAUIY','WAVE_TAUOX',&
-                     'WAVE_TAUOY','WAVE_NUMBER'/)
+                     'WAVE_TAUOY','WAVE_NUMBER']
       character(ESMF_MAXSTR), dimension(1:38) :: wrf_nameList=&
-                   (/'LANDMASK','XLAT','XLONG',&
+                   [character(len=16) :: 'LANDMASK',&
+                     'XLAT','XLONG',&
                      'LH','HFX','SWUPB','SWDNB','LWUPB','LWDNB',&
                      'U10','V10','T2','Q2',&
                      'QFX','RAINCV','RAINSHV','RAINNCV','SST_INPUT',&
@@ -141,16 +143,16 @@
                      'WAVELASL','WAVELANGMUIR',&
                      'WAVEFP','WAVECHA',&
                      'WAVETAUIX','WAVETAUIY','WAVETAUOX','WAVETAUOY',&
-                     'WAVENUMBER'/)
+                     'WAVENUMBER']
       character(ESMF_MAXSTR), dimension(1:38) :: nuopc_entryUnitList=&
-                   (/'1','1','1',&
+                   [character(len=9) :: '1','1','1',&
                      'w/m^2','w/m^2','w/m^2','w/m^2','w/m^2','w/m^2',&
                      'm/s','m/s','degree','kg/kg',&
                      'kg/m2','mm','mm','mm','degree',&
                      'degree','m/s','m/s','m',&
                      'm','1','1','m/s','m/s','m/s','m/s','1','1',&
                      '1/s','1',&
-                     'm2/s2','m2/s2','m2/s2','m2/s2','1'/)
+                     'm2/s2','m2/s2','m2/s2','m2/s2','1']
       logical, dimension(1:38) :: fromOCN=&
                    (/.False.,.False.,.False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,.False.,.False.,&
