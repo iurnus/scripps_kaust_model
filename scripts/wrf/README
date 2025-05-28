@@ -25,5 +25,9 @@ infringement actions.
 ------------------------
 After adding the patches, the WRF is able to be coupled with 
 MITgcm and WW3. ESMF will choose the input/output from the coupler.
-However, the PWRF version only works for MITgcm and it is available
-from ../installOption_seaice
+
+Some hints for Cray compiler:
+To get rid of the digital precision error in WRF, add '-fp-model precise' to
+FCBASEOPTS_NO_G.
+To reduce the number of rsl* output files, add "-DRSLO_ONLY" to CFLAGS_LOCAL.
+

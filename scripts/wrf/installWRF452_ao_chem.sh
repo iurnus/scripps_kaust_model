@@ -18,8 +18,8 @@ echo "Deleting old configure file..."
 rm -rf configure.wrf
 
 ln -sf ${WRF_UPDATE_DIR0}/Config.pl arch/
-ln -sf ${WRF_UPDATE_DIR0}/preample arch/
-ln -sf ${WRF_UPDATE_DIR0}/postample arch/
+ln -sf ${WRF_UPDATE_DIR0}/preamble arch/
+ln -sf ${WRF_UPDATE_DIR0}/postamble arch/
 
 # for kala, WRF configure=34, then nesting=1
 ./configure
