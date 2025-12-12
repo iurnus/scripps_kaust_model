@@ -12,6 +12,8 @@ cat > component_${comp_nam}_context.c <<EOFA
 #include "unistd.h"
 #include "dirent.h"
 #include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 #include "errno.h"
 
 #define COMP_NAME      "${comp_nam}"
@@ -21,14 +23,8 @@ cat > component_${comp_nam}_context.c <<EOFA
 char return_dir[MAX_COMP_COUNT][DB_LEN];
 char run_dir[MAX_COMP_COUNT][DB_LEN];
 
-comp_${comp_nam}_push_context_(int *cId)
-{ Comp_${comp_nam}_push_context(cId); }
-comp_${comp_nam}_push_context__(int *cId)
-{ Comp_${comp_nam}_push_context(cId); }
-_comp_${comp_nam}_push_context__(int *cId)
-{ Comp_${comp_nam}_push_context(cId); }
 
-Comp_${comp_nam}_push_context(int *cId)
+void Comp_${comp_nam}_push_context(int *cId)
 {
  int rc;
  if ( *cId > MAX_COMP_COUNT ) {
@@ -51,14 +47,7 @@ Comp_${comp_nam}_push_context(int *cId)
  }
 }
 
-comp_${comp_nam}_pop_context_(int *cId)
-{ Comp_${comp_nam}_pop_context(cId); }
-comp_${comp_nam}_pop_context__(int *cId)
-{ Comp_${comp_nam}_pop_context(cId); }
-_comp_${comp_nam}_pop_context__(int *cId)
-{ Comp_${comp_nam}_pop_context(cId); }
-
-Comp_${comp_nam}_pop_context(int *cId)
+void Comp_${comp_nam}_pop_context(int *cId)
 {
  int rc;
 
@@ -78,4 +67,20 @@ Comp_${comp_nam}_pop_context(int *cId)
   exit(1);
  }
 }
+
+void comp_${comp_nam}_push_context_(int *cId)
+{ Comp_${comp_nam}_push_context(cId); }
+void comp_${comp_nam}_push_context__(int *cId)
+{ Comp_${comp_nam}_push_context(cId); }
+void _comp_${comp_nam}_push_context__(int *cId)
+{ Comp_${comp_nam}_push_context(cId); }
+
+void comp_${comp_nam}_pop_context_(int *cId)
+{ Comp_${comp_nam}_pop_context(cId); }
+void comp_${comp_nam}_pop_context__(int *cId)
+{ Comp_${comp_nam}_pop_context(cId); }
+void _comp_${comp_nam}_pop_context__(int *cId)
+{ Comp_${comp_nam}_pop_context(cId); }
+
+
 EOFA

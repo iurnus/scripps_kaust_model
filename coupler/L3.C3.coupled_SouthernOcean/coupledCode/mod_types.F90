@@ -97,40 +97,53 @@
 
       integer :: nList = 22
       character(ESMF_MAXSTR), dimension(1:22) :: nuopc_entryNameList=&
-                   (/'OCEAN_MASK_VALUE','XLAT_VALUE','XLONG_VALUE',&
-                     'LATENT_HEAT','SENSIBLE_HEAT',&
-                     'SHORTWAVE_DOWN', 'LONGWAVE_DOWN',&
-                     'U_VELOCITY_AT_10M','V_VELOCITY_AT_10M',&
-                     'TEMPERATURE_AT_2M','SPECIFIC_HUMIDITY_AT_2M',&
-                     'SURFACE_EVAPORATION','PRECIP_CONVECTIVE',&
-                     'PRECIP_SH_CONVECTIVE','PRECIP_NON_CONVECTIVE',&
-                     'SNOW_NON_CONVECTIVE',&
+                   (/'                        XLAT_VALUE',&
+                     '                       XLONG_VALUE',&
+                     '                       LATENT_HEAT',&
+                     '                     SENSIBLE_HEAT',&
+                     '                    SHORTWAVE_DOWN',&
+                     '                     LONGWAVE_DOWN',&
+                     '                 U_VELOCITY_AT_10M',&
+                     '                 V_VELOCITY_AT_10M',&
+                     '                 TEMPERATURE_AT_2M',&
+                     '           SPECIFIC_HUMIDITY_AT_2M',&
+                     '               SURFACE_EVAPORATION',&
+                     '                 PRECIP_CONVECTIVE',&
+                     '              PRECIP_SH_CONVECTIVE',&
+                     '             PRECIP_NON_CONVECTIVE',&
+                     '               SNOW_NON_CONVECTIVE',&
                      'REANALYSIS_SEA_SURFACE_TEMPERATURE',&
-                     'ACTIVE_SEA_SURFACE_TEMPERATURE',&
-                     'OCEAN_SURFACE_U','OCEAN_SURFACE_V',&
-                     'SEAICE_FRACTION','SEAICE_TEMP'/)
+                     '                  OCEAN_MASK_VALUE',&
+                     '    ACTIVE_SEA_SURFACE_TEMPERATURE',&
+                     '                   OCEAN_SURFACE_U',&
+                     '                   OCEAN_SURFACE_V',&
+                     '                   SEAICE_FRACTION',&
+                     '                       SEAICE_TEMP'/)
       character(ESMF_MAXSTR), dimension(1:22) :: wrf_nameList=&
-                   (/'OCNMASK','XLAT','XLONG',&
+                   [character(len=9) :: 'XLAT','XLONG',&
                      'LH','HFX','SWDOWN','GLW',&
                      'U10','V10','T2','Q2',&
                      'QFX','RAINCV','RAINSHV','RAINNCV','SNOWNCV',&
-                     'SST_INPUT','SST','UOCE','VOCE',&
-                     'SEAICE','SITICE'/)
+                     'SST_INPUT',&
+                     'OCNMASK','SST','UOCE','VOCE',&
+                     'SEAICE','SITICE']
       character(ESMF_MAXSTR), dimension(1:22) :: nuopc_entryUnitList=&
-                   (/'1','1','1',&
-                     'w/m^2','w/m^2','w/m^2','w/m^2',&
-                     'm/s','m/s','degree','kg/kg',&
-                     'kg/m2','mm','mm','mm','mm',&
-                     'degree','degree','m/s','m/s','1','degC'/)
+                   (/'     1','     1',&
+                     ' w/m^2',' w/m^2',' w/m^2',' w/m^2',&
+                     '   m/s','   m/s','degree',' kg/kg',&
+                     ' kg/m2','    mm','    mm','    mm','    mm',&
+                     'degree',&
+                     '     1','degree','   m/s','   m/s',&
+                     '     1','degree'/)
       logical, dimension(1:22) :: OCNtoATM=&
                    (/.False.,.False.,.False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,.False.,.False.,&
-                     .False.,.True.,.True.,.True.,.True.,.True./)
+                     .True.,.True.,.True.,.True.,.True.,.True./)
       logical, dimension(1:22) :: ATMtoOCN=&
                    (/.True.,.True.,.True.,.True.,.True.,.True.,&
                      .True.,.True.,.True.,.True.,&
                      .True.,.True.,.True.,.True.,.True.,.True.,&
-                     .True.,.False.,.False.,.False.,.False.,.False./)
+                     .False.,.False.,.False.,.False.,.False.,.False./)
 !
       end module mod_types

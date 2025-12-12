@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "ESMF location? : " ${ESMF_DIR}
-echo "WRF413 (with OA coupling) location? : " ${WRF_DIR}
+echo "WRF471 (with OA coupling) location? : " ${WRF_DIR}
 echo "MITgcm (source code) location? : " ${MITGCM_DIR}
 
 export MITGCM_COMPILER=$ESMF_COMPILER

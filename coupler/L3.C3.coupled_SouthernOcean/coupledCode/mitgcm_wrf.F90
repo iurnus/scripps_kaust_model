@@ -17,7 +17,7 @@ program esmf_application
   use NUOPC
   use mod_esmf_esm, only : ESM_SetServices 
   use mod_config, only : read_config
-
+  use mod_types
   ! use mod_config, only : set_field_dir
   
   implicit none
@@ -31,7 +31,9 @@ program esmf_application
 !     Initialize ESMF framework
 !-----------------------------------------------------------------------
 !
-  call ESMF_Initialize(logkindflag=ESMF_LOGKIND_MULTI,              &
+  !! Change ESMF_LOGKIND_NONE to ESMF_LOGKIND_MULTI 
+  !! to output the log files for each CPU
+  call ESMF_Initialize(logkindflag=ESMF_LOGKIND_SINGLE,             &
                        defaultCalkind=ESMF_CALKIND_GREGORIAN,       &
                        vm=vm, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
@@ -55,7 +57,7 @@ program esmf_application
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=__FILE__))                                &
       call ESMF_Finalize(endflag=ESMF_END_ABORT)
-
+  PRINT *, "DEBUGLEVEL ESMF is: ", debugLevel
 !
 !-----------------------------------------------------------------------
 !     Register component 

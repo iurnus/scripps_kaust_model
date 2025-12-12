@@ -4,8 +4,8 @@ WRF_INC = \
    -I${PWRF_DIR}dyn_nmm \
    -I${PWRF_DIR}main \
    -I${PWRF_DIR}external/io_esmf \
-   -I${PWRF_DIR}io_netcdf \
-   -I${PWRF_DIR}io_int \
+   -I${PWRF_DIR}external/io_netcdf \
+   -I${PWRF_DIR}external/io_int \
    -I${PWRF_DIR}frame \
    -I${PWRF_DIR}share \
    -I${PWRF_DIR}phys \

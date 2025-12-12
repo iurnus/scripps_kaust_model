@@ -35,6 +35,7 @@
  auxhist5_interval_s                 = 60,
  auxhist5_end_d                      = 60,
  io_form_auxhist5                    = 7,
+ force_use_old_data                  = .true.,
  /
 
  &domains

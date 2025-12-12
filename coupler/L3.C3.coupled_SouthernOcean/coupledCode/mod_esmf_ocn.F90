@@ -113,7 +113,7 @@ module mod_esmf_ocn
     entryNameNUOPC = trim(nuopc_entryNameList(iEntry));
     entryNameWRF = trim(wrf_nameList(iEntry));
     exportEntry = OCNtoATM(iEntry);
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       Call NUOPC_Advertise(exportState, &
         StandardName=entryNameNUOPC, name=entryNameWRF, rc=rc)
     else
@@ -635,7 +635,7 @@ module mod_esmf_ocn
     entryNameWRF = trim(wrf_nameList(iEntry));
     exportEntry = OCNtoATM(iEntry);
 
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       field_tmp = ESMF_FieldCreate(gridOut, arraySpec,&
                  staggerloc=staggerLoc,                &
                  indexflag=ESMF_INDEX_GLOBAL,          &
@@ -665,7 +665,7 @@ module mod_esmf_ocn
       end if
     end do
 
-    if (exportEntry == .True.) then
+    if (exportEntry .eqv. .True.) then
       call NUOPC_Realize(exportState, field=field_tmp, rc=rc) 
     else
       call NUOPC_Realize(importState, field=field_tmp, rc=rc) 
@@ -1003,6 +1003,7 @@ module mod_esmf_ocn
   real(ESMF_KIND_R8), pointer :: ptr_area(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_tice(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_ocnmask(:,:)
   integer(ESMF_KIND_I4), pointer :: ptr_mask(:,:)
 !
   type(ESMF_VM) :: vm
@@ -1013,6 +1014,7 @@ module mod_esmf_ocn
   type(ESMF_Field) :: field_area
   type(ESMF_Field) :: field_tice
   type(ESMF_Field) :: field_sst_input
+  type(ESMF_Field) :: field_ocnmask
   type(ESMF_State) :: importState, exportState
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: theta_ESMF
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: uoce_ESMF
@@ -1075,6 +1077,7 @@ module mod_esmf_ocn
   call ESMF_StateGet(exportState, "SST", field_sst, rc=rc)
   call ESMF_StateGet(exportState, "UOCE", field_uoce, rc=rc)
   call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
+  call ESMF_StateGet(exportState, "OCNMASK", field_ocnmask, rc=rc)
   call ESMF_StateGet(exportState, "SEAICE", field_area, rc=rc)
   call ESMF_StateGet(exportState, "SITICE", field_tice, rc=rc)
   call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
@@ -1097,6 +1100,7 @@ module mod_esmf_ocn
     call ESMF_FieldGet(field_sst, localDE=j, farrayPtr=ptr_sst, rc=rc)
     call ESMF_FieldGet(field_uoce, localDE=j, farrayPtr=ptr_uoce, rc=rc)
     call ESMF_FieldGet(field_voce, localDE=j, farrayPtr=ptr_voce, rc=rc)
+    call ESMF_FieldGet(field_ocnmask, localDE=j, farrayPtr=ptr_ocnmask, rc=rc)
     call ESMF_FieldGet(field_area, localDE=j, farrayPtr=ptr_area, rc=rc)
     call ESMF_FieldGet(field_tice, localDE=j, farrayPtr=ptr_tice, rc=rc)
     call ESMF_FieldGet(field_sst_input, localDE=j,                    &
@@ -1128,6 +1132,7 @@ module mod_esmf_ocn
           ptr_voce(iG,jG) = voce_ESMF(ii,jj,1,1,1)
           ptr_area(iG,jG) = area_ESMF(ii,jj,1,1)
           ptr_tice(iG,jG) = tice_ESMF(ii,jj,1,1)
+          ptr_ocnmask(iG,jG) = 1.d0
           ! PRINT *, 'ii theta: ', ii, jj, theta_ESMF(ii,jj,1,1,1) + 273.15
           ! PRINT *, 'ig theta: ', iG, jG, ptr_sst(iG,jG)
           ! ptr_sst(iG,jG) = 273.15
@@ -1142,6 +1147,7 @@ module mod_esmf_ocn
           ptr_voce(iG,jG) = 0.d0
           ptr_area(iG,jG) = 0.d0
           ptr_tice(iG,jG) = 0.d0
+          ptr_ocnmask(iG,jG) = 0.d0
         end if
       end do
     end do
@@ -1172,6 +1178,9 @@ module mod_esmf_ocn
     end if
     if (associated(ptr_mask)) then
       nullify(ptr_mask)
+    end if
+    if (associated(ptr_ocnmask)) then
+      nullify(ptr_ocnmask)
     end if
 !
   end do

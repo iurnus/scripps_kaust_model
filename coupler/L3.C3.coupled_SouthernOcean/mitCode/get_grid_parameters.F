@@ -10,7 +10,7 @@ C $Name: checkpoint66h $
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 CBOP
-C     !ROUTINE: GET_PARAMETERS
+C     !ROUTINE: GET_GRID_PARAMETERS
 C     !INTERFACE:
       SUBROUTINE GET_GRID_PARAMETERS(
      O  rA_ESMF, xC_ESMF, xG_ESMF, yC_ESMF, yG_ESMF,
