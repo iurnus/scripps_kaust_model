@@ -47,6 +47,15 @@ ln -sf ${WRF_UPDATE_DIR0}/module_domain.F frame/
 ln -sf ${WRF_UPDATE_DIR0}/module_first_rk_step_part1.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR0}/wrf_ESMFMod.F main/
 
+read -e -p "Replace icc option with icx? (N/Y): " -i "N" defaultFlag
+if [ $defaultFlag == 'N' ]; then
+  echo "Using icc to compile WRF"
+else 
+  echo "Use icx to compile WRF (for Shaheen)" 
+  # need to use icx instead of icc on Shaheen
+  sed -i s/icc/icx/g configure.wrf
+fi
+echo "The option file is: $MITGCM_OPT"
 
 echo "compiling WRFv4.7.1"
 ./compile em_real &> log.em_real1
