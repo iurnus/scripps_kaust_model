@@ -27,10 +27,10 @@ ln -sf ${WRF_UPDATE_DIR0}/postamble arch/
 
 echo "copying other files to compile ESMF--WRF"
 ln -sf ${WRF_UPDATE_DIR0}/Makefile.wrf Makefile
-ln -sf ${WRF_UPDATE_DIR0}/Registry.EM Registry/
+# ln -sf ${WRF_UPDATE_DIR0}/Registry.EM Registry/
 
 ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_write_field.F90 external/io_esmf/
-ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_read_field.F90 external/io_esmf/
+# ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_read_field.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_open_for_read.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR0}/ext_esmf_open_for_write.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR0}/module_esmf_extensions.F90 external/io_esmf/
@@ -63,10 +63,11 @@ ln -sf ${WRF_UPDATE_DIR1}/module_initialize_real.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR1}/module_soil_pre.F  share/
 
 # There are three files in Polar WRF in conflict with SKRIPS
+ln -sf ${WRF_UPDATE_DIR2}/Registry.EM Registry/
+ln -sf ${WRF_UPDATE_DIR2}/ext_esmf_read_field.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR2}/module_surface_driver.F  phys/
 ln -sf ${WRF_UPDATE_DIR2}/module_first_rk_step_part1.F  dyn_em/
 ln -sf ${WRF_UPDATE_DIR2}/module_sf_mynn.F  phys/
-
 
 echo "compiling WRFv4.7.1"
 ./compile em_real &> log.em_real1
