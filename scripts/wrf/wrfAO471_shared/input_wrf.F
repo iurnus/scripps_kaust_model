@@ -188,7 +188,6 @@
        END IF
        !==========
    
-       CALL is_this_data_ok_to_use ( fid , yes_use_this_data )
        IF ( ( yes_use_this_data ) .OR. ( config_flags%force_use_old_data ) ) THEN
           WRITE(wrf_err_message,*)'Input data is acceptable to use: ' // TRIM(fname) 
           CALL wrf_debug( 0 , wrf_err_message )

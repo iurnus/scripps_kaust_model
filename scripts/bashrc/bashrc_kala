@@ -24,7 +24,8 @@ export H5DIR=/home/rus043/libraries/hdf5-1.14.3-build
 export NCDIR=/home/rus043/libraries/netcdf-build
 export NFDIR=/home/rus043/libraries/netcdf-build-fortran
 export OPENMPI=/home/rus043/libraries/openmpi-build
-export CMAKEDIR=/home/rus043/libraries/cmake-build
+export JASPERLIB=/home/rus043/libraries/jasper-build/lib
+export JASPERINC=/home/rus043/libraries/jasper-build/include
 
 export NETCDF=$NFDIR
 export NETCDF_classic=1

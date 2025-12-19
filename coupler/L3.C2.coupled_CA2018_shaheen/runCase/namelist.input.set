@@ -31,6 +31,7 @@
  auxinput4_interval_s                = 21600,
  auxinput4_end_d                     = 60,
  io_form_auxinput4                   = 2,
+ force_use_old_data                  = .true.,
  /
 
  &domains
