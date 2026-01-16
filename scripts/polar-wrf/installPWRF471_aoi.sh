@@ -58,16 +58,22 @@ ln -sf ${WRF_UPDATE_DIR1}/module_sf_noah_seaice.F  phys/
 ln -sf ${WRF_UPDATE_DIR1}/module_sf_noah_seaice_drv.F  phys/
 ln -sf ${WRF_UPDATE_DIR1}/module_sf_noahlsm.F  phys/
 ln -sf ${WRF_UPDATE_DIR1}/module_sf_noahdrv.F  phys/
-ln -sf ${WRF_UPDATE_DIR1}/module_sf_noahlsm_glacial_only.F  dyn_em/
+ln -sf ${WRF_UPDATE_DIR1}/module_sf_noahlsm_glacial_only.F  phys/
 ln -sf ${WRF_UPDATE_DIR1}/module_initialize_real.F dyn_em/
 ln -sf ${WRF_UPDATE_DIR1}/module_soil_pre.F  share/
 
 # There are three files in Polar WRF in conflict with SKRIPS
 ln -sf ${WRF_UPDATE_DIR2}/Registry.EM Registry/
+ln -sf ${WRF_UPDATE_DIR2}/Registry.EM_COMMON Registry/
 ln -sf ${WRF_UPDATE_DIR2}/ext_esmf_read_field.F90 external/io_esmf/
 ln -sf ${WRF_UPDATE_DIR2}/module_surface_driver.F  phys/
 ln -sf ${WRF_UPDATE_DIR2}/module_first_rk_step_part1.F  dyn_em/
 ln -sf ${WRF_UPDATE_DIR2}/module_sf_mynn.F  phys/
+ln -sf ${WRF_UPDATE_DIR2}/module_sf_noahdrv.F  phys/
+ln -sf ${WRF_UPDATE_DIR2}/module_sf_noahlsm.F  phys/
+ln -sf ${WRF_UPDATE_DIR2}/module_sf_noahlsm_glacial_only.F  phys/
+ln -sf ${WRF_UPDATE_DIR2}/module_sf_noah_seaice_drv.F  phys/
+ln -sf ${WRF_UPDATE_DIR2}/module_sf_noah_seaice.F  phys/
 
 read -e -p "Replace icc option with icx? (N/Y): " -i "N" defaultFlag
 if [ $defaultFlag == 'N' ]; then
