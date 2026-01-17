@@ -1,3 +1,6 @@
-First, download the test case from:
+We have updated the Southern Ocean Case for WRF 4.7.1.
 
-wget ftp://sioftp.ucsd.edu/CW3E_DataShare/RSun_SKRIPS/share/L3.C3.coupled_SouthernOcean.zip
+The test case is accessible from:
+
+https://github.com/iurnus/skrips_seaice.git
+

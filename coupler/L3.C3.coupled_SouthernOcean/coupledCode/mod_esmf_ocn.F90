@@ -707,39 +707,63 @@ module mod_esmf_ocn
   integer :: localPet, petCount, itemCount, localDECount
   character(ESMF_MAXSTR) :: cname, ofile
   real(ESMF_KIND_R8) :: sfac, addo
-  real(ESMF_KIND_R8), pointer :: ptr_lwdn(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_swdn(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_hl(:,:), ptr_hs(:,:)
+
+  real(ESMF_KIND_R8), pointer :: ptr_lwnet_ocn(:,:),ptr_swnet_ocn(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_hl_ocn(:,:), ptr_hs_ocn(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_lwnet_si(:,:),ptr_swnet_si(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_hl_si(:,:), ptr_hs_si(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_u10(:,:), ptr_v10(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_t2(:,:), ptr_q2(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_evap(:,:), ptr_raincv(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_rainshv(:,:), ptr_rainncv(:,:)
-  real(ESMF_KIND_R8), pointer :: ptr_snowncv(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_evap(:,:), ptr_snowncv(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_evap0(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_rainbl(:,:), ptr_hailncv(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_graupelncv(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_snowh(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_snowh0(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_runoff(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_total_runoff(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_land_runoff(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
 !
   type(ESMF_VM) :: vm
   type(ESMF_Clock) :: clock
   type(ESMF_Grid) :: gridIn
   type(ESMF_Field) :: field
-  type(ESMF_Field) :: field_lwdn, field_swdn
-  type(ESMF_Field) :: field_hl, field_hs
+  type(ESMF_Field) :: field_lwnet_ocn, field_swnet_ocn 
+  type(ESMF_Field) :: field_hl_ocn, field_hs_ocn
+  type(ESMF_Field) :: field_lwnet_si, field_swnet_si
+  type(ESMF_Field) :: field_hl_si, field_hs_si
   type(ESMF_Field) :: field_u10, field_v10
   type(ESMF_Field) :: field_t2, field_q2
-  type(ESMF_Field) :: field_evap, field_raincv
-  type(ESMF_Field) :: field_rainshv, field_rainncv, field_snowncv
+  type(ESMF_Field) :: field_evap, field_snowncv
+  type(ESMF_Field) :: field_evap0
+  type(ESMF_Field) :: field_rainbl, field_hailncv, field_graupelncv
+  type(ESMF_Field) :: field_snowh, field_snowh0
+  type(ESMF_Field) :: field_runoff
+  type(ESMF_Field) :: field_total_runoff
+  type(ESMF_Field) :: field_land_runoff
   type(ESMF_State) :: importState
   INTEGER sNx, sNy, OLx, OLy, nSx, nSy, nPx, nPy, Nx, Ny, Nr
   INTEGER myXGlobalLo, myYGlobalLo
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: swdown_ESMF
-  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: lwdown_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: swnet_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: lwnet_ESMF  
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: hl_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: hs_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: swnet_si_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: lwnet_si_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: hl_si_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: hs_si_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: uwind_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: vwind_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: atemp_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: aqh_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: evap_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: evap0_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: precip_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: snowh_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: snowh0_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: runoff_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: land_runoff_ESMF
   integer :: myThid = 1
 !
   rc = ESMF_SUCCESS
@@ -752,16 +776,24 @@ module mod_esmf_ocn
         nSx, nSy, nPx, nPy, Nx, Ny, Nr,                             &
         myXGlobalLo, myYGlobalLo)
 
-  ALLOCATE(swdown_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
-  ALLOCATE(lwdown_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(swnet_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(lwnet_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))  
   ALLOCATE(hl_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(hs_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(swnet_si_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(lwnet_si_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(hl_si_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(hs_si_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(uwind_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(vwind_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(atemp_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(aqh_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(evap_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(evap0_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(precip_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(snowh_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(runoff_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(land_runoff_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
 
   call ESMF_GridCompGet(gcomp, name=cname, clock=clock, grid=gridIn,&
                         importState=importState, vm=vm, rc=rc)
@@ -784,10 +816,16 @@ module mod_esmf_ocn
 ! Get field
 !-------------------------------------------------------------------
 !
-  call ESMF_StateGet(importState, "GLW", field_lwdn, rc=rc)
-  call ESMF_StateGet(importState, "SWDOWN", field_swdn, rc=rc)
-  call ESMF_StateGet(importState, "LH", field_hl, rc=rc)
-  call ESMF_StateGet(importState, "HFX", field_hs, rc=rc)
+  call ESMF_StateGet(importState, "LWNET_OCEAN", field_lwnet_ocn, rc=rc)
+  call ESMF_StateGet(importState, "SWNET_OCEAN", field_swnet_ocn, rc=rc)
+  call ESMF_StateGet(importState, "LH_OCEAN", field_hl_ocn, rc=rc)
+  call ESMF_StateGet(importState, "HFX_OCEAN", field_hs_ocn, rc=rc)
+  call ESMF_StateGet(importState, "LWNET_SEAICE", field_lwnet_si, rc=rc)
+  call ESMF_StateGet(importState, "SWNET_SEAICE", field_swnet_si, rc=rc)
+  call ESMF_StateGet(importState, "LH_SEAICE", field_hl_si, rc=rc)
+  call ESMF_StateGet(importState, "HFX_SEAICE", field_hs_si, rc=rc)
+
+
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 
@@ -798,11 +836,18 @@ module mod_esmf_ocn
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 
+  call ESMF_StateGet(importState, "SFCEVP", field_evap0, rc=rc)
   call ESMF_StateGet(importState, "QFX", field_evap, rc=rc)
-  call ESMF_StateGet(importState, "RAINCV", field_raincv, rc=rc)
-  call ESMF_StateGet(importState, "RAINSHV", field_rainshv, rc=rc)
-  call ESMF_StateGet(importState, "RAINNCV", field_rainncv, rc=rc)
+  call ESMF_StateGet(importState, "RAINBL", field_rainbl, rc=rc)
+  call ESMF_StateGet(importState, "HAILNCV", field_hailncv, rc=rc)
+  call ESMF_StateGet(importState, "GRAUPELNCV", field_graupelncv, rc=rc)
   call ESMF_StateGet(importState, "SNOWNCV", field_snowncv, rc=rc)
+  call ESMF_StateGet(importState, "SNOWH_SI", field_snowh, rc=rc)
+  call ESMF_StateGet(importState, "DELTA_SNOW", field_snowh0, rc=rc)  
+  call ESMF_StateGet(importState, "SFROFF_LAST", field_runoff, rc=rc) 
+  call ESMF_StateGet(importState, "SFROFF", field_total_runoff, rc=rc)
+  
+  call ESMF_StateGet(importState, "LAND_RUNOFF", field_land_runoff, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
 !
@@ -813,10 +858,16 @@ module mod_esmf_ocn
   do j = 0, localDECount-1
 !
 !   ! Get pointer /from field
-    call ESMF_FieldGet(field_lwdn, localDE=j, farrayPtr=ptr_lwdn, rc=rc)
-    call ESMF_FieldGet(field_swdn, localDE=j, farrayPtr=ptr_swdn, rc=rc)
-    call ESMF_FieldGet(field_hl, localDE=j, farrayPtr=ptr_hl, rc=rc)
-    call ESMF_FieldGet(field_hs, localDE=j, farrayPtr=ptr_hs, rc=rc)
+    
+    call ESMF_FieldGet(field_lwnet_ocn, localDE=j, farrayPtr=ptr_lwnet_ocn, rc=rc)
+    call ESMF_FieldGet(field_swnet_ocn, localDE=j, farrayPtr=ptr_swnet_ocn, rc=rc)  
+    call ESMF_FieldGet(field_hl_ocn, localDE=j, farrayPtr=ptr_hl_ocn, rc=rc)
+    call ESMF_FieldGet(field_hs_ocn, localDE=j, farrayPtr=ptr_hs_ocn, rc=rc)
+    call ESMF_FieldGet(field_lwnet_si, localDE=j, farrayPtr=ptr_lwnet_si, rc=rc)
+    call ESMF_FieldGet(field_swnet_si, localDE=j, farrayPtr=ptr_swnet_si, rc=rc) 
+    call ESMF_FieldGet(field_hl_si, localDE=j, farrayPtr=ptr_hl_si, rc=rc)
+    call ESMF_FieldGet(field_hs_si, localDE=j, farrayPtr=ptr_hs_si, rc=rc)
+
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
         line=__LINE__, file=FILENAME)) return
 
@@ -826,12 +877,18 @@ module mod_esmf_ocn
     call ESMF_FieldGet(field_q2, localDE=j, farrayPtr=ptr_q2, rc=rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
         line=__LINE__, file=FILENAME)) return
-
     call ESMF_FieldGet(field_evap, localDE=j, farrayPtr=ptr_evap, rc=rc)
-    call ESMF_FieldGet(field_raincv, localDE=j, farrayPtr=ptr_raincv, rc=rc)
-    call ESMF_FieldGet(field_rainshv, localDE=j, farrayPtr=ptr_rainshv, rc=rc)
-    call ESMF_FieldGet(field_rainncv, localDE=j, farrayPtr=ptr_rainncv, rc=rc)
+    call ESMF_FieldGet(field_evap0, localDE=j, farrayPtr=ptr_evap0, rc=rc)
+    call ESMF_FieldGet(field_rainbl, localDE=j, farrayPtr=ptr_rainbl, rc=rc)
+    call ESMF_FieldGet(field_hailncv, localDE=j, farrayPtr=ptr_hailncv, rc=rc)
+    call ESMF_FieldGet(field_graupelncv, localDE=j, farrayPtr=ptr_graupelncv, rc=rc)
     call ESMF_FieldGet(field_snowncv, localDE=j, farrayPtr=ptr_snowncv, rc=rc)
+    call ESMF_FieldGet(field_snowh, localDE=j, farrayPtr=ptr_snowh, rc=rc)
+    call ESMF_FieldGet(field_snowh0, localDE=j, farrayPtr=ptr_snowh0, rc=rc)
+    call ESMF_FieldGet(field_runoff, localDE=j, farrayPtr=ptr_runoff, rc=rc)
+    call ESMF_FieldGet(field_total_runoff, localDE=j, farrayPtr=ptr_total_runoff, rc=rc)
+
+    call ESMF_FieldGet(field_land_runoff, localDE=j, farrayPtr=ptr_land_runoff, rc=rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
         line=__LINE__, file=FILENAME)) return
 
@@ -842,8 +899,10 @@ module mod_esmf_ocn
     bi = 1
     bj = 1
 !
-    ! where (ieee_is_nan(ptr_lwdn)) ptr_lwdn = MISSING_R8
-    ! where (ieee_is_nan(ptr_swdn)) ptr_swdn = MISSING_R8
+!    ! where (ieee_is_nan(ptr_lwdn)) ptr_lwdn = MISSING_R8
+!    ! where (ieee_is_nan(ptr_swdn)) ptr_swdn = MISSING_R8
+    ! where (ieee_is_nan(ptr_lwdn)) ptr_lwnet = MISSING_R8
+    ! where (ieee_is_nan(ptr_swdn)) ptr_swnet = MISSING_R8    
     ! where (ieee_is_nan(ptr_hl)) ptr_hl = MISSING_R8
     ! where (ieee_is_nan(ptr_hs)) ptr_hs = MISSING_R8
     ! where (ieee_is_nan(ptr_u10)) ptr_u10 = MISSING_R8
@@ -851,9 +910,10 @@ module mod_esmf_ocn
     ! where (ieee_is_nan(ptr_t2)) ptr_t2 = MISSING_R8
     ! where (ieee_is_nan(ptr_q2)) ptr_q2 = MISSING_R8
     ! where (ieee_is_nan(ptr_evap)) ptr_evap = MISSING_R8
-    ! where (ieee_is_nan(ptr_raincv)) ptr_raincv = MISSING_R8
-    ! where (ieee_is_nan(ptr_rainshv)) ptr_rainshv = MISSING_R8
-    ! where (ieee_is_nan(ptr_rainncv)) ptr_rainncv = MISSING_R8
+    ! where (ieee_is_nan(ptr_evap0)) ptr_evap0 = MISSING_R8
+    ! where (ieee_is_nan(ptr_rainbl)) ptr_rainbl = MISSING_R8
+    ! where (ieee_is_nan(ptr_hailncv)) ptr_hailncv = MISSING_R8
+    ! where (ieee_is_nan(ptr_graupelncv)) ptr_graupelncv = MISSING_R8
     ! where (ieee_is_nan(ptr_snowncv)) ptr_snowncv = MISSING_R8
     ! ptr = MISSING_R8
 !
@@ -865,50 +925,91 @@ module mod_esmf_ocn
         jmax = myYGlobalLo-1+(bj-1)*sNy+sNy + 1
         iG = myXGlobalLo-1+(bi-1)*sNx+ii
         jG = myYGlobalLo-1+(bj-1)*sNy+jj
-        lwdown_ESMF(ii,jj,1,1)       =   0.0d0
-        swdown_ESMF(ii,jj,1,1)       =   0.0d0
+        lwnet_ESMF(ii,jj,1,1)       =   0.0d0
+        swnet_ESMF(ii,jj,1,1)       =   0.0d0        
         hl_ESMF(ii,jj,1,1)           =   0.0d0
         hs_ESMF(ii,jj,1,1)           =   0.0d0
+        lwnet_si_ESMF(ii,jj,1,1)       =   0.0d0
+        swnet_si_ESMF(ii,jj,1,1)       =   0.0d0
+        hl_si_ESMF(ii,jj,1,1)           =   0.0d0
+        hs_si_ESMF(ii,jj,1,1)           =   0.0d0
         uwind_ESMF(ii,jj,1,1)        =   0.0d0
         vwind_ESMF(ii,jj,1,1)        =   0.0d0
         atemp_ESMF(ii,jj,1,1)        =   0.0d0
         aqh_ESMF(ii,jj,1,1)          =   0.0d0
         evap_ESMF(ii,jj,1,1)         =   0.0d0
+        evap0_ESMF(ii,jj,1,1)         =   0.0d0
         precip_ESMF(ii,jj,1,1)       =   0.0d0
+        snowh_ESMF(ii,jj,1,1)       =   0.0d0
+        runoff_ESMF(ii,jj,1,1)       =   0.0d0
+        land_runoff_ESMF(ii,jj,1,1)       =   0.0d0
 
         if ((iG > imin .and. iG < imax) .and. (jG > jmin .and. jG < jmax)) then
-          lwdown_ESMF(ii,jj,1,1) = (ptr_lwdn(iG,jG))*sfac+addo
-          swdown_ESMF(ii,jj,1,1) = (ptr_swdn(iG,jG))*sfac+addo
-          hl_ESMF(ii,jj,1,1)     = -ptr_hl(iG,jG)*sfac+addo
-          hs_ESMF(ii,jj,1,1)     = -ptr_hs(iG,jG)*sfac+addo
+          lwnet_ESMF(ii,jj,1,1) = (-ptr_lwnet_ocn(iG,jG))*sfac+addo
+          swnet_ESMF(ii,jj,1,1) = (-ptr_swnet_ocn(iG,jG))*sfac+addo  
+          hl_ESMF(ii,jj,1,1)     = -ptr_hl_ocn(iG,jG)*sfac+addo
+          hs_ESMF(ii,jj,1,1)     = -ptr_hs_ocn(iG,jG)*sfac+addo
+
+          lwnet_si_ESMF(ii,jj,1,1) = (-ptr_lwnet_si(iG,jG))*sfac+addo
+          swnet_si_ESMF(ii,jj,1,1) = (ptr_swnet_si(iG,jG))*sfac+addo
+          hl_si_ESMF(ii,jj,1,1)     = ptr_hl_si(iG,jG)*sfac+addo
+          hs_si_ESMF(ii,jj,1,1)     = ptr_hs_si(iG,jG)*sfac+addo
+
+
           uwind_ESMF(ii,jj,1,1)  = ptr_u10(iG,jG)*sfac+addo
           vwind_ESMF(ii,jj,1,1)  = ptr_v10(iG,jG)*sfac+addo
           atemp_ESMF(ii,jj,1,1)  = (ptr_t2(iG,jG)*sfac)+addo
           aqh_ESMF(ii,jj,1,1)    = (ptr_q2(iG,jG)*sfac)+addo
           evap_ESMF(ii,jj,1,1)   = (ptr_evap(iG,jG)/1000d0*sfac)+addo
-          precip_ESMF(ii,jj,1,1) = ((ptr_raincv(iG,jG)           &
-                                    +ptr_rainshv(iG,jG)          &
-                                    +ptr_rainncv(iG,jG)          &
+          evap0_ESMF(ii,jj,1,1)   = (ptr_evap(iG,jG)/1000d0*sfac)+addo
+          precip_ESMF(ii,jj,1,1) = ((ptr_rainbl(iG,jG)           &
+                                    +ptr_hailncv(iG,jG)          &
+                                    +ptr_graupelncv(iG,jG)          &
                                     +ptr_snowncv(iG,jG))*sfac    &
-                                    +addo) /(atm_step_seconds+0.d0)     &
+                                    +addo) /(atm_step_seconds+0.d0) &
                                    /1000d0
-        endif
+          snowh_ESMF(ii,jj,1,1)    = (ptr_snowh(iG,jG)*sfac)+addo  
+! Convert from mm to m/s
+          runoff_ESMF(ii,jj,1,1)   = (ptr_total_runoff(iG,jG)- &
+                                      ptr_runoff(iG,jG))*sfac    &
+                                     /(esm_step_seconds+0.d0)/1000d0 &
+                                     +addo
+
+! Integrate land_runoff:         
+         land_runoff_ESMF(ii,jj,1,1)   = (ptr_land_runoff(iG,jG) &
+                                         *1000*atm_step_seconds*sfac) &
+                                         +addo                              
+        end if
       end do
     end do
 !
 !   ! Nullify the pointer
-    if (associated(ptr_lwdn)) then
-      nullify(ptr_lwdn)
+    if (associated(ptr_lwnet_ocn)) then
+      nullify(ptr_lwnet_ocn)
     end if
-    if (associated(ptr_hl)) then
-      nullify(ptr_hl)
+    if (associated(ptr_swnet_ocn)) then
+      nullify(ptr_swnet_ocn)
     end if
-    if (associated(ptr_hs)) then
-      nullify(ptr_hs)
+    if (associated(ptr_hl_ocn)) then
+      nullify(ptr_hl_ocn)
     end if
-    if (associated(ptr_swdn)) then
-      nullify(ptr_swdn)
+    if (associated(ptr_hs_ocn)) then
+      nullify(ptr_hs_ocn)
     end if
+
+    if (associated(ptr_lwnet_si)) then
+      nullify(ptr_lwnet_si)
+    end if
+    if (associated(ptr_swnet_si)) then
+      nullify(ptr_swnet_si)
+    end if
+    if (associated(ptr_hl_si)) then
+      nullify(ptr_hl_si)
+    end if
+    if (associated(ptr_hs_si)) then
+      nullify(ptr_hs_si)
+    end if
+
     if (associated(ptr_u10)) then
       nullify(ptr_u10)
     end if
@@ -924,43 +1025,96 @@ module mod_esmf_ocn
     if (associated(ptr_evap)) then
       nullify(ptr_evap)
     end if
-    if (associated(ptr_raincv)) then
-      nullify(ptr_raincv)
+    if (associated(ptr_evap0)) then
+      nullify(ptr_evap)
     end if
-    if (associated(ptr_rainshv)) then
-      nullify(ptr_rainshv)
+    if (associated(ptr_rainbl)) then
+      nullify(ptr_rainbl)
     end if
-    if (associated(ptr_rainncv)) then
-      nullify(ptr_rainncv)
+    if (associated(ptr_hailncv)) then
+      nullify(ptr_hailncv)
+    end if
+    if (associated(ptr_graupelncv)) then
+      nullify(ptr_graupelncv)
     end if
     if (associated(ptr_snowncv)) then
       nullify(ptr_snowncv)
     end if
-!
+    if (associated(ptr_snowh)) then
+      nullify(ptr_snowh)
+    end if
+    if (associated(ptr_snowh0)) then
+      nullify(ptr_snowh0)
+    end if
+    if (associated(ptr_runoff)) then
+      nullify(ptr_runoff)
+    end if  
+    if (associated(ptr_total_runoff)) then
+      nullify(ptr_total_runoff)
+    end if  
+    if (associated(ptr_land_runoff)) then
+      nullify(ptr_land_runoff)
+    end if        
   end do       
 !
-  call get_field_parameters(lwdown_ESMF, swdown_ESMF, &
+  call get_field_parameters(lwnet_ESMF, swnet_ESMF, &   
                             hl_ESMF, hs_ESMF, &
+                            lwnet_si_ESMF, swnet_si_ESMF, &
+                            hl_si_ESMF, hs_si_ESMF, &
                             uwind_ESMF, vwind_ESMF, &
                             atemp_ESMF, aqh_ESMF, &
-                            evap_ESMF, precip_ESMF, myThid)
+                            evap_ESMF, &
+                            precip_ESMF,&
+                            snowh_ESMF,runoff_ESMF, &
+                            land_runoff_ESMF,&
+                            myThid)
 
   if (debugLevel >= 1) then
-    write (ofile, "(A5,I6.6,A3)") "hlATM", iLoop, ".nc"
-    call ESMF_FieldWrite(field_hl, trim(ofile), rc=rc)
+    write (ofile, "(A4,I6.6,A3)") "ATMu", iLoop, ".nc"
+    call ESMF_FieldWrite(field_u10, trim(ofile), rc=rc)
+    write (ofile, "(A4,I6.6,A3)") "ATMv", iLoop, ".nc"
+    call ESMF_FieldWrite(field_v10, trim(ofile), rc=rc)
+    write (ofile, "(A7,I6.6,A3)") "ATMtemp", iLoop, ".nc"
+    call ESMF_FieldWrite(field_t2, trim(ofile), rc=rc)
+    write (ofile, "(A4,I6.6,A3)") "ATMq", iLoop, ".nc"
+    call ESMF_FieldWrite(field_q2, trim(ofile), rc=rc)
+    write (ofile, "(A7,I6.6,A3)") "ATMevap", iLoop, ".nc"
+    call ESMF_FieldWrite(field_evap, trim(ofile), rc=rc)
+    write (ofile, "(A9,I6.6,A3)") "ATMrainbl", iLoop, ".nc"
+    call ESMF_FieldWrite(field_rainbl, trim(ofile), rc=rc)    
+    write (ofile, "(A10,I6.6,A3)") "ATMhailncv", iLoop, ".nc"
+    call ESMF_FieldWrite(field_hailncv, trim(ofile), rc=rc)   
+    write (ofile, "(A10,I6.6,A3)") "ATMgraupelncv", iLoop, ".nc"
+    call ESMF_FieldWrite(field_graupelncv, trim(ofile), rc=rc) 
+    write (ofile, "(A10,I6.6,A3)") "ATMsnowncv", iLoop, ".nc"
+    call ESMF_FieldWrite(field_snowncv, trim(ofile), rc=rc)  
+    write (ofile, "(A8,I6.6,A3)") "ATMsnowh", iLoop, ".nc"
+    call ESMF_FieldWrite(field_snowh, trim(ofile), rc=rc) 
+    write (ofile, "(A9,I6.6,A3)") "ATMrunoff", iLoop, ".nc"
+    call ESMF_FieldWrite(field_runoff, trim(ofile), rc=rc)   
+    write (ofile, "(A7,I6.6,A3)") "ATMland", iLoop, ".nc"
+    call ESMF_FieldWrite(field_land_runoff, trim(ofile), rc=rc)        
   end if
 !
 
-  DEALLOCATE(swdown_ESMF)
-  DEALLOCATE(lwdown_ESMF)
+  DEALLOCATE(swnet_ESMF)
+  DEALLOCATE(lwnet_ESMF)  
   DEALLOCATE(hl_ESMF)
   DEALLOCATE(hs_ESMF)
+  DEALLOCATE(swnet_si_ESMF)
+  DEALLOCATE(lwnet_si_ESMF)
+  DEALLOCATE(hl_si_ESMF)
+  DEALLOCATE(hs_si_ESMF)
+
   DEALLOCATE(uwind_ESMF)
   DEALLOCATE(vwind_ESMF)
   DEALLOCATE(atemp_ESMF)
   DEALLOCATE(aqh_ESMF)
   DEALLOCATE(evap_ESMF)
   DEALLOCATE(precip_ESMF)
+  DEALLOCATE(snowh_ESMF)
+  DEALLOCATE(runoff_ESMF)
+  DEALLOCATE(land_runoff_ESMF)
 
   end subroutine OCN_Get
 !
@@ -1001,7 +1155,9 @@ module mod_esmf_ocn
   real(ESMF_KIND_R8), pointer :: ptr_uoce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_voce(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_area(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_heff(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_tice(:,:)
+  real(ESMF_KIND_R8), pointer :: ptr_hsnow(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_sst_input(:,:)
   real(ESMF_KIND_R8), pointer :: ptr_ocnmask(:,:)
   integer(ESMF_KIND_I4), pointer :: ptr_mask(:,:)
@@ -1012,7 +1168,9 @@ module mod_esmf_ocn
   type(ESMF_Field) :: field_uoce
   type(ESMF_Field) :: field_voce
   type(ESMF_Field) :: field_area
+  type(ESMF_Field) :: field_heff
   type(ESMF_Field) :: field_tice
+  type(ESMF_Field) :: field_hsnow
   type(ESMF_Field) :: field_sst_input
   type(ESMF_Field) :: field_ocnmask
   type(ESMF_State) :: importState, exportState
@@ -1020,7 +1178,10 @@ module mod_esmf_ocn
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: uoce_ESMF
   REAL*8, DIMENSION(:,:,:,:,:), ALLOCATABLE :: voce_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: area_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: heff_ESMF
   REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: tice_ESMF
+  REAL*8, DIMENSION(:,:,:,:), ALLOCATABLE :: hsnow_ESMF
+  
 !
   INTEGER sNx, sNy, OLx, OLy, nSx, nSy, nPx, nPy, Nx, Ny, Nr
   INTEGER myXGlobalLo, myYGlobalLo
@@ -1041,11 +1202,13 @@ module mod_esmf_ocn
   ALLOCATE(uoce_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
   ALLOCATE(voce_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy))
   ALLOCATE(area_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(heff_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
   ALLOCATE(tice_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
+  ALLOCATE(hsnow_ESMF(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy))
 
   call get_theta(theta_ESMF, myThid)
   call get_uvoce(uoce_ESMF, voce_ESMF, myThid)
-  call get_seaice(area_ESMF, tice_ESMF, myThid)
+  call get_seaice(area_ESMF, heff_ESMF, tice_ESMF, hsnow_ESMF, myThid)
 !
 !-------------------------------------------------------------------
 ! Get gridded component 
@@ -1079,7 +1242,9 @@ module mod_esmf_ocn
   call ESMF_StateGet(exportState, "VOCE", field_voce, rc=rc)
   call ESMF_StateGet(exportState, "OCNMASK", field_ocnmask, rc=rc)
   call ESMF_StateGet(exportState, "SEAICE", field_area, rc=rc)
+  call ESMF_StateGet(exportState, "SIHEFF", field_heff, rc=rc)
   call ESMF_StateGet(exportState, "SITICE", field_tice, rc=rc)
+  call ESMF_StateGet(exportState, "SISNOW", field_hsnow, rc=rc)
   call ESMF_StateGet(importState, "SST_INPUT", field_sst_input, rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,    &
       line=__LINE__, file=FILENAME)) return
@@ -1102,7 +1267,9 @@ module mod_esmf_ocn
     call ESMF_FieldGet(field_voce, localDE=j, farrayPtr=ptr_voce, rc=rc)
     call ESMF_FieldGet(field_ocnmask, localDE=j, farrayPtr=ptr_ocnmask, rc=rc)
     call ESMF_FieldGet(field_area, localDE=j, farrayPtr=ptr_area, rc=rc)
+    call ESMF_FieldGet(field_heff, localDE=j, farrayPtr=ptr_heff, rc=rc)
     call ESMF_FieldGet(field_tice, localDE=j, farrayPtr=ptr_tice, rc=rc)
+    call ESMF_FieldGet(field_hsnow, localDE=j, farrayPtr=ptr_hsnow, rc=rc)
     call ESMF_FieldGet(field_sst_input, localDE=j,                    &
                        farrayPtr=ptr_sst_input, rc=rc)
     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU,  &
@@ -1131,7 +1298,9 @@ module mod_esmf_ocn
           ptr_uoce(iG,jG) = uoce_ESMF(ii,jj,1,1,1)
           ptr_voce(iG,jG) = voce_ESMF(ii,jj,1,1,1)
           ptr_area(iG,jG) = area_ESMF(ii,jj,1,1)
+          ptr_heff(iG,jG) = heff_ESMF(ii,jj,1,1)
           ptr_tice(iG,jG) = tice_ESMF(ii,jj,1,1)
+          ptr_hsnow(iG,jG) = hsnow_ESMF(ii,jj,1,1)
           ptr_ocnmask(iG,jG) = 1.d0
           ! PRINT *, 'ii theta: ', ii, jj, theta_ESMF(ii,jj,1,1,1) + 273.15
           ! PRINT *, 'ig theta: ', iG, jG, ptr_sst(iG,jG)
@@ -1146,7 +1315,9 @@ module mod_esmf_ocn
           ptr_uoce(iG,jG) = 0.d0
           ptr_voce(iG,jG) = 0.d0
           ptr_area(iG,jG) = 0.d0
+          ptr_heff(iG,jG) = 0.d0
           ptr_tice(iG,jG) = 0.d0
+          ptr_hsnow(iG,jG) = 0.d0
           ptr_ocnmask(iG,jG) = 0.d0
         end if
       end do
@@ -1154,10 +1325,23 @@ module mod_esmf_ocn
 !
 !   ! Write field to debug
     if (debugLevel >= 1) then
-      write (ofile, "(A9,I6.6,A3)") "sstOCNput", iLoop, ".nc"
+      write (ofile, "(A6,I6.6,A3)") "OCNsst", iLoop, ".nc"
       call ESMF_FieldWrite(field_sst, trim(ofile), rc=rc)
-      write (ofile, "(A9,I6.6,A3)") "sstATMini", iLoop, ".nc"
+      write (ofile, "(A7,I6.6,A3)") "OCNuoce", iLoop, ".nc"
+      call ESMF_FieldWrite(field_uoce, trim(ofile), rc=rc)
+      write (ofile, "(A7,I6.6,A3)") "OCNvoce", iLoop, ".nc"
+      call ESMF_FieldWrite(field_voce, trim(ofile), rc=rc)
+      write (ofile, "(A9,I6.6,A3)") "ATMsstini", iLoop, ".nc"
       call ESMF_FieldWrite(field_sst_input, trim(ofile), rc=rc)
+      write (ofile, "(A9,I6.6,A3)") "OCNsiarea", iLoop, ".nc"
+      call ESMF_FieldWrite(field_area, trim(ofile), rc=rc)  
+      write (ofile, "(A9,I6.6,A3)") "OCNsiheff", iLoop, ".nc"
+      call ESMF_FieldWrite(field_heff, trim(ofile), rc=rc)        
+      write (ofile, "(A9,I6.6,A3)") "OCNsisnow", iLoop, ".nc"
+      call ESMF_FieldWrite(field_hsnow, trim(ofile), rc=rc)       
+      write (ofile, "(A5,I6.6,A3)") "OCNsit", iLoop, ".nc"
+      call ESMF_FieldWrite(field_tice, trim(ofile), rc=rc)
+      
     end if
 
 !   ! Nullify the pointer
@@ -1173,12 +1357,15 @@ module mod_esmf_ocn
     if (associated(ptr_area)) then
       nullify(ptr_area)
     end if
+    if (associated(ptr_heff)) then
+      nullify(ptr_heff)
+    end if    
     if (associated(ptr_tice)) then
       nullify(ptr_tice)
-    end if
-    if (associated(ptr_mask)) then
-      nullify(ptr_mask)
-    end if
+    end if   
+    if (associated(ptr_hsnow)) then
+      nullify(ptr_hsnow)
+    end if       
     if (associated(ptr_ocnmask)) then
       nullify(ptr_ocnmask)
     end if
@@ -1189,7 +1376,9 @@ module mod_esmf_ocn
   DEALLOCATE(uoce_ESMF)
   DEALLOCATE(voce_ESMF)
   DEALLOCATE(area_ESMF)
+  DEALLOCATE(heff_ESMF)
   DEALLOCATE(tice_ESMF)
+  DEALLOCATE(hsnow_ESMF)
 !
   end subroutine OCN_Put
 !

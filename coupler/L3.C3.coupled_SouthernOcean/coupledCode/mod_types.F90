@@ -95,55 +95,76 @@
       type(ESMF_TimeInterval) :: atmTimeStep
       integer :: currentTimeStep = 0
 
-      integer :: nList = 22
-      character(ESMF_MAXSTR), dimension(1:22) :: nuopc_entryNameList=&
+      integer :: nList = 34
+      character(ESMF_MAXSTR), dimension(1:34) :: nuopc_entryNameList=&
                    (/'                        XLAT_VALUE',&
                      '                       XLONG_VALUE',&
-                     '                       LATENT_HEAT',&
-                     '                     SENSIBLE_HEAT',&
-                     '                    SHORTWAVE_DOWN',&
-                     '                     LONGWAVE_DOWN',&
+                     '                LATENT_HEAT_SEAICE',&
+                     '              SENSIBLE_HEAT_SEAICE',&
+                     '             SHORTWAVE_FLUX_SEAICE',&
+                     '              LONGWAVE_FLUX_SEAICE',&
+                     '                 LATENT_HEAT_OCEAN',&
+                     '               SENSIBLE_HEAT_OCEAN',&
+                     '              SHORTWAVE_FLUX_OCEAN',&
+                     '               LONGWAVE_FLUX_OCEAN',&
+                     '                    SURFACE_RUNOFF',&
+                     '               SURFACE_RUNOFF_LAST',&
+                     '                       LAND_RUNOFF',&
                      '                 U_VELOCITY_AT_10M',&
                      '                 V_VELOCITY_AT_10M',&
                      '                 TEMPERATURE_AT_2M',&
                      '           SPECIFIC_HUMIDITY_AT_2M',&
+                     '   ACCUMULATED_SURFACE_EVAPORATION',&
                      '               SURFACE_EVAPORATION',&
-                     '                 PRECIP_CONVECTIVE',&
-                     '              PRECIP_SH_CONVECTIVE',&
-                     '             PRECIP_NON_CONVECTIVE',&
-                     '               SNOW_NON_CONVECTIVE',&
+                     '            TOTAL_BL_PRECIPITATION',&
+                     '                              HAIL',&
+                     '                           GRAUPEL',&
+                     '     TOTAL_GRID_SCALE_SNOW_AND_ICE',&
+                     '               PHYSICAL_SNOW_DEPTH',&
+                     ' PHYSICAL_SNOW_DEPTH_BEFORE_CHANGE',&
                      'REANALYSIS_SEA_SURFACE_TEMPERATURE',&
                      '                  OCEAN_MASK_VALUE',&
                      '    ACTIVE_SEA_SURFACE_TEMPERATURE',&
                      '                   OCEAN_SURFACE_U',&
                      '                   OCEAN_SURFACE_V',&
                      '                   SEAICE_FRACTION',&
-                     '                       SEAICE_TEMP'/)
-      character(ESMF_MAXSTR), dimension(1:22) :: wrf_nameList=&
-                   [character(len=9) :: 'XLAT','XLONG',&
-                     'LH','HFX','SWDOWN','GLW',&
+                     '                       SEAICE_TEMP',&
+                     '                       SEAICE_SNOW',&
+                     '                  SEAICE_THICKNESS'/)
+      character(ESMF_MAXSTR), dimension(1:34) :: wrf_nameList=&
+                   [cHARACTEr(len=12) :: 'XLAT','XLONG',&
+                     'LH_SEAICE','HFX_SEAICE','SWNET_SEAICE','LWNET_SEAICE',&
+                     'LH_OCEAN','HFX_OCEAN','SWNET_OCEAN','LWNET_OCEAN',&
+                     'SFROFF','SFROFF_LAST','LAND_RUNOFF',&
                      'U10','V10','T2','Q2',&
-                     'QFX','RAINCV','RAINSHV','RAINNCV','SNOWNCV',&
+                     'SFCEVP','QFX','RAINBL','HEILNCV','GRAUPELNCV',&
+                     'SNOWNCV','SNOWH_SI','DELTA_SNOW',&
                      'SST_INPUT',&
                      'OCNMASK','SST','UOCE','VOCE',&
-                     'SEAICE','SITICE']
-      character(ESMF_MAXSTR), dimension(1:22) :: nuopc_entryUnitList=&
+                     'SEAICE','SITICE','SISNOW','SIHEFF']
+      character(ESMF_MAXSTR), dimension(1:34) :: nuopc_entryUnitList=&
                    (/'     1','     1',&
                      ' w/m^2',' w/m^2',' w/m^2',' w/m^2',&
+                     ' w/m^2',' w/m^2',' w/m^2',' w/m^2',&
+                     '    mm','    mm','    mm',&
                      '   m/s','   m/s','degree',' kg/kg',&
-                     ' kg/m2','    mm','    mm','    mm','    mm',&
-                     'degree',&
+                     ' kg/m2','kg/m2s','    mm','    mm','    mm','    mm',&
+                     '     m','     m','degree',&
                      '     1','degree','   m/s','   m/s',&
-                     '     1','degree'/)
-      logical, dimension(1:22) :: OCNtoATM=&
+                     '     1','degree','     m','     m'/)
+      logical, dimension(1:34) :: OCNtoATM=&
                    (/.False.,.False.,.False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,&
+                     .False.,.False.,.False.,.False.,&
                      .False.,.False.,.False.,.False.,.False.,.False.,&
-                     .True.,.True.,.True.,.True.,.True.,.True./)
-      logical, dimension(1:22) :: ATMtoOCN=&
+                     .False.,.False.,.False.,.False.,.False.,.False.,&
+                     .True.,.True.,.True.,.True.,.True.,.True.,.True.,.True./)
+      logical, dimension(1:34) :: ATMtoOCN=&
                    (/.True.,.True.,.True.,.True.,.True.,.True.,&
                      .True.,.True.,.True.,.True.,&
+                     .True.,.True.,.True.,.True.,&
                      .True.,.True.,.True.,.True.,.True.,.True.,&
-                     .False.,.False.,.False.,.False.,.False.,.False./)
+                     .True.,.True.,.True.,.True.,.True.,.True.,&
+                     .False.,.False.,.False.,.False.,.False.,.False.,.False.,.False./)
 !
       end module mod_types

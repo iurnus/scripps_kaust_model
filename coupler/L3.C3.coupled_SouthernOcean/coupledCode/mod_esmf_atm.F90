@@ -461,7 +461,9 @@
       do nJ = jps,MIN(jde-1,jpe)
         do nI = ips,MIN(ide-1,ipe)
           if (ptr_ocnmask(nI,nJ) .lt. 0.5) then
-            ptr_sst(nI,nJ) = ptr_sstin(nI,nJ)
+            ! RUI: This needs to be further addressed
+            ptr_sst(nI,nJ) = max(ptr_sstin(nI,nJ),273.15)
+            ! ptr_sst(nI,nJ) = ptr_sstin(nI,nJ)
           endif
         end do
       end do
