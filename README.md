@@ -1,4 +1,4 @@
-The SKRIPS is under continuous development. The current stable version is [v2.0.1](https://github.com/iurnus/scripps_kaust_model/releases/tag/v2.0.1).
+The SKRIPS is under continuous development. The current stable version is [v2.0.3](https://github.com/iurnus/scripps_kaust_model/releases/tag/v2.0.3).
 
 To insall and run the code, please refer to [code documentation](https://skrips.readthedocs.io/en/latest/).
 
@@ -21,10 +21,10 @@ This is the repository for the Scripps-KAUST Regional Integrated Prediction Syst
 It is a regional coupled atmosphere-ocean model that includes WRF, MITgcm, WaveWatch III, and ESMF coupler.
 
 Now all the components are available from GitHub:
-* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.5.2) (version 4.5.2)
+* Atmosphere Solver: [WRF](https://github.com/wrf-model/WRF/releases/tag/v4.7.1) (version 4.7.1)
 * Ocean Solver: [MITgcm](https://github.com/MITgcm/MITgcm/releases/tag/checkpoint68r) (version c68r)
 * Wave Solver: [WaveWatch III](https://github.com/NOAA-EMC/WW3/archive/refs/tags/6.07.1.zip) (version 6.07.1)
-* Driver (coupler): [ESMF](https://github.com/esmf-org/esmf/releases/tag/v8.6.0) (version 8.6.0)
+* Driver (coupler): [ESMF](https://github.com/esmf-org/esmf/releases/tag/v8.9.0) (version 8.9.0)
 
 The instructions on installing each component are detailed in the [code documentation](https://skrips.readthedocs.io/en/latest/). We also attached several [tutorial cases](https://github.com/iurnus/scripps_kaust_model/tree/master/coupler) for testing the coupled model.
 
