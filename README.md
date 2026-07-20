@@ -1,8 +1,8 @@
 The SKRIPS is under continuous development. The current stable version is [v2.0.3](https://github.com/iurnus/scripps_kaust_model/releases/tag/v2.0.3).
 
-To insall and run the code, please refer to [code documentation](https://skrips.readthedocs.io/en/latest/).
+To insall and run the code, please read [this documentation](https://skrips.readthedocs.io/en/latest/).
 
-To build the WRF model or the coupled model, please refer to [other documentation](https://github.com/iurnus/coupled_model_other_docs).
+For other questions on WRF, MITgcm, and WW3, please read [this documentation](https://github.com/iurnus/coupled_model_other_docs).
 
 The previous versions are available here: [older versions](https://github.com/iurnus/scripps_kaust_model/releases).
 
